@@ -132,7 +132,14 @@ const Menuitems = [
         icon: IconPoint,
         href: '/generator/names',
       },
+      {
+        id: uniqueId(),
+        title: 'Smart Reminders',
+        icon: IconPoint,
+        href: '/generator/reminders',
+      }
     ],
+
   },
   {
     navlabel: true,
@@ -160,7 +167,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Tickets',
+    title: 'Messages',
     icon: IconTicket,
     href: '/apps/tickets',
   },

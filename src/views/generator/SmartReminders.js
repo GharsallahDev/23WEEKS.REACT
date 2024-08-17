@@ -19,6 +19,7 @@ import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import PageContainer from '../../components/container/PageContainer';
 import ParentCard from '../../components/shared/ParentCard';
 import config from 'src/config';
+import breadcrumbImg from 'src/assets/images/breadcrumb/calender.jpg';
 const columns = [
   { id: 'event', label: 'Event', minWidth: 150 },
   { id: 'date', label: 'Date', minWidth: 100 },
@@ -140,7 +141,11 @@ const PregnancyRemindersTable = () => {
 
   return (
     <PageContainer title="Pregnancy Reminders" description="Manage your pregnancy reminders">
-      <Breadcrumb title="Pregnancy Reminders" items={BCrumb} />
+      <Breadcrumb title="Pregnancy Reminders" items={BCrumb} >
+        <Box>
+          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
+        </Box>
+      </Breadcrumb>
       <ParentCard title="Pregnancy Reminders">
         <Paper variant="outlined">
           <TableContainer sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' }, maxHeight: 440 }}>

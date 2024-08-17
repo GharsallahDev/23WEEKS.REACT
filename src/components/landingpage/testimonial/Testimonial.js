@@ -4,22 +4,22 @@ import { motion } from 'framer-motion';
 
 const testimonials = [
   {
-    name: 'Sarah Johnson',
-    role: 'Expectant Mother',
-    content: 'PrenatAI has been a lifesaver during my pregnancy. The 24/7 support and personalized advice have given me peace of mind.',
-    avatar: '/path/to/avatar1.jpg',
-  },
-  {
-    name: 'Dr. Emily Chen',
+    name: 'Dr. Ahmed Souki',
     role: 'Gynecologist',
-    content: 'The AI-enhanced imaging has significantly improved my diagnostic accuracy. It\'s a game-changer for prenatal care.',
-    avatar: '/path/to/avatar2.jpg',
+    content: '23Weeks has been an invaluable tool in my practice. The advanced features for monitoring and reporting have significantly improved my ability to provide top-notch care to my patients.',
+    avatar: '/path/to/dr-ahmed-souki.jpg', 
   },
   {
-    name: 'Michael Brown',
-    role: 'Partner',
-    content: 'As a first-time dad, the educational resources and reminders have helped me support my partner throughout her pregnancy.',
-    avatar: '/path/to/avatar3.jpg',
+    name: 'Dr. Zied Kammoun',
+    role: 'Gynecologist and Expert Partner',
+    content: 'I am truly impressed with the 23Weeks solution. Its comprehensive approach to prenatal care is unmatched, and I’m proud to partner with such an innovative solution.',
+    avatar: '/path/to/dr-zied-kammoun.jpg', 
+  },
+  {
+    name: 'Amina Diallo',
+    role: 'Expectant Mother',
+    content: '23Weeks has been a blessing throughout my pregnancy. The personalized care plans and symptom tracking have provided me with much-needed support and reassurance.',
+    avatar: '/path/to/amina-diallo.jpg',
   },
 ];
 

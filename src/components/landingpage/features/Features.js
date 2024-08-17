@@ -9,6 +9,10 @@ import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import ImageIcon from '@mui/icons-material/Image';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import StoryIcon from '@mui/icons-material/EmojiObjects'; // Example icon for story generation
+import MusicNoteIcon from '@mui/icons-material/MusicNote'; // Example icon for songs generation
+import SearchIcon from '@mui/icons-material/Search'; // Example icon for search engine
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation'; // Example icon for baby names
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -36,7 +40,6 @@ const FeatureButton = styled(Button, {
   },
 }));
 
-
 const features = {
   pregnant: [
     {
@@ -45,14 +48,24 @@ const features = {
       icon: ChatIcon,
     },
     {
-      title: 'Personalized Care Plans',
-      description: 'Receive tailored advice based on your unique needs.',
-      icon: AssignmentIcon,
+      title: 'Story Generation',
+      description: 'Receive personalized stories for your baby.',
+      icon: StoryIcon,
     },
     {
-      title: 'Symptom Tracker',
-      description: 'Monitor your pregnancy symptoms and get timely alerts.',
-      icon: TrackChangesIcon,
+      title: 'Songs Generation',
+      description: 'Listen to personalized songs for relaxation and bonding.',
+      icon: MusicNoteIcon,
+    },
+    {
+      title: 'Personalized Baby Names Suggestions',
+      description: 'Get suggestions for baby names based on your preferences.',
+      icon: BabyChangingStationIcon,
+    },
+    {
+      title: 'Search Engine',
+      description: 'Search for relevant information and resources easily.',
+      icon: SearchIcon,
     },
   ],
   gynecologist: [
@@ -62,13 +75,28 @@ const features = {
       icon: ImageIcon,
     },
     {
-      title: 'Patient Management',
-      description: 'Efficiently manage patient records and appointments.',
-      icon: EventNoteIcon,
+      title: 'Fetal Plane Classification',
+      description: 'Classify fetal planes for better assessment.',
+      icon: AssessmentIcon,
     },
     {
-      title: 'Risk Assessment',
-      description: 'Use AI to identify high-risk pregnancies early.',
+      title: 'Head Circumference Measurement',
+      description: 'Accurately measure fetal head circumference from ultrasound images.',
+      icon: AssessmentIcon,
+    },
+    {
+      title: 'Report Generation',
+      description: 'Generate comprehensive reports from ultrasound data.',
+      icon: AssessmentIcon,
+    },
+    {
+      title: 'Ultrasound Anomaly Detection',
+      description: 'Detect anomalies in ultrasound images using AI.',
+      icon: AssessmentIcon,
+    },
+    {
+      title: 'Fetal Health Tracking',
+      description: 'Track fetal health metrics and receive alerts.',
       icon: AssessmentIcon,
     },
   ],

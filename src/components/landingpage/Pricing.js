@@ -98,11 +98,9 @@ const pricingPlans = {
       badge: false,
       btntext: 'Choose Premium',
       rules: [
-        { limit: true, title: 'Personalized story generation' },
-        { limit: true, title: 'Custom lullaby and song generation' },
+        { limit: true, title: 'Personalized story generation with voice generation' },
         { limit: true, title: 'Priority support' },
         { limit: true, title: 'Integration with health tracking devices' },
-        { limit: true, title: 'Exclusive content and expert consultations' },
       ],
     },
   ],
@@ -110,8 +108,8 @@ const pricingPlans = {
     {
       id: 1,
       package: 'Basic',
-      monthlyplan: 0,
-      yearlyplan: 0,
+      monthlyplan: 49.99,
+      yearlyplan: 499.99,
       avatar: pck1,
       badge: false,
       btntext: 'Choose Basic',
@@ -126,8 +124,8 @@ const pricingPlans = {
     {
       id: 2,
       package: 'Advanced',
-      monthlyplan: 49.99,
-      yearlyplan: 499.99,
+      monthlyplan: 99.99,
+      yearlyplan: 999.99,
       avatar: pck2,
       badge: true,
       btntext: 'Choose Advanced',
@@ -142,8 +140,8 @@ const pricingPlans = {
     {
       id: 3,
       package: 'Premium',
-      monthlyplan: 99.99,
-      yearlyplan: 999.99,
+      monthlyplan: 149.99,
+      yearlyplan: 1499.99,
       avatar: pck3,
       badge: false,
       btntext: 'Choose Premium',
@@ -257,7 +255,6 @@ const Pricing = () => {
                     sx={{ width: '100%', mt: 3 }}
                     variant="contained"
                     size="large"
-                    color="primary"
                   >
                     {price.btntext}
                   </Button>

@@ -6,7 +6,7 @@ import ChatSidebar from './components/ChatSidebar';
 import ChatContent from './components/ChatContent';
 import ChatMsgSent from './components/ChatMsgSent';
 import AppCard from 'src/components/shared/AppCard';
-
+import breadcrumbImg from 'src/assets/images/breadcrumb/chat.png';
 const BCrumb = [
   {
     to: '/',
@@ -62,7 +62,11 @@ const Bot = () => {
 
   return (
     <PageContainer title="Chat Bot" description="Dr. Gyno Chat Bot">
-      <Breadcrumb title="Chat Bot" items={BCrumb} />
+      <Breadcrumb title="Chat Bot" items={BCrumb} >
+      <Box>
+          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
+        </Box>
+      </Breadcrumb>
       <AppCard>
         <ChatSidebar
           isMobileSidebarOpen={isMobileSidebarOpen}

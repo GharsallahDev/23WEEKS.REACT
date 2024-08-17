@@ -87,10 +87,10 @@ const TicketListing = () => {
                 <Typography variant="h6">Id</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Ticket</Typography>
+                <Typography variant="h6">Message</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h6">Assigned To</Typography>
+                <Typography variant="h6">Patient</Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="h6">Status</Typography>
