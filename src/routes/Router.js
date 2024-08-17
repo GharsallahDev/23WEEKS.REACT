@@ -4,17 +4,14 @@ import { useSelector } from 'react-redux';
 import { selectIsAuthenticated, selectUserType } from '../store/auth/AuthSlice';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 
-/* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
 
-/* ****Pages***** */
 const DoctorDash = Loadable(lazy(() => import('../views/dashboard/Doctor')));
 const WomanDash = Loadable(lazy(() => import('../views/dashboard/Woman')));
 
 const Test1 = Loadable(lazy(() => import('../views/dashboard/test1')));
 const Test2 = Loadable(lazy(() => import('../views/dashboard/test2')));
-/* ****Apps***** */
 const Chats = Loadable(lazy(() => import('../views/apps/chat/Chat')));
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
 const Calendar = Loadable(lazy(() => import('../views/apps/calendar/BigCalendar')));
@@ -34,7 +31,6 @@ const Followers = Loadable(lazy(() => import('../views/apps/user-profile/Followe
 const Friends = Loadable(lazy(() => import('../views/apps/user-profile/Friends')));
 const Gallery = Loadable(lazy(() => import('../views/apps/user-profile/Gallery')));
 
-// Pages
 const RollbaseCASL = Loadable(lazy(() => import('../views/pages/rollbaseCASL/RollbaseCASL')));
 const Treeview = Loadable(lazy(() => import('../views/pages/treeview/Treeview')));
 const Pricing = Loadable(lazy(() => import('../views/pages/pricing/Pricing')));
@@ -43,12 +39,10 @@ const AccountSetting = Loadable(
 );
 const Faq = Loadable(lazy(() => import('../views/pages/faq/Faq')));
 
-// widget
 const WidgetCards = Loadable(lazy(() => import('../views/widgets/cards/WidgetCards')));
 const WidgetBanners = Loadable(lazy(() => import('../views/widgets/banners/WidgetBanners')));
 const WidgetCharts = Loadable(lazy(() => import('../views/widgets/charts/WidgetCharts')));
 
-// form elements
 const MuiAutoComplete = Loadable(
   lazy(() => import('../views/forms/form-elements/MuiAutoComplete')),
 );
@@ -59,7 +53,6 @@ const MuiSlider = Loadable(lazy(() => import('../views/forms/form-elements/MuiSl
 const MuiDateTime = Loadable(lazy(() => import('../views/forms/form-elements/MuiDateTime')));
 const MuiSwitch = Loadable(lazy(() => import('../views/forms/form-elements/MuiSwitch')));
 
-// form layout
 const FormLayouts = Loadable(lazy(() => import('../views/forms/FormLayouts')));
 const FormCustom = Loadable(lazy(() => import('../views/forms/FormCustom')));
 const FormWizard = Loadable(lazy(() => import('../views/forms/FormWizard')));
@@ -68,7 +61,6 @@ const QuillEditor = Loadable(lazy(() => import('../views/forms/quill-editor/Quil
 const FormHorizontal = Loadable(lazy(() => import('../views/forms/FormHorizontal')));
 const FormVertical = Loadable(lazy(() => import('../views/forms/FormVertical')));
 
-// tables
 const BasicTable = Loadable(lazy(() => import('../views/tables/BasicTable')));
 const CollapsibleTable = Loadable(lazy(() => import('../views/tables/CollapsibleTable')));
 const EnhancedTable = Loadable(lazy(() => import('../views/tables/EnhancedTable')));
@@ -76,7 +68,6 @@ const FixedHeaderTable = Loadable(lazy(() => import('../views/tables/FixedHeader
 const PaginationTable = Loadable(lazy(() => import('../views/tables/PaginationTable')));
 const SearchTable = Loadable(lazy(() => import('../views/tables/SearchTable')));
 
-// chart
 const LineChart = Loadable(lazy(() => import('../views/charts/LineChart')));
 const GredientChart = Loadable(lazy(() => import('../views/charts/GredientChart')));
 const DoughnutChart = Loadable(lazy(() => import('../views/charts/DoughnutChart')));
@@ -85,7 +76,6 @@ const ColumnChart = Loadable(lazy(() => import('../views/charts/ColumnChart')));
 const CandlestickChart = Loadable(lazy(() => import('../views/charts/CandlestickChart')));
 const RadialbarChart = Loadable(lazy(() => import('../views/charts/RadialbarChart')));
 
-// ui
 const MuiAlert = Loadable(lazy(() => import('../views/ui-components/MuiAlert')));
 const MuiAccordion = Loadable(lazy(() => import('../views/ui-components/MuiAccordion')));
 const MuiAvatar = Loadable(lazy(() => import('../views/ui-components/MuiAvatar')));
@@ -99,7 +89,6 @@ const MuiTooltip = Loadable(lazy(() => import('../views/ui-components/MuiTooltip
 const MuiTransferList = Loadable(lazy(() => import('../views/ui-components/MuiTransferList')));
 const MuiTypography = Loadable(lazy(() => import('../views/ui-components/MuiTypography')));
 
-// authentication
 const Login = Loadable(lazy(() => import('../views/authentication/auth1/Login')));
 const Login2 = Loadable(lazy(() => import('../views/authentication/auth2/Login2')));
 const Register = Loadable(lazy(() => import('../views/authentication/auth1/Register')));
@@ -113,10 +102,11 @@ const TwoSteps2 = Loadable(lazy(() => import('../views/authentication/auth2/TwoS
 const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 const Maintenance = Loadable(lazy(() => import('../views/authentication/Maintenance')));
 
-// landingpage
 const Landingpage = Loadable(lazy(() => import('../views/pages/landingpage/Landingpage')));
 
-const UltrasoundClassification = Loadable(lazy(() => import('../views/ultrasound/EntityClassification')));
+const UltrasoundClassification = Loadable(
+  lazy(() => import('../views/ultrasound/EntityClassification')),
+);
 const HeadCircumference = Loadable(lazy(() => import('../views/ultrasound/HeadCircumference')));
 const ReportGeneration = Loadable(lazy(() => import('../views/ultrasound/ReportGeneration')));
 
@@ -157,15 +147,45 @@ const PublicOnlyRoute = ({ children }) => {
 const Router = [
   {
     path: '/',
+    element: <BlankLayout />,
+    children: [
+      { path: '/', element: <Landingpage /> },
+      { path: '/auth/404', element: <Error /> },
+      {
+        path: '/auth/login',
+        element: (
+          <PublicOnlyRoute>
+            <Login />
+          </PublicOnlyRoute>
+        ),
+      },
+      { path: '/auth/login2', element: <Login2 /> },
+      {
+        path: '/auth/register',
+        element: (
+          <PublicOnlyRoute>
+            <Register />
+          </PublicOnlyRoute>
+        ),
+      },
+      { path: '/auth/register2', element: <Register2 /> },
+      { path: '/auth/forgot-password', element: <ForgotPassword /> },
+      { path: '/auth/forgot-password2', element: <ForgotPassword2 /> },
+      { path: '/auth/two-steps', element: <TwoSteps /> },
+      { path: '/auth/two-steps2', element: <TwoSteps2 /> },
+      { path: '/auth/maintenance', element: <Maintenance /> },
+      { path: '/landingpage', element: <Landingpage /> },
+    ],
+  },
+  {
+    path: '/',
     element: <FullLayout />,
     children: [
-      { path: '/', element: <Navigate to="/landingpage" /> },
       {
         path: '/dashboards/doctor',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
-            {' '}
-            <DoctorDash />{' '}
+            <DoctorDash />
           </ProtectedRoute>
         ),
       },
@@ -173,8 +193,7 @@ const Router = [
         path: '/dashboards/woman',
         element: (
           <ProtectedRoute allowedTypes={['user']}>
-            {' '}
-            <WomanDash />{' '}
+            <WomanDash />
           </ProtectedRoute>
         ),
       },
@@ -182,8 +201,7 @@ const Router = [
         path: '/ultrasound/entity_classification',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
-            {' '}
-            <UltrasoundClassification />{' '}
+            <UltrasoundClassification />
           </ProtectedRoute>
         ),
       },
@@ -191,8 +209,7 @@ const Router = [
         path: '/ultrasound/head_circumference',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
-            {' '}
-            <HeadCircumference />{' '}
+            <HeadCircumference />
           </ProtectedRoute>
         ),
       },
@@ -200,8 +217,7 @@ const Router = [
         path: '/ultrasound/report_generation',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
-            {' '}
-            <ReportGeneration />{' '}
+            <ReportGeneration />
           </ProtectedRoute>
         ),
       },
@@ -209,8 +225,7 @@ const Router = [
         path: '/generator/names',
         element: (
           <ProtectedRoute allowedTypes={['user']}>
-            {' '}
-            <BabyNameGenerator />{' '}
+            <BabyNameGenerator />
           </ProtectedRoute>
         ),
       },
@@ -218,8 +233,7 @@ const Router = [
         path: '/generator/chat',
         element: (
           <ProtectedRoute allowedTypes={['user']}>
-            {' '}
-            <ChatBot />{' '}
+            <ChatBot />
           </ProtectedRoute>
         ),
       },

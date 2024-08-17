@@ -1,145 +1,67 @@
 import React from 'react';
-import { Avatar, Box, CardContent, Container, Typography, Rating, Stack } from '@mui/material';
-import TestimonialTitle from './TestimonialTitle';
-import BlankCard from '../../shared/BlankCard';
+import { Box, Container, Typography, Card, CardContent, Avatar, Grid } from '@mui/material';
+import { motion } from 'framer-motion';
 
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import img2 from 'src/assets/images/profile/user-2.jpg';
-import img3 from 'src/assets/images/profile/user-3.jpg';
-import AnimationFadeIn from '../animation/Animation';
-//Carousel slider for product
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import './testimonial.css';
-
-const SliderData = [
+const testimonials = [
   {
-    title: 'Jenny Wilson',
-    subtitle: 'Features avaibility',
-    avatar: img1,
-    subtext:
-      'The dashboard template from adminmart has helped me provide a clean and sleek look to my dashboard and made it look exactly the way I wanted it to, mainly without having.',
+    name: 'Sarah Johnson',
+    role: 'Expectant Mother',
+    content: 'PrenatAI has been a lifesaver during my pregnancy. The 24/7 support and personalized advice have given me peace of mind.',
+    avatar: '/path/to/avatar1.jpg',
   },
   {
-    title: 'Minshan Cui',
-    subtitle: 'Features avaibility',
-    avatar: img2,
-    subtext:
-      'The quality of design is excellent, customizability and flexibility much better than the other products available in the market.I strongly recommend the AdminMart to other.',
+    name: 'Dr. Emily Chen',
+    role: 'Gynecologist',
+    content: 'The AI-enhanced imaging has significantly improved my diagnostic accuracy. It\'s a game-changer for prenatal care.',
+    avatar: '/path/to/avatar2.jpg',
   },
   {
-    title: 'Eminson Mendoza',
-    subtitle: 'Features avaibility',
-    avatar: img3,
-    subtext:
-      'This template is great, UI-rich and up-to-date. Although it is pretty much complete, I suggest to improve a bit of documentation. Thanks & Highly recomended!',
-  },
-  {
-    title: 'Jenny Wilson',
-    subtitle: 'Features avaibility',
-    avatar: img1,
-    subtext:
-      'The dashboard template from adminmart has helped me provide a clean and sleek look to my dashboard and made it look exactly the way I wanted it to, mainly without having.',
-  },
-  {
-    title: 'Minshan Cui',
-    subtitle: 'Features avaibility',
-    avatar: img2,
-    subtext:
-      'The quality of design is excellent, customizability and flexibility much better than the other products available in the market.I strongly recommend the AdminMart to other.',
-  },
-  {
-    title: 'Eminson Mendoza',
-    subtitle: 'Features avaibility',
-    avatar: img3,
-    subtext:
-      'This template is great, UI-rich and up-to-date. Although it is pretty much complete, I suggest to improve a bit of documentation. Thanks & Highly recomended!',
+    name: 'Michael Brown',
+    role: 'Partner',
+    content: 'As a first-time dad, the educational resources and reminders have helped me support my partner throughout her pregnancy.',
+    avatar: '/path/to/avatar3.jpg',
   },
 ];
 
-const Testimonial = () => {
-  const [value, setValue] = React.useState(5);
-
-  const settings = {
-    className: 'testimonial-slider',
-    dots: true,
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-
+const Testimonials = () => {
   return (
-    <Box pt={14} pb={11}>
+    <Box sx={{ py: 8, bgcolor: 'background.default' }}>
       <Container maxWidth="lg">
-        <TestimonialTitle />
-        <Box mt={5}>
-          <AnimationFadeIn>
-            <Slider {...settings}>
-              {SliderData.map((slider, index) => (
-                <Box p="15px" key={index}>
-                  <BlankCard>
-                    <CardContent>
-                      <Stack direction="row">
-                        <Avatar src={slider.avatar} alt="user" sx={{ width: 40, height: 40 }} />
-                        <Box ml={2}>
-                          <Typography variant="h6">{slider.title}</Typography>
-                          <Typography color="textSecondary" variant="subtitle1">
-                            {slider.subtitle}
-                          </Typography>
-                        </Box>
-                        <Box ml="auto">
-                          <Rating
-                            size="small"
-                            name="simple-controlled"
-                            value={value}
-                            onChange={(event, newValue) => {
-                              setValue(newValue);
-                            }}
-                          />
-                        </Box>
-                      </Stack>
-                      <Typography fontSize="15px" color="textSecondary" mt={3}>
-                        {slider.subtext}
-                      </Typography>
-                    </CardContent>
-                  </BlankCard>
-                </Box>
-              ))}
-            </Slider>
-          </AnimationFadeIn>
-        </Box>
+        <Typography variant="h2" align="center" gutterBottom>
+          What Our Users Say
+        </Typography>
+        <Grid container spacing={4} sx={{ mt: 4 }}>
+          {testimonials.map((testimonial, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                style={{ height: '100%' }}
+              >
+                <Card elevation={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Typography variant="body1" paragraph sx={{ fontStyle: 'italic', mb: 2, flexGrow: 1 }}>
+                      "{testimonial.content}"
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Avatar src={testimonial.avatar} sx={{ width: 60, height: 60, mr: 2 }} />
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{testimonial.name}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {testimonial.role}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </Box>
   );
 };
 
-export default Testimonial;
+export default Testimonials;

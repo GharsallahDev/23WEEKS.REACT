@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Box, Typography, Stack } from '@mui/material';
 
 import PageContainer from 'src/components/container/PageContainer';
-import img1 from 'src/assets/images/backgrounds/login-bg.svg';
+import img1 from 'src/assets/images/backgrounds/fetus2.png';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 
 import AuthRegister from '../authForms/AuthRegister';
@@ -72,7 +72,7 @@ const Register = () => (
             title="Welcome to 23 Weeks"
             subtext={
               <Typography variant="subtitle1" color="textSecondary" mb={1}>
-                Your Medical Dashboard
+                Your personalized companion for a healthier and more informed pregnancy journey.
               </Typography>
             }
             subtitle={

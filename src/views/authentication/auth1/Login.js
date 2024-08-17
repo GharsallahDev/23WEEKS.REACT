@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Box, Stack, Typography } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
-import img1 from 'src/assets/images/backgrounds/login-bg.svg';
+import img1 from 'src/assets/images/backgrounds/fetus1.png';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from '../authForms/AuthLogin';
 
@@ -70,7 +70,7 @@ const Login = () => (
             title="Welcome to 23 Weeks"
             subtext={
               <Typography variant="subtitle1" color="textSecondary" mb={1}>
-                Your Medical Dashboard
+                Your personalized companion for a healthier and more informed pregnancy journey.
               </Typography>
             }
             subtitle={

@@ -21,6 +21,8 @@ import CustomFormLabel from '../../../components/forms/theme-elements/CustomForm
 import AuthSocialButtons from './AuthSocialButtons';
 import { setCredentials } from '../../../store/auth/AuthSlice';
 
+import config from 'src/config';
+
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
   password: yup
@@ -42,7 +44,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       try {
-        const response = await fetch('http://127.0.0.1:5000/auth/login', {
+        const response = await fetch(`${config.apiUrl}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

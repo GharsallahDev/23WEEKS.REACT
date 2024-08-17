@@ -1,104 +1,109 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { selectIsAuthenticated, selectUserType } from 'src/store/auth/AuthSlice';
 import {
   AppBar,
   styled,
   Toolbar,
   Container,
   Box,
-  Stack,
+  useTheme,
   useMediaQuery,
-  IconButton,
-  Drawer,
+  Button,
 } from '@mui/material';
+
 import Logo from 'src/layouts/full/shared/logo/Logo';
-import Navigations from './Navigations';
-import MobileSidebar from './MobileSidebar';
-import { IconMenu2 } from '@tabler/icons';
 
-const LpHeader = () => {
-  const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    justifyContent: 'center',
-    [theme.breakpoints.up('lg')]: {
-      minHeight: '80px',
-    },
-    backgroundColor: theme.palette.background.default,
-  }));
+const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
+  width: '100%',
+  color: theme.palette.text.secondary,
+  [theme.breakpoints.down('sm')]: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+}));
 
-  const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
+const ButtonContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  [theme.breakpoints.down('sm')]: {
+    flexDirection: 'column',
     width: '100%',
-    paddingLeft: '0 !important',
-    paddingRight: '0 !important',
-    color: theme.palette.text.secondary,
-  }));
+    alignItems: 'center',
+    marginTop: theme.spacing(2),
+  },
+}));
 
-  //   sidebar
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+const StyledButton = styled(Button)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    marginBottom: theme.spacing(1),
+  },
+}));
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
-
-  const [y, setY] = React.useState(window.scrollY);
-
-  const handleNavigation = React.useCallback(
-    (e) => {
-      const window = e.currentTarget;
-      setY(window.scrollY);
-    },
-    [y],
-  );
-
-  React.useEffect(() => {
-    setY(window.scrollY);
-    window.addEventListener('scroll', handleNavigation);
-
-    return () => {
-      window.removeEventListener('scroll', handleNavigation);
-    };
-  }, [handleNavigation]);
+const Header = () => {
+  const theme = useTheme();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const userType = useSelector(selectUserType);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <AppBarStyled position="sticky" elevation={y ? 8 : 0}>
+    <AppBar position="static" color="transparent" elevation={0}>
       <Container maxWidth="lg">
-        <ToolbarStyled>
-          <Logo />
-          <Box flexGrow={1} />
-          {lgDown ? (
-            <IconButton color="inherit" aria-label="menu" onClick={handleDrawerOpen}>
-              <IconMenu2 size="20" />
-            </IconButton>
-          ) : null}
-          {lgUp ? (
-            <Stack spacing={1} direction="row" alignItems="center">
-              <Navigations />
-            </Stack>
-          ) : null}
+        <ToolbarStyled disableGutters>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              justifyContent: isMobile ? 'center' : 'flex-start',
+            }}
+          >
+            <Logo />
+          </Box>
+          <ButtonContainer>
+            {!isMobile && (
+              <>
+                <StyledButton color="inherit" component={Link} to="/">
+                  Home
+                </StyledButton>
+                <StyledButton color="inherit" component={Link} to="/about">
+                  About
+                </StyledButton>
+                <StyledButton color="inherit" component={Link} to="/features">
+                  Features
+                </StyledButton>
+              </>
+            )}
+            {isAuthenticated ? (
+              <StyledButton
+                color="primary"
+                variant="contained"
+                component={Link}
+                to={userType === 'patient' ? '/dashboards/patient' : '/dashboards/doctor'}
+              >
+                Dashboard
+              </StyledButton>
+            ) : (
+              <>
+                <StyledButton color="primary" variant="outlined" component={Link} to="/auth/login">
+                  Login
+                </StyledButton>
+                <StyledButton
+                  color="primary"
+                  variant="contained"
+                  component={Link}
+                  to="/auth/register"
+                  sx={{ ml: isMobile ? 0 : 1 }}
+                >
+                  Register
+                </StyledButton>
+              </>
+            )}
+          </ButtonContainer>
         </ToolbarStyled>
       </Container>
-      <Drawer
-        anchor="left"
-        open={open}
-        variant="temporary"
-        onClose={toggleDrawer(false)}
-        PaperProps={{
-          sx: {
-            width: 270,
-            border: '0 !important',
-            boxShadow: (theme) => theme.shadows[8],
-          },
-        }}
-      >
-        <MobileSidebar />
-      </Drawer>
-    </AppBarStyled>
+    </AppBar>
   );
 };
 
-export default LpHeader;
+export default Header;

@@ -1,12 +1,13 @@
 import { styled, Container, Box, useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import Header from './vertical/header/Header';
 import HorizontalHeader from '../full/horizontal/header/Header';
 import Sidebar from './vertical/sidebar/Sidebar';
 import Customizer from './shared/customizer/Customizer';
 import Navigation from './horizontal/navbar/Navbar';
+import { selectIsAuthenticated } from '../../store/auth/AuthSlice';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -26,52 +27,48 @@ const PageWrapper = styled('div')(() => ({
 
 const FullLayout = () => {
   const customizer = useSelector((state) => state.customizer);
-
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const location = useLocation();
   const theme = useTheme();
+
+  const isHomePage = location.pathname === '/';
 
   return (
     <MainWrapper
       className={customizer.activeMode === 'dark' ? 'darkbg mainwrapper' : 'mainwrapper'}
     >
-      {/* ------------------------------------------- */}
       {/* Sidebar */}
-      {/* ------------------------------------------- */}
-      {customizer.isHorizontal ? '' : <Sidebar />}
-      {/* ------------------------------------------- */}
+      {isAuthenticated && !customizer.isHorizontal && <Sidebar />}
+
       {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
       <PageWrapper
         className="page-wrapper"
         sx={{
-          ...(customizer.isCollapse && {
-            [theme.breakpoints.up('lg')]: { ml: `${customizer.MiniSidebarWidth}px` },
-          }),
+          ...(isAuthenticated &&
+            customizer.isCollapse && {
+              [theme.breakpoints.up('lg')]: { ml: `${customizer.MiniSidebarWidth}px` },
+            }),
         }}
       >
-        {/* ------------------------------------------- */}
         {/* Header */}
-        {/* ------------------------------------------- */}
-        {customizer.isHorizontal ? <HorizontalHeader /> : <Header />}
-        {/* ------------------------------------------- */}
-        {/* PageContent */}
-        {/* ------------------------------------------- */}
-        {customizer.isHorizontal ? <Navigation /> : ''}
+        {isAuthenticated && (customizer.isHorizontal ? <HorizontalHeader /> : <Header />)}
+
+        {/* Navigation */}
+        {isAuthenticated && customizer.isHorizontal && <Navigation />}
+
         <Container
           sx={{
             maxWidth: customizer.isLayout === 'boxed' ? 'lg' : '100%!important',
           }}
         >
-          {/* ------------------------------------------- */}
           {/* Page Route */}
-          {/* ------------------------------------------- */}
           <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
             <Outlet />
           </Box>
-          {/* ------------------------------------------- */}
-          {/* End Page */}
-          {/* ------------------------------------------- */}
         </Container>
-        <Customizer />
+
+        {/* Customizer */}
+        {isAuthenticated && <Customizer />}
       </PageWrapper>
     </MainWrapper>
   );

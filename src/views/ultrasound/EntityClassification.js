@@ -22,6 +22,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/scan.png';
+import config from 'src/config';
 
 const BCrumb = [
   {
@@ -93,7 +94,7 @@ const UltrasoundClassification = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/classify-ultrasound', {
+      const response = await fetch(`${config.apiUrl}/api/classify-ultrasound`, {
         method: 'POST',
         body: formData,
       });

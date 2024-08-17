@@ -16,6 +16,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
+import config from 'src/config';
 
 const BCrumb = [{ to: '/', title: 'Ultrasound' }, { title: 'AI Report Generator' }];
 
@@ -111,7 +112,7 @@ const UltrasoundReportGenerator = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/generate-report', {
+      const response = await fetch(`${config.apiUrl}/api/generate-report`, {
         method: 'POST',
         body: formData,
       });
