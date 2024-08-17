@@ -89,6 +89,12 @@ const Menuitems = [
     children: [
       {
         id: uniqueId(),
+        title: 'Enhance Quality',
+        icon: IconPoint,
+        href: '/ultrasoud/enhance_quality',
+      },
+      {
+        id: uniqueId(),
         title: 'Entity Classification',
         icon: IconPoint,
         href: '/ultrasound/entity_classification',

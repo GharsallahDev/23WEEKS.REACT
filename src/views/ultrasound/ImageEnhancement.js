@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Grid, Card, CardContent, Typography, Button, CircularProgress, CardActions } from '@mui/material';
+import { Box, Grid, Card, CardContent, Typography, Button, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -13,7 +13,7 @@ const BCrumb = [
     title: 'Ultrasound',
   },
   {
-    title: 'Head Circumference',
+    title: 'Enhancement',
   },
 ];
 
@@ -42,6 +42,7 @@ const FixedHeightCardContent = styled(CardContent)({
 });
 
 const ImageContainer = styled(Box)({
+  flexGrow: 1,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -51,59 +52,24 @@ const ImageContainer = styled(Box)({
   borderRadius: 8,
   padding: 16,
   marginBottom: 16,
-  backgroundColor: '#f9f9f9',
-  position: 'relative',
 });
 
-const MaskImage = styled('img')({
-  maxWidth: '100%',
-  maxHeight: '100%',
-  objectFit: 'contain',
-  width: '100%',
-  height: 'auto',
-});
-
-const CenteredBox = styled(Box)({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
-const ButtonGroup = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column', // Stack buttons vertically
-  gap: 16, // Space between buttons
-  alignItems: 'center', // Center buttons horizontally
-  marginTop: 16,
-});
-
-const MeasurementCard = styled(Card)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
-
-const HeadCircumferenceCalculator = () => {
+const ImageQualityEnhancement = () => {
   const [originalImage, setOriginalImage] = useState(null);
-  const [circumference, setCircumference] = useState(null);
-  const [pixelValue, setPixelValue] = useState(null);
-  const [maskImage, setMaskImage] = useState(null);
+  const [enhancedImage, setEnhancedImage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
-
-  // Define the pixel size in millimeters
-  const pixelSizeInMm = 1.2;
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       setOriginalImage(file);
-      setCircumference(null);
-      setPixelValue(null);
-      setMaskImage(null);
+      setEnhancedImage(null);
       setError(null);
     }
   };
 
-  const calculateCircumference = async () => {
+  const enhanceImage = async () => {
     setIsProcessing(true);
     setError(null);
 
@@ -111,7 +77,7 @@ const HeadCircumferenceCalculator = () => {
     formData.append('image', originalImage);
 
     try {
-      const response = await fetch(`${config.apiUrl}/api/calculate-circumference`, {
+      const response = await fetch(`${config.apiUrl}/api/enhance-image`, {
         method: 'POST',
         body: formData,
       });
@@ -122,15 +88,10 @@ const HeadCircumferenceCalculator = () => {
       }
 
       const data = await response.json();
-
-      if (data.circumference !== undefined) {
-        const circumferenceInMm = data.circumference * pixelSizeInMm;
-        setCircumference(circumferenceInMm);
-        setPixelValue(data.pixelValue);
-        setMaskImage(`data:image/png;base64,${data.maskImage}`);
-      } else {
-        throw new Error('No circumference data received');
+      if (!data.enhancedImage) {
+        throw new Error('No enhanced image received');
       }
+      setEnhancedImage(data.enhancedImage);
     } catch (err) {
       setError(`An error occurred while processing the image: ${err.message}`);
       console.error('Error:', err);
@@ -141,15 +102,13 @@ const HeadCircumferenceCalculator = () => {
 
   const handleReset = () => {
     setOriginalImage(null);
-    setCircumference(null);
-    setPixelValue(null);
-    setMaskImage(null);
+    setEnhancedImage(null);
     setError(null);
   };
 
   return (
-    <PageContainer title="Head Circumference Calculation">
-      <Breadcrumb title="Head Circumference Calculation" items={BCrumb}>
+    <PageContainer title="Image Quality Enhancement">
+      <Breadcrumb title="Image Quality Enhancement" items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Ultrasound" width="155px" />
         </Box>
@@ -190,49 +149,68 @@ const HeadCircumferenceCalculator = () => {
           <FixedHeightCard>
             <FixedHeightCardContent>
               <Typography variant="h6" gutterBottom>
-                Mask Image
+                Enhanced Image
               </Typography>
               <ImageContainer>
-                {maskImage ? (
-                  <MaskImage src={maskImage} alt="Mask" />
+                {enhancedImage ? (
+                  <img
+                    src={`data:image/png;base64,${enhancedImage}`}
+                    alt="Enhanced image"
+                    style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                  />
                 ) : (
                   <Typography color="textSecondary">
-                    {isProcessing ? 'Generating mask...' : 'No mask generated yet'}
+                    {isProcessing ? 'Enhancing image...' : 'No enhanced image yet'}
                   </Typography>
                 )}
               </ImageContainer>
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<RestartAltIcon />}
+                fullWidth
+                onClick={handleReset}
+                disabled={!originalImage && !enhancedImage}
+              >
+                Reset
+              </Button>
             </FixedHeightCardContent>
-            <CardActions sx={{ justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-              <ButtonGroup>
+          </FixedHeightCard>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Enhance Image Quality
+              </Typography>
+              {!enhancedImage && !isProcessing && (
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={calculateCircumference}
-                  disabled={!originalImage || isProcessing}
+                  onClick={enhanceImage}
+                  disabled={!originalImage}
+                  fullWidth
                 >
-                  {isProcessing ? <CircularProgress size={24} /> : 'Calculate Circumference'}
+                  Enhance Image
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<RestartAltIcon />}
-                  onClick={handleReset}
-                  disabled={!originalImage && circumference === null}
-                >
-                  Reset
-                </Button>
-              </ButtonGroup>
-            </CardActions>
-          </FixedHeightCard>
+              )}
+              {isProcessing && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                  <CircularProgress />
+                </Box>
+              )}
+              {error && (
+                <Typography color="error" align="center" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
-      {error && (
-        <Typography color="error" align="center" sx={{ mt: 2 }}>
-          {error}
-        </Typography>
-      )}
     </PageContainer>
   );
 };
 
-export default HeadCircumferenceCalculator;
+export default ImageQualityEnhancement;

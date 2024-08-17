@@ -109,11 +109,10 @@ const UltrasoundClassification = Loadable(
 );
 const HeadCircumference = Loadable(lazy(() => import('../views/ultrasound/HeadCircumference')));
 const ReportGeneration = Loadable(lazy(() => import('../views/ultrasound/ReportGeneration')));
-
+const EnhanceQuality = Loadable(lazy(() => import('../views/ultrasound/ImageEnhancement')));
 const BabyNameGenerator = Loadable(lazy(() => import('../views/generator/BabyNameGenerator')));
-
 const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
-
+const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const userType = useSelector(selectUserType);
@@ -214,6 +213,14 @@ const Router = [
         ),
       },
       {
+        path: '/ultrasoud/enhance_quality',
+        element: (
+          <ProtectedRoute allowedTypes={['doctor']}>
+            <EnhanceQuality />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: '/ultrasound/report_generation',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
@@ -234,6 +241,14 @@ const Router = [
         element: (
           <ProtectedRoute allowedTypes={['user']}>
             <ChatBot />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/generator/reminders',
+        element: (
+          <ProtectedRoute allowedTypes={['user']}>
+            <SmartReminders />
           </ProtectedRoute>
         ),
       },

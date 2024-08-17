@@ -17,7 +17,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import config from 'src/config';
-
+import breadcrumbImg from 'src/assets/images/breadcrumb/reportgen.png';
 const BCrumb = [{ to: '/', title: 'Ultrasound' }, { title: 'AI Report Generator' }];
 
 const VisuallyHiddenInput = styled('input')({
@@ -151,8 +151,11 @@ const UltrasoundReportGenerator = () => {
 
   return (
     <PageContainer title="AI Ultrasound Report Generator">
-      <Breadcrumb title="AI Ultrasound Report Generator" items={BCrumb} />
-
+      <Breadcrumb title="AI Ultrasound Report Generator" items={BCrumb}>
+        <Box>
+          <img src={breadcrumbImg} alt="Ultrasound" width="155px" />
+        </Box>
+      </Breadcrumb>
       <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
         {steps.map((label) => (
           <Step key={label}>

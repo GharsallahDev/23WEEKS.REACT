@@ -5,50 +5,51 @@ const d = today.getDate();
 
 const Events = [
   {
-    title: 'Twice event For two Days',
+    title: 'Surgery: Laparoscopic Hysterectomy - Patient: Jane Doe',
     allDay: true,
-    start: new Date(y, m, 3),
-    end: new Date(y, m, 5),
-    color: 'default',
+    start: new Date(y, m, d + 2), // Surgery scheduled two days from today
+    end: new Date(y, m, d + 2),
+    color: 'red',
   },
   {
-    title: 'Learn ReactJs',
-    start: new Date(y, m, d + 3, 10, 30),
-    end: new Date(y, m, d + 3, 11, 30),
+    title: 'Prenatal Checkup - Patient: Emily Smith',
+    start: new Date(y, m, d + 3, 10, 0), // Checkup scheduled three days from today
+    end: new Date(y, m, d + 3, 11, 0),
     allDay: false,
     color: 'green',
   },
   {
-    title: 'Launching MaterialArt Angular',
-    start: new Date(y, m, d + 7, 12, 0),
-    end: new Date(y, m, d + 7, 14, 0),
+    title: 'Ultrasound - Patient: Sarah Johnson',
+    start: new Date(y, m, d + 4, 14, 30), // Ultrasound scheduled four days from today
+    end: new Date(y, m, d + 4, 15, 30),
     allDay: false,
-    color: 'red',
+    color: 'blue',
   },
   {
-    title: 'Lunch with Mr.Raw',
-    start: new Date(y, m, d - 2),
-    end: new Date(y, m, d - 2),
-    allDay: true,
-    color: 'azure',
-  },
-  {
-    title: 'Going For Party of Sahs',
-    start: new Date(y, m, d + 1, 19, 0),
-    end: new Date(y, m, d + 1, 22, 30),
+    title: 'Postpartum Follow-up - Patient: Lisa Brown',
+    start: new Date(y, m, d + 1, 9, 0), // Follow-up scheduled one day from today
+    end: new Date(y, m, d + 1, 10, 0),
     allDay: false,
     color: 'azure',
   },
   {
-    title: 'Learn Ionic',
-    start: new Date(y, m, 23),
-    end: new Date(y, m, 25),
-    color: 'warning',
+    title: 'Administrative Meeting',
+    start: new Date(y, m, d + 7, 12, 0), // Meeting scheduled seven days from today
+    end: new Date(y, m, d + 7, 13, 0),
+    allDay: false,
+    color: 'orange',
   },
   {
-    title: 'Research of making own Browser',
-    start: new Date(y, m, 19),
-    end: new Date(y, m, 22),
+    title: 'Patient Consultation: Annual Exam - Patient: Anne Baker',
+    start: new Date(y, m, d - 1, 16, 0), // Consultation scheduled one day ago
+    end: new Date(y, m, d - 1, 17, 0),
+    allDay: false,
+    color: 'purple',
+  },
+  {
+    title: 'Research Presentation on New Gynecological Procedures',
+    start: new Date(y, m, d + 10, 14, 0), // Presentation scheduled ten days from today
+    end: new Date(y, m, d + 10, 16, 0),
     color: 'default',
   },
 ];
