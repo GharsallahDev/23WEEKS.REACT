@@ -7,6 +7,7 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/ultrasound.png';
 import { useTranslation } from 'react-i18next';
+import config from 'src/config';
 
 const BCrumb = [
   {
@@ -110,7 +111,7 @@ const HeadCircumferenceCalculator = () => {
     formData.append('image', originalImage);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/calculate-circumference', {
+      const response = await fetch(`${config.apiUrl}/api//calculate-circumference`, {
         method: 'POST',
         body: formData,
       });
