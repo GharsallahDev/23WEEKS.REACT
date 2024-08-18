@@ -19,6 +19,7 @@ import { format } from 'date-fns';
 import { fetchBlogPost } from 'src/store/apps/blog/BlogSlice';
 import BlankCard from '../../shared/BlankCard';
 
+// Styled components
 const CoverImgStyle = styled(CardContent)({
   position: 'absolute',
   top: '0',
@@ -28,6 +29,7 @@ const CoverImgStyle = styled(CardContent)({
   height: '100%',
   color: 'white',
 });
+
 const CoverBox = styled(Box)({
   top: 0,
   content: "''",
@@ -38,13 +40,13 @@ const CoverBox = styled(Box)({
 
 const BlogFeaturedCard = ({ post, index }) => {
   const dispatch = useDispatch();
-  const { coverImg, title, view, comments, category, author, createdAt } = post;
-  const linkTo = title
-    .toLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '');
+  const { id, coverImg, title, view, comments, category, author, createdAt } = post;
+  
+  // Create the link using the post ID
+  const linkTo = `/apps/blog/detail/${id}`;
   const mainPost = index === 0;
 
+  // Styled components for cover image
   const CoverImgBg = styled(BlankCard)({
     p: 0,
     height: '400px',
@@ -75,21 +77,19 @@ const BlogFeaturedCard = ({ post, index }) => {
           alignItems="stretch"
         >
           {isLoading ? (
-            <>
-              <Skeleton
-                variant="square"
-                animation="wave"
-                width="100%"
-                height={400}
-                sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
-              ></Skeleton>
-            </>
+            <Skeleton
+              variant="square"
+              animation="wave"
+              width="100%"
+              height={400}
+              sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
+            />
           ) : (
             <CoverImgBg className="hoverCard">
               <Typography
                 component={Link}
-                to={`/apps/blog/detail/${linkTo}`}
-                onClick={() => dispatch(fetchBlogPost(linkTo))}
+                to={linkTo}
+                onClick={() => dispatch(fetchBlogPost(id))} // Fetch post using ID
               >
                 <CoverBox
                   sx={{ backgroundColor: (theme) => alpha(theme.palette.grey[900], 0.6) }}
@@ -112,7 +112,7 @@ const BlogFeaturedCard = ({ post, index }) => {
                         label={category}
                         size="small"
                         color="primary"
-                      ></Chip>
+                      />
                     </Stack>
                   </Box>
                   <Box>
@@ -123,8 +123,8 @@ const BlogFeaturedCard = ({ post, index }) => {
                         color="inherit"
                         sx={{ textDecoration: 'none' }}
                         component={Link}
-                        to={`/apps/blog/detail/${linkTo}`}
-                        onClick={() => dispatch(fetchBlogPost(linkTo))}
+                        to={linkTo}
+                        onClick={() => dispatch(fetchBlogPost(id))} // Fetch post using ID
                       >
                         {title}
                       </Typography>
@@ -136,7 +136,6 @@ const BlogFeaturedCard = ({ post, index }) => {
                       <Stack direction="row" gap={1} alignItems="center">
                         <IconMessage2 size="18" /> {comments.length}
                       </Stack>
-
                       <Stack direction="row" ml="auto" alignItems="center">
                         <IconPoint size="16" />
                         <small>{format(new Date(createdAt), 'E, MMM d')}</small>

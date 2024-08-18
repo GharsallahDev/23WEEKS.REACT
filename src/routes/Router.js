@@ -112,6 +112,7 @@ const ReportGeneration = Loadable(lazy(() => import('../views/ultrasound/ReportG
 const EnhanceQuality = Loadable(lazy(() => import('../views/ultrasound/ImageEnhancement')));
 const BabyNameGenerator = Loadable(lazy(() => import('../views/generator/BabyNameGenerator')));
 const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
+const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -241,6 +242,15 @@ const Router = [
         element: (
           <ProtectedRoute allowedTypes={['user']}>
             <ChatBot />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/generator/story-generator',
+        element: (
+          <ProtectedRoute allowedTypes={['user']}>
+            {' '}
+            <StoryGeneration />{' '}
           </ProtectedRoute>
         ),
       },
