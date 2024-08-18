@@ -21,7 +21,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
-import breadcrumbImg from 'src/assets/images/breadcrumb/scan.png';
+import breadcrumbImg from 'src/assets/images/breadcrumb/ultrasound_scan.png';
 import config from 'src/config';
 import { useTranslation } from 'react-i18next';
 
@@ -186,8 +186,8 @@ const UltrasoundClassification = () => {
   return (
     <PageContainer title={t('Ultrasound Classification')}>
       <Breadcrumb title={t('Ultrasound Classification')} items={BCrumb}>
-        <Box sx={{ marginTop: '-33px' }}>
-          <img src={breadcrumbImg} alt={t('Ultrasound')} height="190px" width="auto" />
+        <Box sx={{ marginTop: '-15px' }}>
+          <img src={breadcrumbImg} alt={t('Ultrasound')} height="150px" width="auto" />
         </Box>
       </Breadcrumb>
 
