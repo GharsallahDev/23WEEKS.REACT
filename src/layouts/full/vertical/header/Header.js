@@ -8,11 +8,8 @@ import { IconMenu2 } from '@tabler/icons';
 // components
 import Notifications from './Notifications';
 import Profile from './Profile';
-import Cart from './Cart';
 import Search from './Search';
 import Language from './Language';
-import Navigation from './Navigation';
-import MobileRightSidebar from './MobileRightSidebar';
 
 const Header = () => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));

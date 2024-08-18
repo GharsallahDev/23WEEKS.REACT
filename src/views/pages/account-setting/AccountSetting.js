@@ -5,10 +5,9 @@ import { Grid, Tabs, Tab, Box, CardContent, Divider } from '@mui/material';
 
 // components
 import AccountTab from '../../../components/pages/account-setting/AccountTab';
-import { IconArticle, IconBell, IconLock, IconUserCircle } from '@tabler/icons';
+import { IconBell, IconLock, IconUserCircle } from '@tabler/icons';
 import BlankCard from '../../../components/shared/BlankCard';
 import NotificationTab from '../../../components/pages/account-setting/NotificationTab';
-import BillsTab from '../../../components/pages/account-setting/BillsTab';
 import SecurityTab from '../../../components/pages/account-setting/SecurityTab';
 
 const BCrumb = [
@@ -66,7 +65,8 @@ const AccountSetting = () => {
                 value={value}
                 onChange={handleChange}
                 scrollButtons="auto"
-                aria-label="basic tabs example" variant="scrollable"
+                aria-label="basic tabs example"
+                variant="scrollable"
               >
                 <Tab
                   iconPosition="start"
@@ -74,24 +74,17 @@ const AccountSetting = () => {
                   label="Account"
                   {...a11yProps(0)}
                 />
-
-                <Tab
-                  iconPosition="start"
-                  icon={<IconBell size="22" />}
-                  label="Notifications"
-                  {...a11yProps(1)}
-                />
-                <Tab
-                  iconPosition="start"
-                  icon={<IconArticle size="22" />}
-                  label="Bills"
-                  {...a11yProps(2)}
-                />
                 <Tab
                   iconPosition="start"
                   icon={<IconLock size="22" />}
                   label="Security"
-                  {...a11yProps(3)}
+                  {...a11yProps(1)}
+                />
+                <Tab
+                  iconPosition="start"
+                  icon={<IconBell size="22" />}
+                  label="Notifications"
+                  {...a11yProps(2)}
                 />
               </Tabs>
             </Box>
@@ -101,13 +94,10 @@ const AccountSetting = () => {
                 <AccountTab />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <NotificationTab />
+                <SecurityTab />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <BillsTab />
-              </TabPanel>
-              <TabPanel value={value} index={3}>
-                <SecurityTab />
+                <NotificationTab />
               </TabPanel>
             </CardContent>
           </BlankCard>

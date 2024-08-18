@@ -1,22 +1,20 @@
 import React from 'react';
 import { Typography, Avatar, ListItemAvatar, Box } from '@mui/material';
-import { IconMenu2 } from '@tabler/icons';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import chatIcon from 'src/assets/images/chat/gpt.png';
 import { keyframes } from '@emotion/react';
 
-// Keyframes for the typing animation
 const typingAnimation = keyframes`
   0% { opacity: .2; }
   20% { opacity: 1; }
   100% { opacity: .2; }
 `;
 
-const ChatContent = ({ toggleChatSidebar, messages, isChatActive, isBotTyping }) => {
+const ChatContent = ({ messages, isChatActive, isBotTyping }) => {
   return (
-    <Box sx={{ height: '650px', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ flexGrow: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       {isChatActive ? (
-        <Scrollbar sx={{ flexGrow: 1, overflow: 'auto', maxHeight: '100%' }}>
+        <Scrollbar sx={{ flexGrow: 1 }}>
           <Box p={3}>
             {messages.map((message, index) => (
               <Box key={index} mb={2}>
@@ -64,8 +62,8 @@ const ChatContent = ({ toggleChatSidebar, messages, isChatActive, isBotTyping })
                 </ListItemAvatar>
                 <Box
                   sx={{
-                    width: 60, // Set a fixed width for the box
-                    height: 30, // Set a fixed height for the box
+                    width: 60,
+                    height: 30,
                     backgroundColor: 'grey.100',
                     borderRadius: '10px',
                     display: 'flex',

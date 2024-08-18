@@ -1,22 +1,26 @@
 import React from 'react';
-import { Drawer, useMediaQuery } from '@mui/material';
+import { Drawer, useMediaQuery, useTheme } from '@mui/material';
 import ChatListing from './ChatListing';
 
 const drawerWidth = 320;
 
 const ChatSidebar = ({ isMobileSidebarOpen, onSidebarClose, onStartChat, isChatActive }) => {
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+  const theme = useTheme();
+  const lgUp = useMediaQuery(theme.breakpoints.up('lg'));
 
   return (
     <Drawer
-      open={isMobileSidebarOpen}
+      open={lgUp ? true : isMobileSidebarOpen}
       onClose={onSidebarClose}
       variant={lgUp ? 'permanent' : 'temporary'}
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        zIndex: lgUp ? 0 : 1,
-        [`& .MuiDrawer-paper`]: { position: 'relative' },
+        [`& .MuiDrawer-paper`]: {
+          width: drawerWidth,
+          position: lgUp ? 'relative' : 'fixed',
+          height: '100%',
+        },
       }}
     >
       <ChatListing onStartChat={onStartChat} isChatActive={isChatActive} />

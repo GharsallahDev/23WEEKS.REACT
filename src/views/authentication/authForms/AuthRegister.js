@@ -71,7 +71,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
   });
 
   const types = [
-    { value: 'user', label: 'User' },
+    { value: 'user', label: 'Patient' },
     { value: 'doctor', label: 'Doctor' },
   ];
 

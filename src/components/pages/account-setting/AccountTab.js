@@ -1,146 +1,148 @@
-import React from 'react';
-import { CardContent, Grid, Typography, MenuItem, Box, Avatar, Button, Stack } from '@mui/material';
-
-// components
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { CardContent, Grid, Typography, Box, Avatar, Button, Stack, Alert } from '@mui/material';
 import BlankCard from '../../shared/BlankCard';
 import CustomTextField from '../../forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
-import CustomSelect from '../../forms/theme-elements/CustomSelect';
-
-// images
+import { setCredentials } from 'src/store/auth/AuthSlice';
+import config from 'src/config';
 import user1 from 'src/assets/images/profile/user-1.jpg';
 
-// locations
-const locations = [
-  {
-    value: 'us',
-    label: 'United States',
-  },
-  {
-    value: 'uk',
-    label: 'United Kingdom',
-  },
-  {
-    value: 'india',
-    label: 'India',
-  },
-  {
-    value: 'russia',
-    label: 'Russia',
-  },
-];
-
-// currency
-const currencies = [
-  {
-    value: 'us',
-    label: 'US Dollar ($)',
-  },
-  {
-    value: 'uk',
-    label: 'United Kingdom (Pound)',
-  },
-  {
-    value: 'india',
-    label: 'India (INR)',
-  },
-  {
-    value: 'russia',
-    label: 'Russia (Ruble)',
-  },
-];
-
 const AccountTab = () => {
-  const [location, setLocation] = React.useState('india');
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
-  const handleChange1 = (event) => {
-    setLocation(event.target.value);
+  const [avatar, setAvatar] = useState(user.avatar || user1);
+  const [formData, setFormData] = useState({
+    full_name: user.full_name || '',
+    email: user.email || '',
+  });
+  const [alert, setAlert] = useState({ message: '', severity: 'info' });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  //   currency
-  const [currency, setCurrency] = React.useState('india');
+  const handleAvatarChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-  const handleChange2 = (event) => {
-    setCurrency(event.target.value);
+  // Updated handleAvatarReset to reset the avatar to an empty string
+  const handleAvatarReset = () => {
+    setAvatar(''); // Reset to empty string
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('full_name', formData.full_name);
+      formDataToSend.append('email', formData.email);
+
+      // Send empty string for avatar if it was reset
+      if (avatar === '') {
+        formDataToSend.append('avatar', '');
+      } else if (avatar !== user.avatar && avatar !== user1) {
+        formDataToSend.append('avatar', dataURItoBlob(avatar), 'avatar.jpg');
+      }
+
+      const response = await fetch(`${config.apiUrl}/auth/update-account`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: formDataToSend,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.msg || 'Failed to update account');
+      }
+
+      dispatch(
+        setCredentials({
+          user: {
+            ...user,
+            full_name: result.full_name,
+            email: result.email,
+            avatar: result.avatar || user1, // Update avatar or fallback to default
+          },
+          token: localStorage.getItem('token'),
+        }),
+      );
+
+      setAlert({ message: 'Account updated successfully', severity: 'success' });
+    } catch (error) {
+      console.error('Error updating account:', error);
+      setAlert({ message: error.message, severity: 'error' });
+    }
+  };
+
+  // Helper function to convert data URI to Blob
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   };
 
   return (
     <Grid container spacing={3}>
+      {alert.message && (
+        <Grid item xs={12}>
+          <Alert
+            severity={alert.severity}
+            onClose={() => setAlert({ message: '', severity: 'info' })}
+          >
+            {alert.message}
+          </Alert>
+        </Grid>
+      )}
       {/* Change Profile */}
-      <Grid item xs={12} lg={6}>
+      <Grid item xs={12}>
         <BlankCard>
           <CardContent>
             <Typography variant="h5" mb={1}>
               Change Profile
             </Typography>
-            <Typography color="textSecondary" mb={3}>Change your profile picture from here</Typography>
-            <Box textAlign="center" display="flex" justifyContent="center">
-              <Box>
-                <Avatar
-                  src={user1}
-                  alt={user1}
-                  sx={{ width: 120, height: 120, margin: '0 auto' }}
-                />
-                <Stack direction="row" justifyContent="center" spacing={2} my={3}>
-                  <Button variant="contained" color="primary" component="label">
-                    Upload
-                    <input hidden accept="image/*" multiple type="file" />
-                  </Button>
-                  <Button variant="outlined" color="error">
-                    Reset
-                  </Button>
-                </Stack>
-                <Typography variant="subtitle1" color="textSecondary" mb={4}>
-                  Allowed JPG, GIF or PNG. Max size of 800K
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </BlankCard>
-      </Grid>
-      {/*  Change Password */}
-      <Grid item xs={12} lg={6}>
-        <BlankCard>
-          <CardContent>
-            <Typography variant="h5" mb={1}>
-              Change Password
+            <Typography color="textSecondary" mb={3}>
+              Change your profile picture from here
             </Typography>
-            <Typography color="textSecondary" mb={3}>To change your password please confirm here</Typography>
-            <form>
-              <CustomFormLabel
-                sx={{
-                  mt: 0,
-                }}
-                htmlFor="text-cpwd"
-              >
-                Current Password
-              </CustomFormLabel>
-              <CustomTextField
-                id="text-cpwd"
-                value="MathewAnderson"
-                variant="outlined"
-                fullWidth
-                type="password"
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <Avatar
+                src={avatar || user1}
+                alt="User Avatar"
+                sx={{ width: 120, height: 120, mb: 2 }}
               />
-              {/* 2 */}
-              <CustomFormLabel htmlFor="text-npwd">New Password</CustomFormLabel>
-              <CustomTextField
-                id="text-npwd"
-                value="MathewAnderson"
-                variant="outlined"
-                fullWidth
-                type="password"
-              />
-              {/* 3 */}
-              <CustomFormLabel htmlFor="text-conpwd">Confirm Password</CustomFormLabel>
-              <CustomTextField
-                id="text-conpwd"
-                value="MathewAnderson"
-                variant="outlined"
-                fullWidth
-                type="password"
-              />
-            </form>
+              <Stack direction="row" spacing={2} mb={2}>
+                <Button variant="contained" color="primary" component="label">
+                  Upload
+                  <input hidden accept="image/*" type="file" onChange={handleAvatarChange} />
+                </Button>
+                <Button variant="outlined" color="error" onClick={handleAvatarReset}>
+                  Reset
+                </Button>
+              </Stack>
+              <Typography variant="subtitle1" color="textSecondary">
+                Allowed JPG, GIF or PNG. Max size of 800K
+              </Typography>
+            </Box>
           </CardContent>
         </BlankCard>
       </Grid>
@@ -151,10 +153,12 @@ const AccountTab = () => {
             <Typography variant="h5" mb={1}>
               Personal Details
             </Typography>
-            <Typography color="textSecondary" mb={3}>To change your personal detail , edit and save from here</Typography>
-            <form>
+            <Typography color="textSecondary" mb={3}>
+              To change your personal details, edit and save from here
+            </Typography>
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <CustomFormLabel
                     sx={{
                       mt: 0,
@@ -165,78 +169,14 @@ const AccountTab = () => {
                   </CustomFormLabel>
                   <CustomTextField
                     id="text-name"
-                    value="Mathew Anderson"
+                    name="full_name"
+                    value={formData.full_name}
+                    onChange={handleInputChange}
                     variant="outlined"
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  {/* 2 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-store-name"
-                  >
-                    Store Name
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-store-name"
-                    value="Maxima Studio"
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {/* 3 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-location"
-                  >
-                    Location
-                  </CustomFormLabel>
-                  <CustomSelect
-                    fullWidth
-                    id="text-location"
-                    variant="outlined"
-                    value={location}
-                    onChange={handleChange1}
-                  >
-                    {locations.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </CustomSelect>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {/* 4 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-currency"
-                  >
-                    Currency
-                  </CustomFormLabel>
-                  <CustomSelect
-                    fullWidth
-                    id="text-currency"
-                    variant="outlined"
-                    value={currency}
-                    onChange={handleChange2}
-                  >
-                    {currencies.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </CustomSelect>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {/* 5 */}
+                <Grid item xs={12}>
                   <CustomFormLabel
                     sx={{
                       mt: 0,
@@ -247,41 +187,9 @@ const AccountTab = () => {
                   </CustomFormLabel>
                   <CustomTextField
                     id="text-email"
-                    value="info@23weeks.com"
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {/* 6 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-phone"
-                  >
-                    Phone
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-phone"
-                    value="+91 12345 65478"
-                    variant="outlined"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  {/* 7 */}
-                  <CustomFormLabel
-                    sx={{
-                      mt: 0,
-                    }}
-                    htmlFor="text-address"
-                  >
-                    Address
-                  </CustomFormLabel>
-                  <CustomTextField
-                    id="text-address"
-                    value="814 Howard Street, 120065, India"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     variant="outlined"
                     fullWidth
                   />
@@ -291,7 +199,7 @@ const AccountTab = () => {
           </CardContent>
         </BlankCard>
         <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
-          <Button size="large" variant="contained" color="primary">
+          <Button size="large" variant="contained" color="primary" onClick={handleSubmit}>
             Save
           </Button>
           <Button size="large" variant="text" color="error">
