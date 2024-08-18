@@ -9,7 +9,6 @@ import NameList from './components/NameList';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/baby.png';
-import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -80,47 +79,27 @@ const questions = [
 ];
 
 const BabyNameGenerator = () => {
-  const { t } = useTranslation();
   const [started, setStarted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [generating, setGenerating] = useState(false);
   const [names, setNames] = useState([]);
-  const [error, setError] = useState(null);
 
   const handleStart = () => {
     setStarted(true);
   };
 
-  const handleAnswer = async (answer) => {
-    const updatedAnswers = { ...answers, [currentQuestion]: answer };
-    setAnswers(updatedAnswers);
-
+  const handleAnswer = (answer) => {
+    setAnswers({ ...answers, [currentQuestion]: answer });
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setGenerating(true);
-      try {
-        const response = await fetch('/api/generate-baby-names', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedAnswers),
-        });
-
-        if (!response.ok) {
-          throw new Error(t('Failed to generate names'));
-        }
-
-        const data = await response.json();
-        setNames(data.names);
-      } catch (error) {
-        setError(t('An error occurred while generating names. Please try again.'));
-        console.error('Error:', error);
-      } finally {
+      setTimeout(() => {
+        const generatedNames = generateNames(answers);
+        setNames(generatedNames);
         setGenerating(false);
-      }
+      }, 3000);
     }
   };
 
@@ -129,20 +108,46 @@ const BabyNameGenerator = () => {
     setCurrentQuestion(0);
     setAnswers({});
     setNames([]);
-    setError(null);
+  };
+
+  const generateNames = (answers) => {
+    const genderSpecificNames = {
+      Boy: ['Liam', 'Noah', 'Oliver', 'Elijah', 'William'],
+      Girl: ['Olivia', 'Emma', 'Ava', 'Charlotte', 'Sophia'],
+    };
+
+    const originSpecificNames = {
+      African: ['Zuri', 'Kwesi', 'Amara', 'Kobe', 'Nia'],
+      Latin: ['Luna', 'Nova', 'Leo', 'Aria', 'Cruz'],
+      Hebrew: ['Ezra', 'Abigail', 'Asher', 'Eliana', 'Levi'],
+      Celtic: ['Finn', 'Niamh', 'Rowan', 'Saoirse', 'Declan'],
+      Nordic: ['Freya', 'Bjorn', 'Astrid', 'Leif', 'Ingrid'],
+    };
+
+    let namePool = [];
+
+    if (answers[0] !== "I don't know yet") {
+      namePool = [...genderSpecificNames[answers[0]]];
+    } else {
+      namePool = [...genderSpecificNames.Boy, ...genderSpecificNames.Girl];
+    }
+
+    namePool = [...namePool, ...originSpecificNames[answers[1]]];
+
+    return namePool.sort(() => 0.5 - Math.random()).slice(0, 5);
   };
 
   return (
-    <PageContainer title={t('Baby Name Generator')} sx={{ paddingTop: 0 }}>
-      <Breadcrumb title={t('Baby Names Generator')} items={BCrumb}>
+    <PageContainer title="Baby Name Generator" sx={{ paddingTop: 0 }}>
+      <Breadcrumb title="Baby Names Generator" items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt={t('Ultrasound')} width="150px" />
+          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
         </Box>
       </Breadcrumb>
       <StyledContainer>
         <StyledPaper>
           <StyledTypography variant="h5" align="center">
-            {t('AI Baby Name Generator')}
+            AI Baby Name Generator
           </StyledTypography>
           <AnimatePresence mode="wait">
             {!started && (
@@ -159,11 +164,11 @@ const BabyNameGenerator = () => {
                   size="large"
                   onClick={handleStart}
                 >
-                  {t('Start Name Generator')}
+                  Start Name Generator
                 </Button>
               </motion.div>
             )}
-            {started && !generating && names.length === 0 && !error && (
+            {started && !generating && names.length === 0 && (
               <motion.div
                 key="question"
                 initial={{ opacity: 0, x: 50 }}
@@ -196,24 +201,9 @@ const BabyNameGenerator = () => {
                 <StyledBox>
                   <NameList names={names} />
                   <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
-                    {t('Start Over')}
+                    Start Over
                   </Button>
                 </StyledBox>
-              </motion.div>
-            )}
-            {error && (
-              <motion.div
-                key="error"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Typography color="error" align="center">
-                  {error}
-                </Typography>
-                <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
-                  {t('Try Again')}
-                </Button>
               </motion.div>
             )}
           </AnimatePresence>
