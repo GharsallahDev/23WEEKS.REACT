@@ -68,7 +68,7 @@ const FullLayout = () => {
         </Container>
 
         {/* Customizer */}
-        {isAuthenticated && <Customizer />}
+        {/* {isAuthenticated && <Customizer />} */}
       </PageWrapper>
     </MainWrapper>
   );

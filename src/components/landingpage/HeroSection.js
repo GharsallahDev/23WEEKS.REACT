@@ -27,7 +27,7 @@ const HeroSection = () => {
               color="primary"
               size="large"
               component={Link}
-              to="/register"
+              to="/auth/register"
               sx={{ mr: 2 }}
             >
               Get Started
@@ -37,7 +37,7 @@ const HeroSection = () => {
               color="primary"
               size="large"
               component={Link}
-              to="/learn-more"
+              to=""
             >
               Learn More
             </Button>

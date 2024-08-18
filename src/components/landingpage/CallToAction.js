@@ -22,7 +22,7 @@ const CallToAction = () => {
               color="secondary"
               size="large"
               component={Link}
-              to="/register"
+              to="/auth/register"
               fullWidth
             >
               Get Started Now
