@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: 'https://two3weeks.onrender.com',
+  apiUrl: 'https://23weeks.azurewebsites.net',
 };
 
 export default config;
