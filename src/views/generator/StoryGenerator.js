@@ -13,7 +13,7 @@ const BCrumb = [
     title: 'Generator',
   },
   {
-    title: 'Stories for Kids',
+    title: 'Stories',
   },
 ];
 
@@ -47,7 +47,7 @@ const formatText = (text) => {
 };
 
 const StoryGenerator = () => {
-    const [topic, setTopic] = useState('space adventures');
+    const [topic, setTopic] = useState('');
     const [chapters, setChapters] = useState(1);
     const [language, setLanguage] = useState('en');
     const [loading, setLoading] = useState(false);
@@ -127,8 +127,8 @@ const StoryGenerator = () => {
     }, [storyContent, currentText, currentIndex]);
 
   return (
-    <PageContainer title="Story Generator for Kids" sx={{ paddingTop: 0 }}>
-      <Breadcrumb title="Story Generator for Kids" items={BCrumb}>
+    <PageContainer title="Story Generator" sx={{ paddingTop: 0 }}>
+      <Breadcrumb title="Story Generator " items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Ultrasound" width="120px" className="image" />
         </Box>
