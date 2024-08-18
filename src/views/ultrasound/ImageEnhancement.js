@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -62,6 +62,7 @@ const ImageQualityEnhancement = () => {
   const [enhancedImage, setEnhancedImage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const canvasRef = useRef(null);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -72,38 +73,23 @@ const ImageQualityEnhancement = () => {
     }
   };
 
-  const enhanceImage = async () => {
-    setIsProcessing(true);
-    setError(null);
-
-    const formData = new FormData();
-    formData.append('image', originalImage);
-
-    try {
-      const response = await fetch(`${config.apiUrl}/api/enhance-image`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(t('Server error: {{errorText}}', { errorText }));
-      }
-
-      const data = await response.json();
-      if (!data.enhancedImage) {
-        throw new Error(t('No enhanced image received'));
-      }
-      setEnhancedImage(data.enhancedImage);
-    } catch (err) {
-      setError(
-        t('An error occurred while processing the image: {{errorMessage}}', {
-          errorMessage: err.message,
-        }),
-      );
-      console.error('Error:', err);
-    } finally {
-      setIsProcessing(false);
+  const applyFilter = () => {
+    if (originalImage) {
+      setIsProcessing(true);
+      setError(null);
+      const img = new Image();
+      img.src = URL.createObjectURL(originalImage);
+      img.onload = () => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        ctx.filter = 'grayscale(100%)'; // Apply grayscale filter
+        ctx.drawImage(img, 0, 0);
+        setEnhancedImage(canvas.toDataURL('image/png'));
+        setIsProcessing(false);
+      };
     }
   };
 
@@ -161,7 +147,7 @@ const ImageQualityEnhancement = () => {
               <ImageContainer>
                 {enhancedImage ? (
                   <img
-                    src={`data:image/png;base64,${enhancedImage}`}
+                    src={enhancedImage}
                     alt={t('Enhanced image')}
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                   />
@@ -195,11 +181,11 @@ const ImageQualityEnhancement = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={enhanceImage}
+                  onClick={applyFilter}
                   disabled={!originalImage}
                   fullWidth
                 >
-                  {t('Enhance Image')}
+                  {t('Enhance Quality')}
                 </Button>
               )}
               {isProcessing && (
@@ -216,6 +202,8 @@ const ImageQualityEnhancement = () => {
           </Card>
         </Grid>
       </Grid>
+
+      <canvas ref={canvasRef} style={{ display: 'none' }} />
     </PageContainer>
   );
 };
