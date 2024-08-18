@@ -14,6 +14,7 @@ import {
   IconCircleDotted,
   IconCone,
   IconPhoto,
+  IconPoint,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -77,6 +78,12 @@ const Menuitems = [
     icon: IconMessage2,
     href: '/generator/chat',
     userType: 'user',
+  },
+  {
+    id: uniqueId(),
+    title: 'Story Generation',
+    icon: IconPoint,
+    href: '/generator/story-generator',
   },
   {
     id: uniqueId(),

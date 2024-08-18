@@ -167,9 +167,6 @@ const TicketListing = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box my={3} display="flex" justifyContent={'center'}>
-        <Pagination count={10} color="primary" />
-      </Box>
     </Box>
   );
 };
