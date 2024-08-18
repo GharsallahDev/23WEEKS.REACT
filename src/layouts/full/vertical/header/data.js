@@ -1,7 +1,20 @@
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import img2 from 'src/assets/images/profile/user-2.jpg';
-import img3 from 'src/assets/images/profile/user-3.jpg';
-import img4 from 'src/assets/images/profile/user-4.jpg';
+import {
+  Calendar,
+  Activity,
+  Baby,
+  FileText,
+  MessageCircle,
+  Stethoscope,
+  HeartPulse,
+  Apple,
+  Bell,
+  UserRound,
+  Clipboard,
+  Pill,
+  Microscope,
+  ChartLine,
+  BookOpen,
+} from 'lucide-react';
 
 import icon1 from 'src/assets/images/svgs/icon-account.svg';
 import icon2 from 'src/assets/images/svgs/icon-inbox.svg';
@@ -20,45 +33,106 @@ import ddIcon8 from 'src/assets/images/svgs/icon-dd-application.svg';
 // Notifications dropdown
 //
 const notifications = [
+  // Doctor notifications
   {
-    avatar: img1,
-    title: 'Roman Joined the Team!',
-    subtitle: 'Congratulate him',
+    icon: Calendar,
+    title: 'Upcoming Appointments',
+    subtitle: 'You have 3 consultations scheduled today',
+    forDoctor: true,
+    forPatient: false,
   },
   {
-    avatar: img2,
-    title: 'New message received',
-    subtitle: 'Salma sent you new message',
+    icon: Activity,
+    title: 'New Health Data Available',
+    subtitle: 'Patient Sarah J. has updated her health logs',
+    forDoctor: true,
+    forPatient: false,
   },
   {
-    avatar: img3,
-    title: 'New Payment received',
-    subtitle: 'Check your earnings',
+    icon: Stethoscope,
+    title: 'Patient Request',
+    subtitle: 'Emily R. has requested a consultation',
+    forDoctor: true,
+    forPatient: false,
   },
   {
-    avatar: img4,
-    title: 'Jolly completed tasks',
-    subtitle: 'Assign her new tasks',
+    icon: FileText,
+    title: 'Test Results Ready',
+    subtitle: 'New lab results available for review',
+    forDoctor: true,
+    forPatient: false,
   },
   {
-    avatar: img1,
-    title: 'Roman Joined the Team!',
-    subtitle: 'Congratulate him',
+    icon: Bell,
+    title: 'Medical Conference',
+    subtitle: 'Upcoming webinar on "Advances in Prenatal Care"',
+    forDoctor: true,
+    forPatient: false,
   },
   {
-    avatar: img2,
-    title: 'New message received',
-    subtitle: 'Salma sent you new message',
+    icon: Clipboard,
+    title: 'Patient Notes Update',
+    subtitle: 'You have 5 patient notes pending review',
+    forDoctor: true,
+    forPatient: false,
   },
   {
-    avatar: img3,
-    title: 'New Payment received',
-    subtitle: 'Check your earnings',
+    icon: Microscope,
+    title: 'New Research Publication',
+    subtitle: 'Latest findings in maternal-fetal medicine',
+    forDoctor: true,
+    forPatient: false,
+  },
+
+  // Patient notifications
+  {
+    icon: Calendar,
+    title: 'Upcoming Appointment',
+    subtitle: 'Your next check-up is tomorrow at 10:00 AM',
+    forDoctor: false,
+    forPatient: true,
   },
   {
-    avatar: img4,
-    title: 'Jolly completed tasks',
-    subtitle: 'Assign her new tasks',
+    icon: Baby,
+    title: 'Fetal Movement Tracker',
+    subtitle: "Remember to log your baby's movements today",
+    forDoctor: false,
+    forPatient: true,
+  },
+  {
+    icon: MessageCircle,
+    title: 'New Message',
+    subtitle: 'Dr. Smith sent you a new message',
+    forDoctor: false,
+    forPatient: true,
+  },
+  {
+    icon: HeartPulse,
+    title: 'Elevated Blood Pressure',
+    subtitle: 'Your last reading was higher than usual',
+    forDoctor: false,
+    forPatient: true,
+  },
+  {
+    icon: Pill,
+    title: 'Medication Reminder',
+    subtitle: 'Time to take your prenatal vitamins',
+    forDoctor: false,
+    forPatient: true,
+  },
+  {
+    icon: Apple,
+    title: 'Nutrition Tip',
+    subtitle: 'New article: "Healthy Eating in Your Third Trimester"',
+    forDoctor: false,
+    forPatient: true,
+  },
+  {
+    icon: ChartLine,
+    title: 'Pregnancy Progress',
+    subtitle: 'View your week-by-week pregnancy timeline',
+    forDoctor: false,
+    forPatient: true,
   },
 ];
 
@@ -67,21 +141,15 @@ const notifications = [
 //
 const profile = [
   {
-    href: '/user-profile',
+    href: '/pages/account-settings',
     title: 'My Profile',
     subtitle: 'Account Settings',
     icon: icon1,
   },
   {
-    href: '/apps/email',
-    title: 'My Inbox',
-    subtitle: 'Messages & Emails',
-    icon: icon2,
-  },
-  {
-    href: '/apps/notes',
-    title: 'My Tasks',
-    subtitle: 'To-do and Daily Tasks',
+    href: '/pages/faq',
+    title: 'FAQ',
+    subtitle: 'Frequently asked questions',
     icon: icon3,
   },
 ];

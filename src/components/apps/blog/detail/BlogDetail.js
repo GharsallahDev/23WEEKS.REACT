@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
-import { fetchBlogPost } from 'src/store/apps/blog/BlogSlice';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchBlogPost, addComment } from 'src/store/apps/blog/BlogSlice';
 import {
+  Box,
+  Typography,
+  CardMedia,
   CardContent,
   Stack,
   Avatar,
-  Typography,
-  CardMedia,
   Chip,
   Tooltip,
-  Box,
   Divider,
   TextField,
   Button,
@@ -20,55 +21,19 @@ import { IconEye, IconMessage2, IconPoint, IconQuote } from '@tabler/icons';
 import { format } from 'date-fns';
 import BlogComment from './BlogComment';
 import { uniqueId } from 'lodash';
-import { addComment } from 'src/store/apps/blog/BlogSlice';
 import BlankCard from '../../../shared/BlankCard';
-import { useDispatch, useSelector } from 'react-redux';
 
 const BlogDetail = () => {
   const dispatch = useDispatch();
-  const title = useLocation();
-  const getTitle = title.pathname.split('/').pop();
-  const [replyTxt, setReplyTxt] = React.useState('');
+  const { id } = useParams();
+  const [replyTxt, setReplyTxt] = useState('');
+  const [isLoading, setLoading] = useState(true);
+
+  const { selectedPost: post, loading, error } = useSelector((state) => state.blogReducer);
 
   useEffect(() => {
-    dispatch(fetchBlogPost(getTitle));
-  }, [dispatch]);
-
-  // Get post
-  const post = useSelector((state) => state.blogReducer.selectedPost);
-  const BCrumb = [
-    {
-      to: '/',
-      title: 'Home',
-    },
-    {
-      to: '/apps/blog/posts',
-      title: 'Blog',
-    },
-    {
-      title: 'Blog post',
-    },
-  ];
-
-  const onSubmit = async (id, reply) => {
-    const replyId = uniqueId('#comm_');
-    const newReply = {
-      id: replyId,
-      profile: {
-        id: uniqueId('#REPLY_'),
-        avatar: post?.author.avatar,
-        name: post?.author.name,
-        time: 'now',
-      },
-      comment: reply,
-      replies: [],
-    };
-    dispatch(addComment(id, newReply));
-    dispatch(fetchBlogPost(getTitle));
-    setReplyTxt('');
-  };
-
-  const [isLoading, setLoading] = React.useState(true);
+    dispatch(fetchBlogPost(id));
+  }, [dispatch, id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -77,156 +42,148 @@ const BlogDetail = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const BCrumb = [
+    { to: '/', title: 'Home' },
+    { to: '/apps/blog/posts', title: 'Blog' },
+    { title: 'Blog post' },
+  ];
+
+  const onSubmit = async (postId, reply) => {
+    if (!postId || !reply) return;
+    const newReply = {
+      id: uniqueId('#comm_'),
+      profile: {
+        id: uniqueId('#REPLY_'),
+        avatar: post?.author?.avatar,
+        name: post?.author?.name || 'Anonymous',
+        time: new Date().toISOString(),
+      },
+      comment: reply,
+      replies: [],
+    };
+    await dispatch(addComment(postId, newReply));
+    dispatch(fetchBlogPost(id));
+    setReplyTxt('');
+  };
+
+  if (loading || isLoading) {
+    return (
+      <Box>
+        <Breadcrumb title="Blog Detail" items={BCrumb} />
+        <BlankCard>
+          <Skeleton
+            animation="wave"
+            variant="rectangular"
+            width="100%"
+            height={440}
+            sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
+          />
+          <CardContent>
+            <Skeleton animation="wave" height={40} width="80%" />
+            <Skeleton animation="wave" height={20} width="60%" />
+          </CardContent>
+        </BlankCard>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box>
+        <Breadcrumb title="Blog Detail" items={BCrumb} />
+        <Typography color="error">Error: {error}</Typography>
+      </Box>
+    );
+  }
+
+  if (!post) {
+    return (
+      <Box>
+        <Breadcrumb title="Blog Detail" items={BCrumb} />
+        <Typography>No post found</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       <Breadcrumb title="Blog Detail" items={BCrumb} />
-      <BlankCard>
-        <>
-          {isLoading ? (
-            <>
-              <Skeleton
-                animation="wave"
-                variant="square"
-                width="100%"
-                height={440}
-                sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
-              ></Skeleton>
-            </>
-          ) : (
-            <CardMedia component="img" height="440" image={post?.coverImg} alt="green iguana" />
+      <Stack spacing={5}>
+        {' '}
+        {/* Added Stack with spacing */}
+        <BlankCard>
+          {post.coverImg && (
+            <CardMedia component="img" height="440" image={post.coverImg} alt={post.title} />
           )}
           <CardContent>
-            <Stack direction="row" sx={{ marginTop: '-45px' }}>
-              <Tooltip title={post ? post?.author.name : ''} placement="top">
-                <Avatar aria-label="recipe" src={post?.author.avatar}></Avatar>
-              </Tooltip>
-              <Chip
-                sx={{ marginLeft: 'auto', marginTop: '-21px', backgroundColor: 'white' }}
-                label="2 min Read"
-                size="small"
-              ></Chip>
-            </Stack>
-            <Chip label={post?.category} size="small" sx={{ marginTop: 2 }}></Chip>
             <Box my={3}>
-              <Typography
-                gutterBottom
-                variant="h1"
-                fontWeight={600}
-                color="inherit"
-                sx={{ textDecoration: 'none' }}
-              >
-                {post?.title}
+              <Typography gutterBottom variant="h1" fontWeight={600}>
+                {post.title || 'Untitled Post'}
               </Typography>
             </Box>
             <Stack direction="row" gap={3} alignItems="center">
               <Stack direction="row" gap={1} alignItems="center">
-                <IconEye size="18" /> {post?.view}
+                <IconEye size="18" /> {post.view || 0}
               </Stack>
               <Stack direction="row" gap={1} alignItems="center">
-                <IconMessage2 size="18" /> {post?.comments.length}
+                <IconMessage2 size="18" /> {post.comments?.length || 0}
               </Stack>
-
               <Stack direction="row" ml="auto" alignItems="center">
                 <IconPoint size="16" />
-                <small>{post ? <>{format(new Date(post.createdAt), 'E, MMM d')}</> : ''}</small>
+                <small>
+                  {post.createdAt ? format(new Date(post.createdAt), 'E, MMM d') : 'Unknown date'}
+                </small>
               </Stack>
             </Stack>
           </CardContent>
           <Divider />
           <CardContent>
-            <Typography variant="h2">Title of the paragraph</Typography>
-            <p>
-              But you cannot figure out what it is or what it can do. MTA web directory is the
-              simplest way in which one can bid on a link, or a few links if they wish to do so. The
-              link directory on MTA displays all of the links it currently has, and does so in
-              alphabetical order, which makes it much easier for someone to find what they are
-              looking for if it is something specific and they do not want to go through all the
-              other sites and links as well. It allows you to start your bid at the bottom and
-              slowly work your way to the top of the list.
-            </p>
-            <p>
-              Gigure out what it is or what it can do. MTA web directory is the simplest way in
-              which one can bid on a link, or a few links if they wish to do so. The link directory
-              on MTA displays all of the links it currently has, and does so in alphabetical order,
-              which makes it much easier for someone to find what they are looking for if it is
-              something specific and they do not want to go through all the other sites and links as
-              well. It allows you to start your bid at the bottom and slowly work your way to the
-              top of the
-            </p>
-            <Typography fontWeight={600}>This is strong text.</Typography>
-            <Typography fontStyle="italic">This is italic text.</Typography>
+            <Typography
+              variant="body1"
+              dangerouslySetInnerHTML={{ __html: post.content || 'No content available' }}
+            />
             <Box my={4}>
               <Divider />
-            </Box>
-            <Typography variant="h3">Unorder list.</Typography>
-            <ul>
-              <li>Gigure out what it is or</li>
-              <li>The links it currently</li>
-              <li>It allows you to start your bid</li>
-              <li>Gigure out what it is or</li>
-              <li>The links it currently</li>
-              <li>It allows you to start your bid</li>
-            </ul>
-            <Box my={4}>
-              <Divider />
-            </Box>
-            <Typography variant="h3">Order list.</Typography>
-            <ol>
-              <li>Gigure out what it is or</li>
-              <li>The links it currently</li>
-              <li>It allows you to start your bid</li>
-              <li>Gigure out what it is or</li>
-              <li>The links it currently</li>
-              <li>It allows you to start your bid</li>
-            </ol>
-            <Box my={4}>
-              <Divider />
-            </Box>
-            <Typography variant="h3">Quotes</Typography>
-            <Box p={2} bgcolor="grey[100]" mt={2}>
-              <Typography variant="h6">
-                <IconQuote /> Life is short, Smile while you still have teeth!
-              </Typography>
             </Box>
           </CardContent>
-        </>
-      </BlankCard>
-      <BlankCard sx={{ mt: 3, p: 0 }}>
-        <CardContent>
-          <Typography variant="h4" fontWeight={600}>
-            Post Comments
-          </Typography>
-          <br />
-          <TextField
-            rows={4}
-            multiline
-            fullWidth
-            value={replyTxt}
-            onChange={(e) => setReplyTxt(e.target.value)}
-          ></TextField>
-          <br />
-          <br />
-          <Button color="primary" variant="contained" onClick={() => onSubmit(post.id, replyTxt)}>
-            Post Comment
-          </Button>
-
-          <Stack direction="row" gap={2} alignItems="center" mb={3} mt={5}>
+        </BlankCard>
+        {/* <BlankCard>
+          <CardContent>
             <Typography variant="h4" fontWeight={600}>
-              Comments
+              Post Comments
             </Typography>
-            <Box px={1.5} py={1} color="primary.main" bgcolor={'primary.light'}>
-              <Typography variant="h6" fontWeight={600}>
-                {post?.comments.length}
+            <br />
+            <TextField
+              rows={4}
+              multiline
+              fullWidth
+              value={replyTxt}
+              onChange={(e) => setReplyTxt(e.target.value)}
+            />
+            <br />
+            <br />
+            <Button color="primary" variant="contained" onClick={() => onSubmit(post.id, replyTxt)}>
+              Post Comment
+            </Button>
+
+            <Stack direction="row" gap={2} alignItems="center" mb={3} mt={5}>
+              <Typography variant="h4" fontWeight={600}>
+                Comments
               </Typography>
+              <Box px={1.5} py={1} color="primary.main" bgcolor="primary.light">
+                <Typography variant="h6" fontWeight={600}>
+                  {post.comments?.length || 0}
+                </Typography>
+              </Box>
+            </Stack>
+            <Box>
+              {post.comments?.map((comment) => (
+                <BlogComment comment={comment} key={comment.id} />
+              )) || <Typography>No comments yet</Typography>}
             </Box>
-          </Stack>
-          <Box>
-            {post?.comments?.map((comment) => {
-              return <BlogComment comment={comment} key={comment.profile.id} />;
-            })}
-          </Box>
-        </CardContent>
-      </BlankCard>
+          </CardContent>
+        </BlankCard> */}
+      </Stack>
     </Box>
   );
 };

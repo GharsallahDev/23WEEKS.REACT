@@ -1,16 +1,7 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  IconButton,
-  Box,
-  Badge,
-  Menu,
-  MenuItem,
-  Avatar,
-  Typography,
-  Button,
-  Chip,
-} from '@mui/material';
+import { IconButton, Box, Badge, Menu, MenuItem, Typography, Button, Chip } from '@mui/material';
 import * as dropdownData from './data';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 
@@ -19,6 +10,7 @@ import { Stack } from '@mui/system';
 
 const Notifications = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
+  const user = useSelector((state) => state.auth.user);
 
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
@@ -28,11 +20,17 @@ const Notifications = () => {
     setAnchorEl2(null);
   };
 
+  const filteredNotifications = dropdownData.notifications.filter(
+    (notification) =>
+      (user && user.type === 'doctor' && notification.forDoctor) ||
+      (user && user.type === 'user' && notification.forPatient),
+  );
+
   return (
     <Box>
       <IconButton
         size="large"
-        aria-label="show 11 new notifications"
+        aria-label="show new notifications"
         color="inherit"
         aria-controls="msgs-menu"
         aria-haspopup="true"
@@ -47,9 +45,6 @@ const Notifications = () => {
           <IconBellRinging size="21" stroke="1.5" />
         </Badge>
       </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
       <Menu
         id="msgs-menu"
         anchorEl={anchorEl2}
@@ -66,21 +61,26 @@ const Notifications = () => {
       >
         <Stack direction="row" py={2} px={4} justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Notifications</Typography>
-          <Chip label="5 new" color="primary" size="small" />
+          <Chip label={`${filteredNotifications.length} new`} color="primary" size="small" />
         </Stack>
         <Scrollbar sx={{ height: '385px' }}>
-          {dropdownData.notifications.map((notification, index) => (
+          {filteredNotifications.map((notification, index) => (
             <Box key={index}>
               <MenuItem sx={{ py: 2, px: 4 }}>
                 <Stack direction="row" spacing={2}>
-                  <Avatar
-                    src={notification.avatar}
-                    alt={notification.avatar}
+                  <Box
                     sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                       width: 48,
                       height: 48,
+                      bgcolor: 'action.selected',
+                      borderRadius: '50%',
                     }}
-                  />
+                  >
+                    {notification.icon && <notification.icon size={24} />}
+                  </Box>
                   <Box>
                     <Typography
                       variant="subtitle2"
@@ -110,7 +110,7 @@ const Notifications = () => {
           ))}
         </Scrollbar>
         <Box p={3} pb={1}>
-          <Button to="/apps/email" variant="outlined" component={Link} color="primary" fullWidth>
+          <Button to="/notifications" variant="outlined" component={Link} color="primary" fullWidth>
             See all Notifications
           </Button>
         </Box>

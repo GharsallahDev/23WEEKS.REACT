@@ -37,7 +37,6 @@ const NotificationTab = () => {
               <CustomTextField id="text-email" variant="outlined" fullWidth />
               <Typography color="textSecondary">Required for notificaitons.</Typography>
 
-              {/* list 1 */}
               <Stack direction="row" spacing={2} mt={4}>
                 <Avatar
                   variant="rounded"
@@ -58,70 +57,6 @@ const NotificationTab = () => {
                 </Box>
               </Stack>
 
-              {/* list 2 */}
-              <Stack direction="row" spacing={2} mt={3}>
-                <Avatar
-                  variant="rounded"
-                  sx={{ bgcolor: 'grey.100', color: 'grey.500', width: 48, height: 48 }}
-                >
-                  <IconCheckbox size="22" />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6" mb={1}>
-                    Order Confirmation
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    You will be notified when customer order any product
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto !important' }}>
-                  <CustomSwitch checked />
-                </Box>
-              </Stack>
-
-              {/* list 3 */}
-              <Stack direction="row" spacing={2} mt={3}>
-                <Avatar
-                  variant="rounded"
-                  sx={{ bgcolor: 'grey.100', color: 'grey.500', width: 48, height: 48 }}
-                >
-                  <IconClock size="22" />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6" mb={1}>
-                    Order Status Changed
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    You will be notified when customer make changes to the order
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto !important' }}>
-                  <CustomSwitch checked />
-                </Box>
-              </Stack>
-
-              {/* list 4 */}
-              <Stack direction="row" spacing={2} mt={3}>
-                <Avatar
-                  variant="rounded"
-                  sx={{ bgcolor: 'grey.100', color: 'grey.500', width: 48, height: 48 }}
-                >
-                  <IconTruckDelivery size="22" />
-                </Avatar>
-                <Box>
-                  <Typography variant="h6" mb={1}>
-                    Order Delivered
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    You will be notified once the order is delivered
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto !important' }}>
-                  <CustomSwitch />
-                </Box>
-              </Stack>
-
-              {/* list 5 */}
               <Stack direction="row" spacing={2} mt={3}>
                 <Avatar
                   variant="rounded"

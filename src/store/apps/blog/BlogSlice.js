@@ -1,12 +1,14 @@
-import axios from 'src/utils/axios';
 import { createSlice } from '@reduxjs/toolkit';
+import axios from 'src/utils/axios';
 
 const initialState = {
   blogposts: [],
   recentPosts: [],
   blogSearch: '',
   sortBy: 'newest',
-  selectedPost: null, 
+  selectedPost: null,
+  loading: false,
+  error: null,
 };
 
 export const BlogSlice = createSlice({
@@ -18,34 +20,49 @@ export const BlogSlice = createSlice({
     },
     getPost: (state, action) => {
       state.selectedPost = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
     },
   },
 });
 
-export const { getPosts, getPost } = BlogSlice.actions;
+export const { getPosts, getPost, setLoading, setError } = BlogSlice.actions;
 
 export const fetchBlogPosts = () => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     const response = await axios.get('/api/data/blog/BlogPosts');
     dispatch(getPosts(response.data));
+    dispatch(setLoading(false));
   } catch (err) {
-    throw new Error();
+    dispatch(setError(err.message));
   }
 };
+
 export const addComment = (postId, comment) => async (dispatch) => {
   try {
     const response = await axios.post('/api/data/blog/post/add', { postId, comment });
     dispatch(getPosts(response.data.posts));
   } catch (err) {
-    throw new Error(err);
+    dispatch(setError(err.message));
   }
 };
-export const fetchBlogPost = (title) => async (dispatch) => {
+
+export const fetchBlogPost = (id) => async (dispatch) => {
   try {
-    const response = await axios.post('/api/data/blog/post', { title });
+    dispatch(setLoading(true));
+    const response = await axios.get(`/api/data/blog/post/${id}`);
     dispatch(getPost(response.data.post));
   } catch (err) {
-    throw new Error(err);
+    dispatch(setError(err.message));
   }
 };
+
 export default BlogSlice.reducer;

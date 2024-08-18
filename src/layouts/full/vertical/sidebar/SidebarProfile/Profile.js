@@ -20,6 +20,12 @@ export const Profile = () => {
     navigate('/auth/login');
   };
 
+  const avatarSrc = user?.avatar
+    ? user.avatar
+    : user?.type === 'doctor'
+    ? img1 
+    : img2;
+
   return (
     <Box
       display={'flex'}
@@ -29,7 +35,7 @@ export const Profile = () => {
     >
       {!hideMenu ? (
         <>
-          <Avatar alt="User Image" src={user?.type === 'doctor' ? img1 : img2} />
+          <Avatar alt="User Image" src={avatarSrc} />
 
           <Box>
             <Typography variant="h6" color="textPrimary">

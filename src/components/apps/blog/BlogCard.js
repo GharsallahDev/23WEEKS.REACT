@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-// third-party
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -18,16 +17,11 @@ import {
 } from '@mui/material';
 import { IconEye, IconMessage2, IconPoint } from '@tabler/icons';
 import { fetchBlogPost } from 'src/store/apps/blog/BlogSlice';
-
 import BlankCard from '../../shared/BlankCard';
 
 const BlogCard = ({ post }) => {
   const dispatch = useDispatch();
-  const { coverImg, title, view, comments, category, author, createdAt } = post;
-  const linkTo = title
-    .toLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^\w-]+/g, '');
+  const { id, coverImg, title, view, comments, createdAt } = post;
 
   const [isLoading, setLoading] = React.useState(true);
 
@@ -38,39 +32,26 @@ const BlogCard = ({ post }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  const handlePostClick = () => {
+    dispatch(fetchBlogPost(id));
+  };
+
   return (
     <Grid item xs={12} lg={4} md={4} sm={6} display="flex" alignItems="stretch">
       {isLoading ? (
-        <>
-          <Skeleton
-            animation="wave"
-            variant="square"
-            width="100%"
-            height={400}
-            sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
-          ></Skeleton>
-        </>
+        <Skeleton
+          animation="wave"
+          variant="square"
+          width="100%"
+          height={400}
+          sx={{ borderRadius: (theme) => theme.shape.borderRadius / 5 }}
+        />
       ) : (
         <BlankCard className="hoverCard">
-          <Typography
-            component={Link}
-            to={`/apps/blog/detail/${linkTo}`}
-            onClick={() => dispatch(fetchBlogPost(linkTo))}
-          >
-            <CardMedia component="img" height="240" image={coverImg} alt="green iguana" />
-          </Typography>
+          <Link to={`/apps/blog/detail/${id}`} onClick={handlePostClick}>
+            <CardMedia component="img" height="240" image={coverImg} alt={title} />
+          </Link>
           <CardContent>
-            <Stack direction="row" sx={{ marginTop: '-35px' }}>
-              <Tooltip title={author.name} placement="top">
-                {/* <Avatar aria-label="recipe" src={author.avatar}></Avatar> */}
-              </Tooltip>
-              <Chip
-                sx={{ marginLeft: 'auto', marginTop: '-21px', backgroundColor: 'white' }}
-                label="2 min Read"
-                size="small"
-              ></Chip>
-            </Stack>
-            <Chip label={category} size="small" sx={{ marginTop: 2 }}></Chip>
             <Box my={3}>
               <Typography
                 gutterBottom
@@ -78,8 +59,8 @@ const BlogCard = ({ post }) => {
                 color="inherit"
                 sx={{ textDecoration: 'none' }}
                 component={Link}
-                to={`/apps/blog/detail/${linkTo}`}
-                onClick={() => dispatch(fetchBlogPost(linkTo))}
+                to={`/apps/blog/detail/${id}`}
+                onClick={handlePostClick}
               >
                 {title}
               </Typography>
@@ -91,7 +72,6 @@ const BlogCard = ({ post }) => {
               <Stack direction="row" gap={1} alignItems="center">
                 <IconMessage2 size="18" /> {comments.length}
               </Stack>
-
               <Stack direction="row" ml="auto" alignItems="center">
                 <IconPoint size="16" />
                 <small>{format(new Date(createdAt), 'E, MMM d')}</small>
@@ -103,7 +83,9 @@ const BlogCard = ({ post }) => {
     </Grid>
   );
 };
+
 BlogCard.propTypes = {
   post: PropTypes.object.isRequired,
 };
+
 export default BlogCard;
