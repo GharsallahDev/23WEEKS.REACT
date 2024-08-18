@@ -2,9 +2,11 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Stack, Typography, Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import DashboardCard from 'src/components/shared/DashboardCard';
 
 const PatientStatistics = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const secondary = theme.palette.secondary.main;
@@ -55,7 +57,7 @@ const PatientStatistics = () => {
       tickAmount: 4,
     },
     xaxis: {
-      categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      categories: [t('Mon'), t('Tue'), t('Wed'), t('Thu'), t('Fri'), t('Sat'), t('Sun')],
       axisBorder: {
         show: false,
       },
@@ -67,17 +69,17 @@ const PatientStatistics = () => {
   };
   const seriescolumnchart = [
     {
-      name: 'Appointments',
+      name: t('Appointments'),
       data: [20, 25, 30, 35, 40, 15, 10],
     },
     {
-      name: 'Procedures',
+      name: t('Procedures'),
       data: [10, 15, 20, 25, 18, 8, 5],
     },
   ];
 
   return (
-    <DashboardCard title="Patient Statistics" subtitle="Weekly Overview">
+    <DashboardCard title={t('Patient Statistics')} subtitle={t('Weekly Overview')}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={8}>
           <Chart
@@ -94,26 +96,26 @@ const PatientStatistics = () => {
                 175
               </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Total Patients This Week
+                {t('Total Patients This Week')}
               </Typography>
             </Stack>
           </Stack>
           <Stack spacing={3} my={5}>
             <Stack direction="row" spacing={2}>
               <Typography variant="subtitle1" color="textSecondary">
-                Appointments
+                {t('Appointments')}
               </Typography>
               <Typography variant="h5">135</Typography>
             </Stack>
             <Stack direction="row" spacing={2}>
               <Typography variant="subtitle1" color="textSecondary">
-                Procedures
+                {t('Procedures')}
               </Typography>
               <Typography variant="h5">40</Typography>
             </Stack>
           </Stack>
           <Button color="primary" variant="contained" fullWidth>
-            View Full Report
+            {t('View Full Report')}
           </Button>
         </Grid>
       </Grid>

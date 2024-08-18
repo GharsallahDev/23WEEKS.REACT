@@ -17,11 +17,6 @@ const Languages = [
     value: 'en',
   },
   {
-    flagname: '中国人 (Chinese)',
-    icon: FlagCn,
-    value: 'ch',
-  },
-  {
     flagname: 'français (French)',
     icon: FlagFr,
     value: 'fr',

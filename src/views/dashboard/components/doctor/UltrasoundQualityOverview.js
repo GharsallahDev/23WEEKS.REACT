@@ -1,10 +1,12 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import { Stack, Typography, Box } from '@mui/material';
 import DashboardCard from 'src/components/shared/DashboardCard';
 
 const UltrasoundQualityOverview = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const secondary = theme.palette.secondary.main;
@@ -19,7 +21,7 @@ const UltrasoundQualityOverview = () => {
       },
       height: 275,
     },
-    labels: ['High Quality', 'Medium Quality', 'Low Quality'],
+    labels: [t('High Quality'), t('Medium Quality'), t('Low Quality')],
     colors: [primary, secondary, theme.palette.error.main],
     plotOptions: {
       pie: {
@@ -63,7 +65,7 @@ const UltrasoundQualityOverview = () => {
   const seriescolumnchart = [70, 20, 5];
 
   return (
-    <DashboardCard title="Ultrasound Quality Overview" subtitle="This Month">
+    <DashboardCard title={t('Ultrasound Quality Overview')} subtitle={t('This Month')}>
       <>
         <Box mt={3}>
           <Chart
@@ -78,24 +80,24 @@ const UltrasoundQualityOverview = () => {
             <Box>
               <Typography variant="h6" fontWeight="600">
                 95 %
-              </Typography>{' '}
+              </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Overall Quality{' '}
-              </Typography>{' '}
-            </Box>{' '}
-          </Stack>{' '}
+                {t('Overall Quality')}
+              </Typography>
+            </Box>
+          </Stack>
           <Stack direction="row" spacing={2} alignItems="center">
             <Box>
               <Typography variant="h6" fontWeight="600">
                 5 %
-              </Typography>{' '}
+              </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Need Improvement{' '}
-              </Typography>{' '}
-            </Box>{' '}
-          </Stack>{' '}
-        </Stack>{' '}
-      </>{' '}
+                {t('Need Improvement')}
+              </Typography>
+            </Box>
+          </Stack>
+        </Stack>
+      </>
     </DashboardCard>
   );
 };

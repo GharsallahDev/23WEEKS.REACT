@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { Stack, Typography, Avatar, Box } from '@mui/material';
@@ -6,6 +7,7 @@ import DashboardCard from 'src/components/shared/DashboardCard';
 import { IconClock, IconActivity, IconMoonStars } from '@tabler/icons';
 
 const FetalMovement = () => {
+  const { t } = useTranslation();
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;
@@ -56,7 +58,7 @@ const FetalMovement = () => {
   };
   const seriescolumnchart = [
     {
-      name: 'Weekly Stats',
+      name: t('Weekly Stats'),
       color: primary,
       data: [5, 15, 5, 10, 5],
     },
@@ -64,24 +66,24 @@ const FetalMovement = () => {
 
   const stats = [
     {
-      title: 'Most Active Time',
-      subtitle: '8 PM',
+      title: t('Most Active Time'),
+      subtitle: t('8 PM'),
       percent: '15',
       color: primary,
       lightcolor: primarylight,
       icon: <IconClock width={18} />,
     },
     {
-      title: 'Avg. Kicks',
-      subtitle: 'Per Hour',
+      title: t('Avg. Kicks'),
+      subtitle: t('Per Hour'),
       percent: '15',
       color: secondary,
       lightcolor: secondarylight,
       icon: <IconActivity width={18} />,
     },
     {
-      title: 'Longest Quiet Period',
-      subtitle: '2 hours',
+      title: t('Longest Quiet Period'),
+      subtitle: t('2 hours'),
       percent: '120',
       color: error,
       lightcolor: errorlight,
@@ -90,7 +92,7 @@ const FetalMovement = () => {
   ];
 
   return (
-    <DashboardCard title="Fetal Movement" subtitle="Kicks per hour">
+    <DashboardCard title={t('Fetal Movement')} subtitle={t('Kicks per hour')}>
       <>
         <Stack mt={4}>
           <Chart
@@ -118,10 +120,10 @@ const FetalMovement = () => {
                 </Avatar>
                 <Box>
                   <Typography variant="h6" mb="4px">
-                    {stat.title}
+                    {t(stat.title)}
                   </Typography>
                   <Typography variant="subtitle2" color="textSecondary">
-                    {stat.subtitle}
+                    {t(stat.subtitle)}
                   </Typography>
                 </Box>
               </Stack>

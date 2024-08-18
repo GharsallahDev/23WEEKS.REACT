@@ -1,9 +1,22 @@
 import React from 'react';
-import { IconButton, Box, AppBar, useMediaQuery, Toolbar, styled, Stack } from '@mui/material';
+import {
+  IconButton,
+  Box,
+  AppBar,
+  useMediaQuery,
+  Toolbar,
+  styled,
+  Stack,
+  Switch,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleSidebar, toggleMobileSidebar } from 'src/store/customizer/CustomizerSlice';
-import { IconMenu2 } from '@tabler/icons';
+import {
+  toggleSidebar,
+  toggleMobileSidebar,
+  setDarkMode,
+} from 'src/store/customizer/CustomizerSlice';
+import { IconMenu2, IconSun, IconMoon } from '@tabler/icons';
 
 // components
 import Notifications from './Notifications';
@@ -28,10 +41,14 @@ const Header = () => {
       minHeight: customizer.TopbarHeight,
     },
   }));
-  const ToolbarStyled = styled(Toolbar)(({theme}) => ({
+  const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
     width: '100%',
     color: theme.palette.text.secondary,
   }));
+
+  const handleThemeChange = () => {
+    dispatch(setDarkMode(customizer.activeMode === 'dark' ? 'light' : 'dark'));
+  };
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -39,7 +56,11 @@ const Header = () => {
         {/* ------------------------------------------- */}
         {/* Toggle Button Sidebar */}
         {/* ------------------------------------------- */}
-        <IconButton color="inherit" aria-label="menu" onClick={lgUp ? () => dispatch(toggleSidebar()) : () => dispatch(toggleMobileSidebar())}>
+        <IconButton
+          color="inherit"
+          aria-label="menu"
+          onClick={lgUp ? () => dispatch(toggleSidebar()) : () => dispatch(toggleMobileSidebar())}
+        >
           <IconMenu2 size="20" />
         </IconButton>
         {/* ------------------------------------------- */}
@@ -54,6 +75,12 @@ const Header = () => {
 
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
+          {/* ------------------------------------------- */}
+          {/* Dark/Light Mode Toggle */}
+          {/* ------------------------------------------- */}
+          <IconButton color="inherit" onClick={handleThemeChange}>
+            {customizer.activeMode === 'dark' ? <IconSun size="20" /> : <IconMoon size="20" />}
+          </IconButton>
 
           <Language />
           {/* ------------------------------------------- */}
@@ -63,7 +90,7 @@ const Header = () => {
           {/* End Ecommerce Dropdown */}
           {/* ------------------------------------------- */}
           <Notifications />
-           {/* ------------------------------------------- */}
+          {/* ------------------------------------------- */}
           {/* Toggle Right Sidebar for mobile */}
           {/* ------------------------------------------- */}
           {/* {lgDown ? <MobileRightSidebar /> : null} */}

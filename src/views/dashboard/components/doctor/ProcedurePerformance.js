@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import DashboardCard from 'src/components/shared/DashboardCard';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 import {
@@ -16,6 +17,7 @@ import {
 } from '@mui/material';
 
 const ProcedurePerformance = () => {
+  const { t } = useTranslation();
   const [month, setMonth] = React.useState('1');
 
   const handleChange = (event) => {
@@ -57,13 +59,13 @@ const ProcedurePerformance = () => {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: [t('Feb'), t('Mar'), t('Apr'), t('May'), t('Jun'), t('Jul')],
     },
     tooltip: {
       theme: theme.palette.mode === 'dark' ? 'dark' : 'light',
       y: {
         formatter: function (val) {
-          return val + ' procedures';
+          return val + ' ' + t('procedures');
         },
       },
     },
@@ -71,30 +73,30 @@ const ProcedurePerformance = () => {
 
   const procedures = [
     {
-      name: 'Ultrasound',
+      name: t('Ultrasound'),
       success: '78.5%',
-      status: 'Excellent',
+      status: t('Excellent'),
       total: 3190,
       growth: [30, 25, 35, 20, 30],
     },
     {
-      name: 'C-Section',
+      name: t('C-Section'),
       success: '58.6%',
-      status: 'Good',
+      status: t('Good'),
       total: 2190,
       growth: [20, 25, 15, 30, 20],
     },
     {
-      name: 'Natural Birth',
+      name: t('Natural Birth'),
       success: '90%',
-      status: 'Excellent',
+      status: t('Excellent'),
       total: 5190,
       growth: [35, 35, 35, 35, 35],
     },
     {
-      name: 'Gynecological Exam',
+      name: t('Gynecological Exam'),
       success: '82.3%',
-      status: 'Very Good',
+      status: t('Very Good'),
       total: 4190,
       growth: [30, 30, 30, 30, 30],
     },
@@ -102,7 +104,7 @@ const ProcedurePerformance = () => {
 
   return (
     <DashboardCard
-      title="Procedure Performance"
+      title={t('Procedure Performance')}
       action={
         <CustomSelect
           labelId="month-dd"
@@ -111,9 +113,9 @@ const ProcedurePerformance = () => {
           value={month}
           onChange={handleChange}
         >
-          <MenuItem value={1}>March 2023</MenuItem>
-          <MenuItem value={2}>April 2023</MenuItem>
-          <MenuItem value={3}>May 2023</MenuItem>
+          <MenuItem value={1}>{t('March 2023')}</MenuItem>
+          <MenuItem value={2}>{t('April 2023')}</MenuItem>
+          <MenuItem value={3}>{t('May 2023')}</MenuItem>
         </CustomSelect>
       }
     >
@@ -128,27 +130,27 @@ const ProcedurePerformance = () => {
             <TableRow>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Procedure
+                  {t('Procedure')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Success Rate
+                  {t('Success Rate')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Status
+                  {t('Status')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Total
+                  {t('Total')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Trend
+                  {t('Trend')}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -170,9 +172,21 @@ const ProcedurePerformance = () => {
                   <Chip
                     sx={{
                       bgcolor: (theme) =>
-                        theme.palette[procedure.status === 'Excellent' ? 'success' : procedure.status === 'Good' ? 'primary' : 'secondary'].light,
+                        theme.palette[
+                          procedure.status === t('Excellent')
+                            ? 'success'
+                            : procedure.status === t('Good')
+                            ? 'primary'
+                            : 'secondary'
+                        ].light,
                       color: (theme) =>
-                        theme.palette[procedure.status === 'Excellent' ? 'success' : procedure.status === 'Good' ? 'primary' : 'secondary'].main,
+                        theme.palette[
+                          procedure.status === t('Excellent')
+                            ? 'success'
+                            : procedure.status === t('Good')
+                            ? 'primary'
+                            : 'secondary'
+                        ].main,
                       borderRadius: '8px',
                     }}
                     size="small"
@@ -183,7 +197,13 @@ const ProcedurePerformance = () => {
                   <Typography variant="subtitle2">{procedure.total}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Chart options={optionschart} series={[{ data: procedure.growth }]} type="bar" height="35px" width="100px" />
+                  <Chart
+                    options={optionschart}
+                    series={[{ data: procedure.growth }]}
+                    type="bar"
+                    height="35px"
+                    width="100px"
+                  />
                 </TableCell>
               </TableRow>
             ))}

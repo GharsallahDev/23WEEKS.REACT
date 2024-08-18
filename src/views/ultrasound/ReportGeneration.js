@@ -18,6 +18,8 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import config from 'src/config';
 import breadcrumbImg from 'src/assets/images/breadcrumb/reportgen.png';
+import { useTranslation } from 'react-i18next';
+
 const BCrumb = [{ to: '/', title: 'Ultrasound' }, { title: 'AI Report Generator' }];
 
 const VisuallyHiddenInput = styled('input')({
@@ -86,6 +88,7 @@ const FloatingActionButton = styled(Button)(({ theme }) => ({
 }));
 
 const UltrasoundReportGenerator = () => {
+  const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
   const [image, setImage] = useState(null);
   const [report, setReport] = useState('');
@@ -118,7 +121,7 @@ const UltrasoundReportGenerator = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Server error');
+        throw new Error(t('Server error'));
       }
 
       const data = await response.json();
@@ -126,7 +129,7 @@ const UltrasoundReportGenerator = () => {
       setPdfLink(data.pdfLink);
       setActiveStep(2);
     } catch (err) {
-      setError('An error occurred while generating the report.');
+      setError(t('An error occurred while generating the report.'));
       console.error('Error:', err);
     } finally {
       setIsGenerating(false);
@@ -147,13 +150,13 @@ const UltrasoundReportGenerator = () => {
     }
   };
 
-  const steps = ['Upload Image', 'Generate Report', 'View Results'];
+  const steps = [t('Upload Image'), t('Generate Report'), t('View Results')];
 
   return (
-    <PageContainer title="AI Ultrasound Report Generator">
-      <Breadcrumb title="AI Ultrasound Report Generator" items={BCrumb}>
+    <PageContainer title={t('AI Ultrasound Report Generator')}>
+      <Breadcrumb title={t('AI Ultrasound Report Generator')} items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="155px" />
+          <img src={breadcrumbImg} alt={t('AI Report Generator')} width="155px" />
         </Box>
       </Breadcrumb>
       <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
@@ -168,7 +171,7 @@ const UltrasoundReportGenerator = () => {
         <Fade in={true}>
           <ImageContainer>
             <Typography variant="h6" gutterBottom>
-              Upload Ultrasound Image
+              {t('Upload Ultrasound Image')}
             </Typography>
             <Button
               component="label"
@@ -176,7 +179,7 @@ const UltrasoundReportGenerator = () => {
               startIcon={<CloudUploadIcon />}
               size="large"
             >
-              Select Image
+              {t('Select Image')}
               <VisuallyHiddenInput type="file" onChange={handleImageUpload} accept="image/*" />
             </Button>
           </ImageContainer>
@@ -189,7 +192,7 @@ const UltrasoundReportGenerator = () => {
             <ImagePreview
               component="img"
               src={URL.createObjectURL(image)}
-              alt="Uploaded ultrasound"
+              alt={t('Uploaded ultrasound')}
             />
             <Button
               variant="contained"
@@ -198,7 +201,7 @@ const UltrasoundReportGenerator = () => {
               disabled={isGenerating}
               size="large"
             >
-              {isGenerating ? <CircularProgress size={24} /> : 'Generate Report'}
+              {isGenerating ? <CircularProgress size={24} /> : t('Generate Report')}
             </Button>
           </Box>
         </Fade>
@@ -209,7 +212,7 @@ const UltrasoundReportGenerator = () => {
           <ReportContainer elevation={3}>
             <ReportHeader>
               <Typography variant="body2" color="textSecondary">
-                Generated on: {new Date().toLocaleString()}
+                {t('Generated on')}: {new Date().toLocaleString()}
               </Typography>
             </ReportHeader>
             <div dangerouslySetInnerHTML={{ __html: report }} />
@@ -220,7 +223,7 @@ const UltrasoundReportGenerator = () => {
                 onClick={handleDownload}
                 startIcon={<DownloadIcon />}
               >
-                Download PDF
+                {t('Download PDF')}
               </FloatingActionButton>
             )}
           </ReportContainer>
@@ -230,7 +233,7 @@ const UltrasoundReportGenerator = () => {
       {error && (
         <Box display="flex" justifyContent="center" mt={2}>
           <Typography color="error" align="center">
-            {error}
+            {t(error)}
           </Typography>
         </Box>
       )}
@@ -243,7 +246,7 @@ const UltrasoundReportGenerator = () => {
             startIcon={<RefreshIcon />}
             variant="outlined"
           >
-            Start Over
+            {t('Start Over')}
           </Button>
         </Box>
       )}

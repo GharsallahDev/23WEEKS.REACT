@@ -9,6 +9,7 @@ import NameList from './components/NameList';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/baby.png';
+import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -79,6 +80,7 @@ const questions = [
 ];
 
 const BabyNameGenerator = () => {
+  const { t } = useTranslation();
   const [started, setStarted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -108,13 +110,13 @@ const BabyNameGenerator = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to generate names');
+          throw new Error(t('Failed to generate names'));
         }
 
         const data = await response.json();
         setNames(data.names);
       } catch (error) {
-        setError('An error occurred while generating names. Please try again.');
+        setError(t('An error occurred while generating names. Please try again.'));
         console.error('Error:', error);
       } finally {
         setGenerating(false);
@@ -131,16 +133,16 @@ const BabyNameGenerator = () => {
   };
 
   return (
-    <PageContainer title="Baby Name Generator" sx={{ paddingTop: 0 }}>
-      <Breadcrumb title="Baby Names Generator" items={BCrumb}>
+    <PageContainer title={t('Baby Name Generator')} sx={{ paddingTop: 0 }}>
+      <Breadcrumb title={t('Baby Names Generator')} items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
+          <img src={breadcrumbImg} alt={t('Ultrasound')} width="150px" />
         </Box>
       </Breadcrumb>
       <StyledContainer>
         <StyledPaper>
           <StyledTypography variant="h5" align="center">
-            AI Baby Name Generator
+            {t('AI Baby Name Generator')}
           </StyledTypography>
           <AnimatePresence mode="wait">
             {!started && (
@@ -157,7 +159,7 @@ const BabyNameGenerator = () => {
                   size="large"
                   onClick={handleStart}
                 >
-                  Start Name Generator
+                  {t('Start Name Generator')}
                 </Button>
               </motion.div>
             )}
@@ -194,7 +196,7 @@ const BabyNameGenerator = () => {
                 <StyledBox>
                   <NameList names={names} />
                   <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
-                    Start Over
+                    {t('Start Over')}
                   </Button>
                 </StyledBox>
               </motion.div>
@@ -210,7 +212,7 @@ const BabyNameGenerator = () => {
                   {error}
                 </Typography>
                 <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
-                  Try Again
+                  {t('Try Again')}
                 </Button>
               </motion.div>
             )}

@@ -12,7 +12,7 @@ import {
   Paper,
   Stack,
   Alert,
-  AlertTitle
+  AlertTitle,
 } from '@mui/material';
 import { IconTrash, IconEdit, IconMicrophone } from '@tabler/icons';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
@@ -20,21 +20,24 @@ import PageContainer from '../../components/container/PageContainer';
 import ParentCard from '../../components/shared/ParentCard';
 import config from 'src/config';
 import breadcrumbImg from 'src/assets/images/breadcrumb/calender.jpg';
-const columns = [
-  { id: 'event', label: 'Event', minWidth: 150 },
-  { id: 'date', label: 'Date', minWidth: 100 },
-  { id: 'time', label: 'Time', minWidth: 100 },
-  { id: 'day', label: 'Day', minWidth: 100 },
-  { id: 'occurrence', label: 'Occurrence', minWidth: 150 },
-  { id: 'action', label: 'Action', minWidth: 170 },
-];
+import { useTranslation } from 'react-i18next';
 
-const BCrumb = [
-  { to: '/', title: 'Home' },
-  { title: 'Pregnancy Reminders' },
-];
+
 
 const PregnancyRemindersTable = () => {
+    const { t } = useTranslation();
+
+  const columns = [
+    { id: 'event', label: t('Event'), minWidth: 150 },
+    { id: 'date', label: t('Date'), minWidth: 100 },
+    { id: 'time', label: t('Time'), minWidth: 100 },
+    { id: 'day', label: t('Day'), minWidth: 100 },
+    { id: 'occurrence', label: t('Occurrence'), minWidth: 150 },
+    { id: 'action', label: t('Action'), minWidth: 170 },
+  ];
+
+  const BCrumb = [{ to: '/', title: 'Home' }, { title: t('Pregnancy Reminders') }];
+
   const [recording, setRecording] = useState(false);
   const [data, setData] = useState([]);
   const [result, setResult] = useState('');
@@ -53,12 +56,13 @@ const PregnancyRemindersTable = () => {
     let mediaRecorder;
     let audioChunks = [];
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.start();
 
-        mediaRecorder.ondataavailable = event => {
+        mediaRecorder.ondataavailable = (event) => {
           audioChunks.push(event.data);
         };
 
@@ -73,9 +77,9 @@ const PregnancyRemindersTable = () => {
           mediaRecorder.stop();
         }, 5000);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error accessing microphone:', error);
-        setResult(`Error: ${error.message}`);
+        setResult(t('Error: {{errorMessage}}', { errorMessage: error.message }));
         setRecording(false); // Stop recording if there's an error
       });
   };
@@ -88,36 +92,38 @@ const PregnancyRemindersTable = () => {
       method: 'POST',
       body: formData,
     })
-    .then(response => {
-      if (!response.ok) {
-        return response.text().then(text => {
-          throw new Error(`Network response was not ok: ${text}`);
-        });
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data && data.extracted_data && data.extracted_data.events) {
-        setData(prevData => [...prevData, ...data.extracted_data.events]); // Append new reminders
-        setResult('');
-        setAlert('Reminder set with success!'); // Set success alert
-      } else {
-        setResult('Error: No events data returned from the server.');
-        console.log('Response Data:', data);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      setResult(`Error: ${error.message}`);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(
+              t('Network response was not ok: {{responseText}}', { responseText: text }),
+            );
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data && data.extracted_data && data.extracted_data.events) {
+          setData((prevData) => [...prevData, ...data.extracted_data.events]); // Append new reminders
+          setResult('');
+          setAlert(t('Reminder set with success!')); // Set success alert
+        } else {
+          setResult(t('Error: No events data returned from the server.'));
+          console.log('Response Data:', data);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setResult(t('Error: {{errorMessage}}', { errorMessage: error.message }));
+      });
   };
 
   const formatTime = (time) => {
     if (!time) return '';
-    
+
     let [hour, minute] = time.split(':');
     let ampm = 'AM';
-    
+
     if (parseInt(hour, 10) >= 12) {
       ampm = 'PM';
       if (parseInt(hour, 10) > 12) {
@@ -126,30 +132,35 @@ const PregnancyRemindersTable = () => {
     } else if (hour === '0') {
       hour = 12; // Midnight case
     }
-    
+
     return `${hour}:${minute} ${ampm}`;
   };
 
   const getDayOfWeek = (dateString) => {
     if (!dateString) return '';
-    
-    const [day, month, year] = dateString.split('/').map(part => parseInt(part, 10));
+
+    const [day, month, year] = dateString.split('/').map((part) => parseInt(part, 10));
     const date = new Date(year, month - 1, day);
     const options = { weekday: 'long' };
     return date.toLocaleDateString('en-US', options);
   };
 
   return (
-    <PageContainer title="Pregnancy Reminders" description="Manage your pregnancy reminders">
-      <Breadcrumb title="Pregnancy Reminders" items={BCrumb} >
+    <PageContainer
+      title={t('Pregnancy Reminders')}
+      description={t('Manage your pregnancy reminders')}
+    >
+      <Breadcrumb title={t('Pregnancy Reminders')} items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
+          <img src={breadcrumbImg} alt={t('Ultrasound')} width="150px" />
         </Box>
       </Breadcrumb>
-      <ParentCard title="Pregnancy Reminders">
+      <ParentCard title={t('Pregnancy Reminders')}>
         <Paper variant="outlined">
-          <TableContainer sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' }, maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
+          <TableContainer
+            sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' }, maxHeight: 440 }}
+          >
+            <Table stickyHeader aria-label={t('sticky table')}>
               <TableHead>
                 <TableRow>
                   {columns.map((column) => (
@@ -159,7 +170,7 @@ const PregnancyRemindersTable = () => {
                       style={{ minWidth: column.minWidth }}
                     >
                       <Typography variant="h6" fontWeight="500">
-                        {column.label}
+                        {t(column.label)}
                       </Typography>
                     </TableCell>
                   ))}
@@ -203,12 +214,12 @@ const PregnancyRemindersTable = () => {
               <IconMicrophone width={24} />
             </IconButton>
             <Typography variant="h6" mt={2}>
-              {recording ? 'Recording...' : 'Record Voice'}
+              {recording ? t('Recording...') : t('Record Voice')}
             </Typography>
             <Box mt={2}>
               {alert && (
                 <Alert severity="success">
-                  <AlertTitle>Success</AlertTitle>
+                  <AlertTitle>{t('Success')}</AlertTitle>
                   {alert}
                 </Alert>
               )}

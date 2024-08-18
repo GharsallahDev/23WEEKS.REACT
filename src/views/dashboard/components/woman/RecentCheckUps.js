@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import DashboardCard from 'src/components/shared/DashboardCard';
 import {
   Timeline,
@@ -13,8 +14,10 @@ import {
 import { Typography } from '@mui/material';
 
 const RecentCheckUps = () => {
+  const { t } = useTranslation();
+
   return (
-    <DashboardCard title="Recent Check-ups">
+    <DashboardCard title={t('Recent Check-ups')}>
       <>
         <Timeline
           className="theme-timeline"
@@ -31,57 +34,57 @@ const RecentCheckUps = () => {
           }}
         >
           <TimelineItem>
-            <TimelineOppositeContent>09:30 am</TimelineOppositeContent>
+            <TimelineOppositeContent>{t('09:30 am')}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color="primary" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Blood pressure check - 120/80</TimelineContent>
+            <TimelineContent>{t('Blood pressure check - 120/80')}</TimelineContent>
           </TimelineItem>
           <TimelineItem>
-            <TimelineOppositeContent>10:00 am</TimelineOppositeContent>
+            <TimelineOppositeContent>{t('10:00 am')}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color="secondary" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">Ultrasound scan completed</Typography>
+              <Typography fontWeight="600">{t('Ultrasound scan completed')}</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
-            <TimelineOppositeContent>12:00 pm</TimelineOppositeContent>
+            <TimelineOppositeContent>{t('12:00 pm')}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color="success" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Glucose test scheduled</TimelineContent>
+            <TimelineContent>{t('Glucose test scheduled')}</TimelineContent>
           </TimelineItem>
           <TimelineItem>
-            <TimelineOppositeContent>02:30 pm</TimelineOppositeContent>
+            <TimelineOppositeContent>{t('02:30 pm')}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color="warning" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">Prenatal vitamin prescription renewed</Typography>
+              <Typography fontWeight="600">{t('Prenatal vitamin prescription renewed')}</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
-            <TimelineOppositeContent>04:00 pm</TimelineOppositeContent>
+            <TimelineOppositeContent>{t('04:00 pm')}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color="error" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">Next appointment scheduled</Typography>
+              <Typography fontWeight="600">{t('Next appointment scheduled')}</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
-            <TimelineOppositeContent>05:30 pm</TimelineOppositeContent>
+            <TimelineOppositeContent>{t('05:30 pm')}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color="success" variant="outlined" />
             </TimelineSeparator>
-            <TimelineContent>Nutrition consultation completed</TimelineContent>
+            <TimelineContent>{t('Nutrition consultation completed')}</TimelineContent>
           </TimelineItem>
         </Timeline>
       </>

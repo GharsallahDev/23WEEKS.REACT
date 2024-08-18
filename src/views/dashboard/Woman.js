@@ -8,10 +8,12 @@ import BabyDevelopment from './components/woman/BabyDevelopment';
 import FetalMovement from './components/woman/FetalMovement';
 import PregnancySymptoms from './components/woman/PregnancySymptoms';
 import RecentCheckUps from './components/woman/RecentCheckUps';
+import { useTranslation } from 'react-i18next';
 
 const PregnancyDashboard = () => {
+  const { t } = useTranslation();
   return (
-    <PageContainer title="Pregnancy Dashboard">
+    <PageContainer title={t('Pregnancy Dashboard')}>
       <Box mt={3}>
         <Grid container spacing={3}>
           {' '}

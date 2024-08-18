@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import DashboardCard from 'src/components/shared/DashboardCard';
 import {
   Timeline,
@@ -10,11 +11,13 @@ import {
   TimelineContent,
   timelineOppositeContentClasses,
 } from '@mui/lab';
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 const RecentPatientVisits = () => {
+  const { t } = useTranslation();
+
   return (
-    <DashboardCard title="Recent Patient Visits">
+    <DashboardCard title={t('Recent Patient Visits')}>
       <>
         <Timeline
           className="theme-timeline"
@@ -36,7 +39,7 @@ const RecentPatientVisits = () => {
               <TimelineDot color="primary" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Sarah Johnson - Prenatal checkup</TimelineContent>
+            <TimelineContent>{t('Sarah Johnson - Prenatal checkup')}</TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineOppositeContent>10:00 am</TimelineOppositeContent>
@@ -45,7 +48,7 @@ const RecentPatientVisits = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">Emily Davis - Ultrasound</Typography>
+              <Typography fontWeight="600">{t('Emily Davis - Ultrasound')}</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
@@ -54,7 +57,7 @@ const RecentPatientVisits = () => {
               <TimelineDot color="success" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Lisa Brown - Postpartum follow-up</TimelineContent>
+            <TimelineContent>{t('Lisa Brown - Postpartum follow-up')}</TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineOppositeContent>01:00 pm</TimelineOppositeContent>
@@ -63,7 +66,9 @@ const RecentPatientVisits = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">Amanda Wilson - First trimester screening</Typography>
+              <Typography fontWeight="600">
+                {t('Amanda Wilson - First trimester screening')}
+              </Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
@@ -73,7 +78,7 @@ const RecentPatientVisits = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">Rachel Green - Gynecological exam</Typography>
+              <Typography fontWeight="600">{t('Rachel Green - Gynecological exam')}</Typography>
             </TimelineContent>
           </TimelineItem>
           <TimelineItem>
@@ -81,7 +86,7 @@ const RecentPatientVisits = () => {
             <TimelineSeparator>
               <TimelineDot color="success" variant="outlined" />
             </TimelineSeparator>
-            <TimelineContent>Emma Thompson - Fertility consultation</TimelineContent>
+            <TimelineContent>{t('Emma Thompson - Fertility consultation')}</TimelineContent>
           </TimelineItem>
         </Timeline>
       </>

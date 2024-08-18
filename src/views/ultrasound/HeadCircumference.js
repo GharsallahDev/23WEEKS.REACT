@@ -6,6 +6,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/ultrasound.png';
+import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -81,6 +82,7 @@ const MeasurementCard = styled(Card)(({ theme }) => ({
 }));
 
 const HeadCircumferenceCalculator = () => {
+  const { t } = useTranslation();
   const [originalImage, setOriginalImage] = useState(null);
   const [circumference, setCircumference] = useState(null);
   const [pixelValue, setPixelValue] = useState(null);
@@ -115,7 +117,7 @@ const HeadCircumferenceCalculator = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Server error: ${errorText}`);
+        throw new Error(t('Server error: {{errorText}}', { errorText }));
       }
 
       const data = await response.json();
@@ -126,10 +128,14 @@ const HeadCircumferenceCalculator = () => {
         setCircumference(circumferenceInMm);
         setPixelValue(data.pixelValue);
       } else {
-        throw new Error('No circumference data received');
+        throw new Error(t('No circumference data received'));
       }
     } catch (err) {
-      setError(`An error occurred while processing the image: ${err.message}`);
+      setError(
+        t('An error occurred while processing the image: {{errorMessage}}', {
+          errorMessage: err.message,
+        }),
+      );
       console.error('Error:', err);
     } finally {
       setIsProcessing(false);
@@ -144,10 +150,10 @@ const HeadCircumferenceCalculator = () => {
   };
 
   return (
-    <PageContainer title="Head Circumference Calculation">
-      <Breadcrumb title="Head Circumference Calculation" items={BCrumb}>
+    <PageContainer title={t('Head Circumference Calculation')}>
+      <Breadcrumb title={t('Head Circumference Calculation')} items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="155px" />
+          <img src={breadcrumbImg} alt={t('Ultrasound')} width="155px" />
         </Box>
       </Breadcrumb>
 
@@ -156,28 +162,28 @@ const HeadCircumferenceCalculator = () => {
           <FixedHeightCard>
             <FixedHeightCardContent>
               <Typography variant="h6" gutterBottom>
-                Uploaded Ultrasound Image
+                {t('Uploaded Ultrasound Image')}
               </Typography>
               <ImageContainer>
                 {originalImage ? (
                   <UploadedImage
                     src={URL.createObjectURL(originalImage)}
-                    alt="Uploaded ultrasound"
+                    alt={t('Uploaded ultrasound')}
                   />
                 ) : (
-                  <Typography color="textSecondary">No image uploaded</Typography>
+                  <Typography color="textSecondary">{t('No image uploaded')}</Typography>
                 )}
               </ImageContainer>
               <CenteredBox>
                 {circumference !== null ? (
                   <Typography variant="h4" gutterBottom>
-                    Head Circumference: {circumference.toFixed(2)} mm
+                    {t('Head Circumference')}: {circumference.toFixed(2)} mm
                   </Typography>
                 ) : isProcessing ? (
                   <CircularProgress />
                 ) : (
                   <Typography color="textSecondary">
-                    No circumference calculated yet
+                    {t('No circumference calculated yet')}
                   </Typography>
                 )}
                 <ButtonGroup>
@@ -188,8 +194,12 @@ const HeadCircumferenceCalculator = () => {
                     fullWidth
                     sx={{ width: '250px' }} // Adjust button width
                   >
-                    Upload Image
-                    <VisuallyHiddenInput type="file" onChange={handleImageUpload} accept="image/*" />
+                    {t('Upload Image')}
+                    <VisuallyHiddenInput
+                      type="file"
+                      onChange={handleImageUpload}
+                      accept="image/*"
+                    />
                   </Button>
                   <Button
                     variant="contained"
@@ -199,7 +209,7 @@ const HeadCircumferenceCalculator = () => {
                     fullWidth
                     sx={{ mt: 2, width: '250px' }} // Adjust button width
                   >
-                    {isProcessing ? <CircularProgress size={24} /> : 'Calculate Circumference'}
+                    {isProcessing ? <CircularProgress size={24} /> : t('Calculate Circumference')}
                   </Button>
                   <Button
                     variant="outlined"
@@ -210,7 +220,7 @@ const HeadCircumferenceCalculator = () => {
                     fullWidth
                     sx={{ mt: 2, width: '150px' }} // Adjust button width
                   >
-                    Reset
+                    {t('Reset')}
                   </Button>
                 </ButtonGroup>
               </CenteredBox>

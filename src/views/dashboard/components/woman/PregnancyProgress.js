@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { MenuItem, Grid, Stack, Typography, Button, Avatar, Box } from '@mui/material';
@@ -7,6 +8,7 @@ import DashboardCard from 'src/components/shared/DashboardCard';
 import CustomSelect from 'src/components/forms/theme-elements/CustomSelect';
 
 const PregnancyProgress = () => {
+  const { t } = useTranslation();
   const [trimester, setTrimester] = React.useState('2');
 
   const handleChange = (event) => {
@@ -65,7 +67,14 @@ const PregnancyProgress = () => {
       tickAmount: 4,
     },
     xaxis: {
-      categories: ['Week 13', 'Week 14', 'Week 15', 'Week 16', 'Week 17', 'Week 18'],
+      categories: [
+        t('Week 13'),
+        t('Week 14'),
+        t('Week 15'),
+        t('Week 16'),
+        t('Week 17'),
+        t('Week 18'),
+      ],
       axisBorder: {
         show: false,
       },
@@ -77,19 +86,19 @@ const PregnancyProgress = () => {
   };
   const seriescolumnchart = [
     {
-      name: 'Baby Growth (cm)',
+      name: t('Baby Growth (cm)'),
       data: [7.4, 8.7, 10.1, 11.6, 13, 14.2],
     },
     {
-      name: 'Weight Gain (lbs)',
+      name: t('Weight Gain (lbs)'),
       data: [2, 3, 4, 5, 6, 7],
     },
   ];
 
   return (
     <DashboardCard
-      title="Pregnancy Progress"
-      subtitle="Overview of Trimesters"
+      title={t('Pregnancy Progress')}
+      subtitle={t('Overview of Trimesters')}
       action={
         <CustomSelect
           labelId="trimester-dd"
@@ -98,9 +107,9 @@ const PregnancyProgress = () => {
           size="small"
           onChange={handleChange}
         >
-          <MenuItem value={1}>First Trimester</MenuItem>
-          <MenuItem value={2}>Second Trimester</MenuItem>
-          <MenuItem value={3}>Third Trimester</MenuItem>
+          <MenuItem value={1}>{t('First Trimester')}</MenuItem>
+          <MenuItem value={2}>{t('Second Trimester')}</MenuItem>
+          <MenuItem value={3}>{t('Third Trimester')}</MenuItem>
         </CustomSelect>
       }
     >
@@ -130,10 +139,10 @@ const PregnancyProgress = () => {
               </Box>
               <Box>
                 <Typography variant="h3" fontWeight="700">
-                  Week 18
+                  {t('Week 18')}
                 </Typography>
                 <Typography variant="subtitle2" color="textSecondary">
-                  Current Week
+                  {t('Current Week')}
                 </Typography>
               </Box>
             </Stack>
@@ -145,7 +154,7 @@ const PregnancyProgress = () => {
               ></Avatar>
               <Box>
                 <Typography variant="subtitle1" color="textSecondary">
-                  Baby Size
+                  {t('Baby Size')}
                 </Typography>
                 <Typography variant="h5">14.2 cm</Typography>
               </Box>
@@ -156,14 +165,14 @@ const PregnancyProgress = () => {
               ></Avatar>
               <Box>
                 <Typography variant="subtitle1" color="textSecondary">
-                  Weight Gain
+                  {t('Weight Gain')}
                 </Typography>
                 <Typography variant="h5">7 lbs</Typography>
               </Box>
             </Stack>
           </Stack>
           <Button color="primary" variant="contained" fullWidth>
-            View Detailed Report
+            {t('View Detailed Report')}
           </Button>
         </Grid>
       </Grid>

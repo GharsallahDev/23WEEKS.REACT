@@ -1,11 +1,13 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import { Stack, Typography, Avatar, Box } from '@mui/material';
 import DashboardCard from 'src/components/shared/DashboardCard';
 import Icon from '@mui/material/Icon';
 
 const WeeklyPatientStats = () => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const primarylight = theme.palette.primary.light;
@@ -50,7 +52,7 @@ const WeeklyPatientStats = () => {
   };
   const seriescolumnchart = [
     {
-      name: 'Patients',
+      name: t('Patients'),
       color: primary,
       data: [25, 66, 20, 40, 12, 58, 20],
     },
@@ -58,24 +60,24 @@ const WeeklyPatientStats = () => {
 
   const stats = [
     {
-      title: 'New Patients',
-      subtitle: 'This Week',
+      title: t('New Patients'),
+      subtitle: t('This Week'),
       percent: '68',
       color: primary,
       lightcolor: primarylight,
       icon: <Icon>person_add</Icon>,
     },
     {
-      title: 'Follow-ups',
-      subtitle: 'This Week',
+      title: t('Follow-ups'),
+      subtitle: t('This Week'),
       percent: '45',
       color: theme.palette.success.main,
       lightcolor: theme.palette.success.light,
       icon: <Icon>refresh</Icon>,
     },
     {
-      title: 'Procedures',
-      subtitle: 'This Week',
+      title: t('Procedures'),
+      subtitle: t('This Week'),
       percent: '14',
       color: theme.palette.error.main,
       lightcolor: theme.palette.error.light,
@@ -84,7 +86,7 @@ const WeeklyPatientStats = () => {
   ];
 
   return (
-    <DashboardCard title="Weekly Patient Stats" subtitle="Average patients">
+    <DashboardCard title={t('Weekly Patient Stats')} subtitle={t('Average patients')}>
       <>
         <Stack mt={4}>
           <Chart

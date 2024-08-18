@@ -9,6 +9,7 @@ import ChatMsgSent from './components/ChatMsgSent';
 import AppCard from 'src/components/shared/AppCard';
 import breadcrumbImg from 'src/assets/images/breadcrumb/chat.png';
 import config from 'src/config';
+import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -21,6 +22,7 @@ const BCrumb = [
 ];
 
 const Bot = () => {
+  const { t } = useTranslation();
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isChatActive, setIsChatActive] = useState(false);
@@ -40,7 +42,7 @@ const Bot = () => {
     setMessages([
       {
         sender: 'bot',
-        content: "Hello! I'm Dr. Gyno, your prenatal care expert. How can I assist you today?",
+        content: t("Hello! I'm Dr. Gyno, your prenatal care expert. How can I assist you today?"),
       },
     ]);
     if (isMobile) {
@@ -72,7 +74,9 @@ const Bot = () => {
           ...prevMessages,
           {
             sender: 'bot',
-            content: "I'm sorry, I'm having trouble responding right now. Please try again later.",
+            content: t(
+              "I'm sorry, I'm having trouble responding right now. Please try again later.",
+            ),
           },
         ]);
       }
@@ -82,7 +86,7 @@ const Bot = () => {
         ...prevMessages,
         {
           sender: 'bot',
-          content: "I'm sorry, I'm having trouble responding right now. Please try again later.",
+          content: t("I'm sorry, I'm having trouble responding right now. Please try again later."),
         },
       ]);
     } finally {
@@ -91,10 +95,10 @@ const Bot = () => {
   };
 
   return (
-    <PageContainer title="Chat Bot" description="Dr. Gyno Chat Bot">
-      <Breadcrumb title="Chat Bot" items={BCrumb}>
+    <PageContainer title={t('Chat Bot')} description={t('Dr. Gyno Chat Bot')}>
+      <Breadcrumb title={t('Chat Bot')} items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
+          <img src={breadcrumbImg} alt={t('Chat Bot')} width="150px" />
         </Box>
       </Breadcrumb>
       <AppCard>
@@ -115,16 +119,16 @@ const Bot = () => {
             >
               <IconButton
                 color="inherit"
-                aria-label="open drawer"
+                aria-label={t('Open drawer')}
                 edge="start"
                 onClick={() => setMobileSidebarOpen(!isMobileSidebarOpen)}
                 sx={{
                   padding: 0,
                   margin: 0,
                   width: '100%',
-                  height: '40px', // Set a fixed height
+                  height: '40px',
                   '& .MuiSvgIcon-root': {
-                    fontSize: '24px', // Adjust icon size if needed
+                    fontSize: '24px',
                   },
                 }}
               >

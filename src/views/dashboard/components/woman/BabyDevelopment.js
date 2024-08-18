@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { Stack, Typography, Box } from '@mui/material';
@@ -7,6 +8,7 @@ import { IconGridDots } from '@tabler/icons';
 import DashboardCard from 'src/components/shared/DashboardCard';
 
 const BabyDevelopment = () => {
+  const { t } = useTranslation();
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;
@@ -25,7 +27,7 @@ const BabyDevelopment = () => {
       },
       height: 275,
     },
-    labels: ['Weight', 'Length', 'Head Circumference'],
+    labels: [t('Weight'), t('Length'), t('Head Circumference')],
     colors: [primary, primarylight, secondary],
     plotOptions: {
       pie: {
@@ -47,7 +49,7 @@ const BabyDevelopment = () => {
               color: textColor,
               fontSize: '20px',
               fontWeight: '600',
-              label: 'Week 20',
+              label: t('Week 20'),
             },
           },
         },
@@ -70,7 +72,7 @@ const BabyDevelopment = () => {
   const seriescolumnchart = [55, 55, 55];
 
   return (
-    <DashboardCard title="Baby Development" subtitle="Current Week">
+    <DashboardCard title={t('Baby Development')} subtitle={t('Current Week')}>
       <>
         <Box mt={3}>
           <Chart
@@ -96,18 +98,18 @@ const BabyDevelopment = () => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <IconGridDots width={22} />{' '}
-              </Typography>{' '}
-            </Box>{' '}
+                <IconGridDots width={22} />
+              </Typography>
+            </Box>
             <Box>
               <Typography variant="h6" fontWeight="600">
-                500 g{' '}
-              </Typography>{' '}
+                500 g
+              </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Weight{' '}
-              </Typography>{' '}
-            </Box>{' '}
-          </Stack>{' '}
+                {t('Weight')}
+              </Typography>
+            </Box>
+          </Stack>
           <Stack direction="row" spacing={2} alignItems="center">
             <Box
               width={38}
@@ -123,20 +125,20 @@ const BabyDevelopment = () => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <IconGridDots width={22} />{' '}
-              </Typography>{' '}
-            </Box>{' '}
+                <IconGridDots width={22} />
+              </Typography>
+            </Box>
             <Box>
               <Typography variant="h6" fontWeight="600">
-                25 cm{' '}
-              </Typography>{' '}
+                25 cm
+              </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Length{' '}
-              </Typography>{' '}
-            </Box>{' '}
-          </Stack>{' '}
-        </Stack>{' '}
-      </>{' '}
+                {t('Length')}
+              </Typography>
+            </Box>
+          </Stack>
+        </Stack>
+      </>
     </DashboardCard>
   );
 };

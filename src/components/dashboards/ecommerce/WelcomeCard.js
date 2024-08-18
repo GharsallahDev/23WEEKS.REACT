@@ -1,13 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Typography, Card, CardContent, Grid } from '@mui/material';
 import welcomeImg from 'src/assets/images/backgrounds/baby-inside-woman-womb.png';
 import { useSelector } from 'react-redux';
 
 const WelcomeCard = () => {
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
 
   const pregnancyWeek = 12;
-  const babySize = 'a lime';
+  const babySize = t('a lime');
 
   return (
     <Card
@@ -27,19 +29,16 @@ const WelcomeCard = () => {
           <Grid item xs={12} sm={7}>
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
               <Typography variant="h5" gutterBottom>
-                {' '}
-                {/* Increased from h6 to h5 */}
-                Welcome back {user ? user.full_name : 'Full Name'}!
+                {t('Welcome back {name}!', { name: user ? user.full_name : t('Full Name') })}
               </Typography>
               <Typography variant="body1" sx={{ mb: 1 }}>
-                {' '}
-                {/* Increased from body2 to body1 */}
-                Week {pregnancyWeek}: Your baby is about the size of {babySize}.
+                {t('Week {week}: Your baby is about the size of {size}.', {
+                  week: pregnancyWeek,
+                  size: babySize,
+                })}
               </Typography>
               <Button variant="contained" color="primary" size="medium">
-                {' '}
-                {/* Increased from small to medium */}
-                Track Progress
+                {t('Track Progress')}
               </Button>
             </Box>
           </Grid>
@@ -51,7 +50,7 @@ const WelcomeCard = () => {
           >
             <img
               src={welcomeImg}
-              alt="Pregnancy visual"
+              alt={t('Pregnancy visual')}
               style={{ maxWidth: '130px', width: '100%', height: 'auto' }} // Slightly reduced max-width
             />
           </Grid>

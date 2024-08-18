@@ -128,7 +128,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Account Setting',
+    title: 'Account Settings',
     icon: IconUserCircle,
     href: '/pages/account-settings',
   },

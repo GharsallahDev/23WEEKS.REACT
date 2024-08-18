@@ -1,16 +1,16 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import DashboardCard from 'src/components/shared/DashboardCard';
 import { Stack, Typography, Box } from '@mui/material';
 
 const YearlyPatientGrowth = () => {
-  // chart color
+  const { t } = useTranslation();
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const secondary = theme.palette.secondary.main;
 
-  // chart
   const optionscolumnchart = {
     chart: {
       type: 'bar',
@@ -57,7 +57,20 @@ const YearlyPatientGrowth = () => {
       tickAmount: 4,
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      categories: [
+        t('Jan'),
+        t('Feb'),
+        t('Mar'),
+        t('Apr'),
+        t('May'),
+        t('Jun'),
+        t('Jul'),
+        t('Aug'),
+        t('Sep'),
+        t('Oct'),
+        t('Nov'),
+        t('Dec'),
+      ],
       axisBorder: {
         show: false,
       },
@@ -69,31 +82,30 @@ const YearlyPatientGrowth = () => {
   };
   const seriescolumnchart = [
     {
-      name: 'New Patients',
+      name: t('New Patients'),
       data: [355, 390, 300, 350, 390, 180, 355, 390, 300, 350, 390, 180],
     },
     {
-      name: 'Returning Patients',
+      name: t('Returning Patients'),
       data: [280, 250, 325, 215, 250, 310, 280, 250, 325, 215, 250, 310],
     },
   ];
 
   return (
-    <DashboardCard title="Yearly Patient Growth">
-      <Chart
-        options={optionscolumnchart}
-        series={seriescolumnchart}
-        type="bar"
-        height="360px"
-      />
+    <DashboardCard title={t('Yearly Patient Growth')}>
+      <Chart options={optionscolumnchart} series={seriescolumnchart} type="bar" height="360px" />
       <Stack direction="row" spacing={2} justifyContent="end" mt={2}>
         <Stack direction="row" spacing={1} alignItems="center">
           <Box bgcolor={primary} width="12px" height="12px" borderRadius="50%" />
-          <Typography variant="subtitle2" color="textSecondary">New Patients</Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {t('New Patients')}
+          </Typography>
         </Stack>
         <Stack direction="row" spacing={1} alignItems="center">
           <Box bgcolor={secondary} width="12px" height="12px" borderRadius="50%" />
-          <Typography variant="subtitle2" color="textSecondary">Returning Patients</Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {t('Returning Patients')}
+          </Typography>
         </Stack>
       </Stack>
     </DashboardCard>

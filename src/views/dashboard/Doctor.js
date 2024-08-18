@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import PageContainer from '../../components/container/PageContainer';
+import { useTranslation } from 'react-i18next';
 
 // Import components
 import TopCards from './components/doctor/TopCards';
@@ -12,8 +13,10 @@ import RecentPatientVisits from 'src/views/dashboard/components/doctor/RecentPat
 import YearlyPatientGrowth from 'src/views/dashboard/components/doctor/YearlyPatientGrowth';
 
 const DoctorDashboard = () => {
+  const { t } = useTranslation();
+
   return (
-    <PageContainer title="Doctor Dashboard">
+    <PageContainer title={t('Doctor Dashboard')}>
       <Box mt={3}>
         <TopCards />
         <Grid container spacing={3} mt={1}>

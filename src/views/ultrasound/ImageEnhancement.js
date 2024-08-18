@@ -7,6 +7,8 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/ultrasound.png';
 import config from 'src/config';
+import { useTranslation } from 'react-i18next';
+
 const BCrumb = [
   {
     to: '/',
@@ -55,6 +57,7 @@ const ImageContainer = styled(Box)({
 });
 
 const ImageQualityEnhancement = () => {
+  const { t } = useTranslation();
   const [originalImage, setOriginalImage] = useState(null);
   const [enhancedImage, setEnhancedImage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -84,16 +87,20 @@ const ImageQualityEnhancement = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Server error: ${errorText}`);
+        throw new Error(t('Server error: {{errorText}}', { errorText }));
       }
 
       const data = await response.json();
       if (!data.enhancedImage) {
-        throw new Error('No enhanced image received');
+        throw new Error(t('No enhanced image received'));
       }
       setEnhancedImage(data.enhancedImage);
     } catch (err) {
-      setError(`An error occurred while processing the image: ${err.message}`);
+      setError(
+        t('An error occurred while processing the image: {{errorMessage}}', {
+          errorMessage: err.message,
+        }),
+      );
       console.error('Error:', err);
     } finally {
       setIsProcessing(false);
@@ -107,10 +114,10 @@ const ImageQualityEnhancement = () => {
   };
 
   return (
-    <PageContainer title="Image Quality Enhancement">
-      <Breadcrumb title="Image Quality Enhancement" items={BCrumb}>
+    <PageContainer title={t('Image Quality Enhancement')}>
+      <Breadcrumb title={t('Image Quality Enhancement')} items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="155px" />
+          <img src={breadcrumbImg} alt={t('Ultrasound')} width="155px" />
         </Box>
       </Breadcrumb>
 
@@ -119,17 +126,17 @@ const ImageQualityEnhancement = () => {
           <FixedHeightCard>
             <FixedHeightCardContent>
               <Typography variant="h6" gutterBottom>
-                Original Image
+                {t('Original Image')}
               </Typography>
               <ImageContainer>
                 {originalImage ? (
                   <img
                     src={URL.createObjectURL(originalImage)}
-                    alt="Original ultrasound"
+                    alt={t('Original ultrasound')}
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                   />
                 ) : (
-                  <Typography color="textSecondary">No image uploaded</Typography>
+                  <Typography color="textSecondary">{t('No image uploaded')}</Typography>
                 )}
               </ImageContainer>
               <Button
@@ -138,7 +145,7 @@ const ImageQualityEnhancement = () => {
                 startIcon={<CloudUploadIcon />}
                 fullWidth
               >
-                Upload Image
+                {t('Upload Image')}
                 <VisuallyHiddenInput type="file" onChange={handleImageUpload} accept="image/*" />
               </Button>
             </FixedHeightCardContent>
@@ -149,18 +156,18 @@ const ImageQualityEnhancement = () => {
           <FixedHeightCard>
             <FixedHeightCardContent>
               <Typography variant="h6" gutterBottom>
-                Enhanced Image
+                {t('Enhanced Image')}
               </Typography>
               <ImageContainer>
                 {enhancedImage ? (
                   <img
                     src={`data:image/png;base64,${enhancedImage}`}
-                    alt="Enhanced image"
+                    alt={t('Enhanced image')}
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                   />
                 ) : (
                   <Typography color="textSecondary">
-                    {isProcessing ? 'Enhancing image...' : 'No enhanced image yet'}
+                    {isProcessing ? t('Enhancing image...') : t('No enhanced image yet')}
                   </Typography>
                 )}
               </ImageContainer>
@@ -172,7 +179,7 @@ const ImageQualityEnhancement = () => {
                 onClick={handleReset}
                 disabled={!originalImage && !enhancedImage}
               >
-                Reset
+                {t('Reset')}
               </Button>
             </FixedHeightCardContent>
           </FixedHeightCard>
@@ -182,7 +189,7 @@ const ImageQualityEnhancement = () => {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Enhance Image Quality
+                {t('Enhance Image Quality')}
               </Typography>
               {!enhancedImage && !isProcessing && (
                 <Button
@@ -192,7 +199,7 @@ const ImageQualityEnhancement = () => {
                   disabled={!originalImage}
                   fullWidth
                 >
-                  Enhance Image
+                  {t('Enhance Image')}
                 </Button>
               )}
               {isProcessing && (

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import DashboardCard from 'src/components/shared/DashboardCard';
@@ -17,6 +18,7 @@ import {
 } from '@mui/material';
 
 const PregnancySymptoms = () => {
+  const { t } = useTranslation();
   const [week, setWeek] = React.useState('18');
 
   const handleChange = (event) => {
@@ -61,15 +63,15 @@ const PregnancySymptoms = () => {
   };
 
   const symptoms = [
-    { name: 'Morning Sickness', severity: '25%', status: 'Low', trend: [30, 25, 35, 20, 30] },
-    { name: 'Fatigue', severity: '60%', status: 'Medium', trend: [40, 35, 45, 30, 40] },
-    { name: 'Back Pain', severity: '40%', status: 'Low', trend: [20, 15, 25, 10, 20] },
-    { name: 'Swelling', severity: '30%', status: 'Low', trend: [10, 15, 20, 25, 30] },
+    { name: t('Morning Sickness'), severity: '25%', status: t('Low'), trend: [30, 25, 35, 20, 30] },
+    { name: t('Fatigue'), severity: '60%', status: t('Medium'), trend: [40, 35, 45, 30, 40] },
+    { name: t('Back Pain'), severity: '40%', status: t('Low'), trend: [20, 15, 25, 10, 20] },
+    { name: t('Swelling'), severity: '30%', status: t('Low'), trend: [10, 15, 20, 25, 30] },
   ];
 
   return (
     <DashboardCard
-      title="Pregnancy Symptoms"
+      title={t('Pregnancy Symptoms')}
       action={
         <CustomSelect
           labelId="week-dd"
@@ -78,9 +80,9 @@ const PregnancySymptoms = () => {
           value={week}
           onChange={handleChange}
         >
-          <MenuItem value={18}>Week 18</MenuItem>
-          <MenuItem value={19}>Week 19</MenuItem>
-          <MenuItem value={20}>Week 20</MenuItem>
+          <MenuItem value={18}>{t('Week 18')}</MenuItem>
+          <MenuItem value={19}>{t('Week 19')}</MenuItem>
+          <MenuItem value={20}>{t('Week 20')}</MenuItem>
         </CustomSelect>
       }
     >
@@ -95,22 +97,22 @@ const PregnancySymptoms = () => {
             <TableRow>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Symptom
+                  {t('Symptom')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Severity
+                  {t('Severity')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Status
+                  {t('Status')}
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Trend
+                  {t('Trend')}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -133,17 +135,17 @@ const PregnancySymptoms = () => {
                     sx={{
                       bgcolor: (theme) =>
                         theme.palette[
-                          symptom.status === 'Low'
+                          symptom.status === t('Low')
                             ? 'success'
-                            : symptom.status === 'Medium'
+                            : symptom.status === t('Medium')
                             ? 'warning'
                             : 'error'
                         ].light,
                       color: (theme) =>
                         theme.palette[
-                          symptom.status === 'Low'
+                          symptom.status === t('Low')
                             ? 'success'
-                            : symptom.status === 'Medium'
+                            : symptom.status === t('Medium')
                             ? 'warning'
                             : 'error'
                         ].main,

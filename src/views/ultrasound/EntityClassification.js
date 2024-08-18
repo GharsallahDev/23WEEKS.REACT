@@ -23,6 +23,7 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/scan.png';
 import config from 'src/config';
+import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -72,6 +73,7 @@ const ImageContainer = styled(Box)({
 });
 
 const UltrasoundClassification = () => {
+  const { t } = useTranslation();
   const [image, setImage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState(null);
@@ -100,13 +102,13 @@ const UltrasoundClassification = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Server error');
+        throw new Error(t('Server error'));
       }
 
       const data = await response.json();
       setResults(data);
     } catch (err) {
-      setError('An error occurred while processing the image.');
+      setError(t('An error occurred while processing the image.'));
       console.error('Error:', err);
     } finally {
       setIsProcessing(false);
@@ -122,11 +124,11 @@ const UltrasoundClassification = () => {
   const renderClassificationResults = (classification, title) => (
     <Box sx={{ mt: 2 }}>
       <Typography variant="h6" gutterBottom>
-        {title}
+        {t(title)}
       </Typography>
       <Box sx={{ mb: 2 }}>
         <Typography variant="subtitle1" color="text.secondary">
-          Main Class
+          {t('Main Class')}
         </Typography>
         <Typography variant="h5" color="primary" fontWeight="bold">
           {classification.mainClass}
@@ -134,7 +136,7 @@ const UltrasoundClassification = () => {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <Typography variant="body1" fontWeight="medium" sx={{ mr: 1 }}>
-          Accuracy:
+          {t('Accuracy')}:
         </Typography>
         <Typography variant="body1">{`${(classification.accuracy * 100).toFixed(2)}%`}</Typography>
         <Box sx={{ ml: 2, flexGrow: 1 }}>
@@ -152,7 +154,7 @@ const UltrasoundClassification = () => {
         </Box>
       </Box>
       <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-        All Classes:
+        {t('All Classes')}:
       </Typography>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {classification.allClasses.map((cls) => (
@@ -173,7 +175,7 @@ const UltrasoundClassification = () => {
                   {cls.name}
                 </Typography>
               }
-              secondary={`Probability: ${(cls.probability * 100).toFixed(2)}%`}
+              secondary={`${t('Probability')}: ${(cls.probability * 100).toFixed(2)}%`}
             />
           </ListItem>
         ))}
@@ -182,10 +184,10 @@ const UltrasoundClassification = () => {
   );
 
   return (
-    <PageContainer title="Ultrasound Classification">
-      <Breadcrumb title="Ultrasound Classification" items={BCrumb}>
+    <PageContainer title={t('Ultrasound Classification')}>
+      <Breadcrumb title={t('Ultrasound Classification')} items={BCrumb}>
         <Box sx={{ marginTop: '-33px' }}>
-          <img src={breadcrumbImg} alt="Ultrasound" height="190px" width="auto" />
+          <img src={breadcrumbImg} alt={t('Ultrasound')} height="190px" width="auto" />
         </Box>
       </Breadcrumb>
 
@@ -194,17 +196,17 @@ const UltrasoundClassification = () => {
           <FixedHeightCard>
             <FixedHeightCardContent>
               <Typography variant="h6" gutterBottom>
-                Upload Ultrasound Image
+                {t('Upload Ultrasound Image')}
               </Typography>
               <ImageContainer>
                 {image ? (
                   <img
                     src={URL.createObjectURL(image)}
-                    alt="Uploaded ultrasound"
+                    alt={t('Uploaded ultrasound')}
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                   />
                 ) : (
-                  <Typography color="textSecondary">No image uploaded</Typography>
+                  <Typography color="textSecondary">{t('No image uploaded')}</Typography>
                 )}
               </ImageContainer>
             </FixedHeightCardContent>
@@ -215,7 +217,7 @@ const UltrasoundClassification = () => {
                 startIcon={<CloudUploadIcon />}
                 fullWidth
               >
-                Upload Image
+                {t('Upload Image')}
                 <VisuallyHiddenInput type="file" onChange={handleImageUpload} accept="image/*" />
               </Button>
             </CardActions>
@@ -226,7 +228,7 @@ const UltrasoundClassification = () => {
           <FixedHeightCard>
             <FixedHeightCardContent>
               <Typography variant="h6" gutterBottom>
-                Classification Results
+                {t('Classification Results')}
               </Typography>
               {!results && !isProcessing && !error && (
                 <Box
@@ -243,7 +245,7 @@ const UltrasoundClassification = () => {
                     onClick={processImage}
                     disabled={!image}
                   >
-                    Classify Image
+                    {t('Classify Image')}
                   </Button>
                 </Box>
               )}
@@ -258,13 +260,13 @@ const UltrasoundClassification = () => {
                 >
                   <LinearProgress />
                   <Typography align="center" sx={{ mt: 1 }}>
-                    Processing...
+                    {t('Processing...')}
                   </Typography>
                 </Box>
               )}
               {error && (
                 <Alert severity="error" sx={{ mt: 2 }}>
-                  {error}
+                  {t(error)}
                 </Alert>
               )}
               {results && (
@@ -287,7 +289,7 @@ const UltrasoundClassification = () => {
                 onClick={handleReset}
                 disabled={!image && !results}
               >
-                Reset
+                {t('Reset')}
               </Button>
             </CardActions>
           </FixedHeightCard>
