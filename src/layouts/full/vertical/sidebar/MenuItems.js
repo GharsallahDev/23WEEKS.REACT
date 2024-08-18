@@ -84,6 +84,7 @@ const Menuitems = [
     title: 'Story Generation',
     icon: IconPoint,
     href: '/generator/story-generator',
+    userType: 'user',
   },
   {
     id: uniqueId(),

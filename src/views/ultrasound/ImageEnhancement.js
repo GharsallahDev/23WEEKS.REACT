@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -6,7 +6,6 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/ultrasound.png';
-import config from 'src/config';
 import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
@@ -56,6 +55,19 @@ const ImageContainer = styled(Box)({
   marginBottom: 16,
 });
 
+const adjustContrast = (ctx, imageData, contrast) => {
+  const { data, width, height } = imageData;
+  const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = factor * (data[i] - 128) + 128;     // Red
+    data[i + 1] = factor * (data[i + 1] - 128) + 128; // Green
+    data[i + 2] = factor * (data[i + 2] - 128) + 128; // Blue
+  }
+
+  return imageData;
+};
+
 const ImageQualityEnhancement = () => {
   const { t } = useTranslation();
   const [originalImage, setOriginalImage] = useState(null);
@@ -85,9 +97,15 @@ const ImageQualityEnhancement = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
-        ctx.filter = 'grayscale(100%)'; // Apply grayscale filter
-        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const contrast = 20; // Adjust this value to control the contrast level
+        const adjustedData = adjustContrast(ctx, imageData, contrast);
+        ctx.putImageData(adjustedData, 0, 0);
         setEnhancedImage(canvas.toDataURL('image/png'));
+        setIsProcessing(false);
+      };
+      img.onerror = () => {
+        setError(t('Failed to load the image.'));
         setIsProcessing(false);
       };
     }
