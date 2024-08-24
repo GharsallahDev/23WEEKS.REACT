@@ -110,10 +110,13 @@ const UltrasoundClassification = Loadable(
 const HeadCircumference = Loadable(lazy(() => import('../views/ultrasound/HeadCircumference')));
 const ReportGeneration = Loadable(lazy(() => import('../views/ultrasound/ReportGeneration')));
 const EnhanceQuality = Loadable(lazy(() => import('../views/ultrasound/ImageEnhancement')));
+const AnomalyDetection = Loadable (lazy(() => import('../views/ultrasound/AnomalyDetection')));
+const HealthTracking = Loadable(lazy(() => import('../views/ultrasound/HealthTracking')));
 const BabyNameGenerator = Loadable(lazy(() => import('../views/generator/BabyNameGenerator')));
 const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
 const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
+const Search  = Loadable(lazy(() => import('../views/generator/Search')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const userType = useSelector(selectUserType);
@@ -222,6 +225,24 @@ const Router = [
         ),
       },
       {
+        path: '/ultrasound/anomaly-detection',
+        element: (
+          <ProtectedRoute allowedTypes={['doctor']}>
+            {' '}
+            <AnomalyDetection />{' '}
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/ultrasound/HealthTracking',
+        element: (
+          <ProtectedRoute allowedTypes={['doctor']}>
+            {' '}
+            <HealthTracking />{' '}
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: '/ultrasound/report_generation',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
@@ -234,6 +255,15 @@ const Router = [
         element: (
           <ProtectedRoute allowedTypes={['user']}>
             <BabyNameGenerator />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/generator/search',
+        element: (
+          <ProtectedRoute allowedTypes={['user']}>
+            {' '}
+            <Search />{' '}
           </ProtectedRoute>
         ),
       },

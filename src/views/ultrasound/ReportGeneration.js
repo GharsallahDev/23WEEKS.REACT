@@ -155,7 +155,7 @@ const UltrasoundReportGenerator = () => {
   return (
     <PageContainer title={t('AI Ultrasound Report Generator')}>
       <Breadcrumb title={t('AI Ultrasound Report Generator')} items={BCrumb}>
-        <Box>
+        <Box sx={{ marginTop: '-15px' }}>
           <img src={breadcrumbImg} alt={t('AI Report Generator')} width="155px" />
         </Box>
       </Breadcrumb>

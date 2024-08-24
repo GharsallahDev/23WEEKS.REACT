@@ -111,7 +111,7 @@ const HeadCircumferenceCalculator = () => {
     formData.append('image', originalImage);
 
     try {
-      const response = await fetch(`${config.apiUrl}/api//calculate-circumference`, {
+      const response = await fetch(`${config.apiUrl}/api/calculate-circumference`, {
         method: 'POST',
         body: formData,
       });

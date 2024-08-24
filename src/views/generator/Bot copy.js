@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Divider, Box, IconButton, useMediaQuery, useTheme, TextField } from '@mui/material';
-import { Menu as MenuIcon, Send as SendIcon, Mic as MicIcon } from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
+import { Divider, Box, IconButton, useMediaQuery, useTheme } from '@mui/material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import PageContainer from '../../components/container/PageContainer';
 import ChatSidebar from './components/ChatSidebar';
 import ChatContent from './components/ChatContent';
+import ChatMsgSent from './components/ChatMsgSent';
 import AppCard from 'src/components/shared/AppCard';
 import breadcrumbImg from 'src/assets/images/breadcrumb/chat.png';
 import config from 'src/config';
@@ -26,8 +27,6 @@ const Bot = () => {
   const [messages, setMessages] = useState([]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [isBotTyping, setIsBotTyping] = useState(false);
-  const [message, setMessage] = useState('');
-  const recognitionRef = useRef(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -51,11 +50,10 @@ const Bot = () => {
     }
   };
 
-  const handleSendMessage = async () => {
-    if (!isChatActive || !message.trim()) return;
+  const handleSendMessage = async (message) => {
+    if (!isChatActive) return;
 
     setMessages((prevMessages) => [...prevMessages, { sender: 'user', content: message }]);
-    setMessage('');
     setIsBotTyping(true);
 
     try {
@@ -94,35 +92,6 @@ const Bot = () => {
     } finally {
       setIsBotTyping(false);
     }
-  };
-
-  const initSpeechRecognition = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert("Speech recognition is not supported in this browser.");
-      return;
-    }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.lang = 'en-US';
-    recognitionRef.current.interimResults = false;
-    recognitionRef.current.maxAlternatives = 1;
-
-    recognitionRef.current.onresult = (event) => {
-      const speechToText = event.results[0][0].transcript;
-      setMessage(speechToText);
-    };
-
-    recognitionRef.current.onerror = (event) => {
-      console.error('Speech recognition error', event);
-    };
-  };
-
-  const handleSpeechInput = () => {
-    if (!recognitionRef.current) {
-      initSpeechRecognition();
-    }
-    recognitionRef.current.start();
   };
 
   return (
@@ -187,36 +156,8 @@ const Bot = () => {
               isBotTyping={isBotTyping}
             />
             <Divider />
-            <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center', padding: '8px' }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type or speak your message..."
-                disabled={!isChatActive}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSendMessage();
-                  }
-                }}
-              />
-              <IconButton
-                color="primary"
-                onClick={handleSpeechInput}
-                aria-label="Start speech input"
-                disabled={!isChatActive}
-              >
-                <MicIcon />
-              </IconButton>
-              <IconButton
-                color="primary"
-                onClick={handleSendMessage}
-                aria-label="Send message"
-                disabled={!isChatActive || !message.trim()}
-              >
-                <SendIcon />
-              </IconButton>
+            <Box sx={{ flexShrink: 0 }}>
+              <ChatMsgSent onSendMessage={handleSendMessage} isChatActive={isChatActive} />
             </Box>
           </Box>
         </Box>

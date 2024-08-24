@@ -15,6 +15,10 @@ import {
   IconCone,
   IconPhoto,
   IconPoint,
+  IconBook,
+  IconSearch,
+  IconDetails,
+  IconHealthRecognition,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -60,6 +64,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: 'Anomaly Detection',
+    icon: IconDetails,
+    href: '/ultrasound/anomaly-detection',
+    userType: 'doctor',
+  },
+  {
+    id: uniqueId(),
     title: 'Head Circumference',
     icon: IconCircleDotted,
     href: '/ultrasound/head_circumference',
@@ -74,6 +85,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: 'Health Tracking',
+    icon:  IconHealthRecognition,
+    href: '/ultrasound/HealthTracking',
+    userType: 'doctor',
+  },
+  {
+    id: uniqueId(),
     title: 'Chat',
     icon: IconMessage2,
     href: '/generator/chat',
@@ -82,7 +100,7 @@ const Menuitems = [
   {
     id: uniqueId(),
     title: 'Story Generation',
-    icon: IconPoint,
+    icon: IconBook,
     href: '/generator/story-generator',
     userType: 'user',
   },
@@ -98,6 +116,13 @@ const Menuitems = [
     title: 'Smart Reminders',
     icon: IconAlarm,
     href: '/generator/reminders',
+    userType: 'user',
+  },
+  {
+    id: uniqueId(),
+    title: 'AI Search Engine ',
+    icon: IconSearch,
+    href: '/generator/search',
     userType: 'user',
   },
   {
