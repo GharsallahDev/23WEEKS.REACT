@@ -40,7 +40,42 @@ const HealthTracking = () => {
     bt: '',
     heart_rate: ''
   });
+
+  const [errors, setErrors] = useState({});
   const [predictionText, setPredictionText] = useState('');
+
+  const validateForm = () => {
+    const newErrors = {};
+    let hasError = false;
+    
+    if (formData.age < 10 || formData.age > 70) {
+      newErrors.age = 'Age must be between 10 and 70';
+      hasError = true;
+    }
+    if (formData.systolic_bp < 70 || formData.systolic_bp > 160) {
+      newErrors.systolic_bp = 'Systolic BP must be between 70 and 160';
+      hasError = true;
+    }
+    if (formData.diastolic_bp < 49 || formData.diastolic_bp > 100) {
+      newErrors.diastolic_bp = 'Diastolic BP must be between 49 and 100';
+      hasError = true;
+    }
+    if (formData.bs < 6.0 || formData.bs > 19.0) {
+      newErrors.bs = 'Blood Glucose Level must be between 6.0 and 19.0';
+      hasError = true;
+    }
+    if (formData.bt < 98.0 || formData.bt > 103.0) {
+      newErrors.bt = 'Body Temperature must be between 98.0 and 103.0';
+      hasError = true;
+    }
+    if (formData.heart_rate < 70 || formData.heart_rate > 90) {
+      newErrors.heart_rate = 'Heart Rate must be between 7 and 90';
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+    return !hasError;
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -51,39 +86,44 @@ const HealthTracking = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      setPredictionText('Serious case');
+      return;
+    }
+
     try {
-        const formDataObj = new FormData();
-        for (const key in formData) {
-            formDataObj.append(key, formData[key]);
-        }
-  
-        const response = await fetch(`${config.apiUrl}/api/health-tracking`, {
-            method: 'POST',
-            body: formDataObj
-        });
-  
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('API error:', errorText);
-            setPredictionText('Error: ' + errorText);
-            return;
-        }
-  
-        const result = await response.json();
-        if (result.error) {
-            setPredictionText('Error: ' + result.error);
-        } else {
-            setPredictionText(result.risk_level);
-        }
+      const formDataObj = new FormData();
+      for (const key in formData) {
+        formDataObj.append(key, formData[key]);
+      }
+
+      const response = await fetch(`${config.apiUrl}/api/health-tracking`, {
+        method: 'POST',
+        body: formDataObj
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API error:', errorText);
+        setPredictionText('Error: ' + errorText);
+        return;
+      }
+
+      const result = await response.json();
+      if (result.error) {
+        setPredictionText('Error: ' + result.error);
+      } else {
+        setPredictionText(result.risk_level);
+      }
     } catch (error) {
-        console.error('Error:', error);
-        setPredictionText('An error occurred while fetching the prediction.');
+      console.error('Error:', error);
+      setPredictionText('An error occurred while fetching the prediction.');
     }
   };
 
   return (
     <PageContainer title="Health Tracking">
-      <Breadcrumb title="Tracking" items={BCrumb}>
+      <Breadcrumb title="Health Tracking" items={BCrumb}>
         <Box sx={{ marginTop: '-15px' }}>
           <img src={breadcrumbImg} alt="Health Tracking" width="155px" />
         </Box>
@@ -103,6 +143,8 @@ const HealthTracking = () => {
               fullWidth
               margin="normal"
               required
+              error={!!errors.age}
+              helperText={errors.age}
             />
             <TextField
               label="Systolic Blood Pressure (mmHg)"
@@ -113,6 +155,8 @@ const HealthTracking = () => {
               fullWidth
               margin="normal"
               required
+              error={!!errors.systolic_bp}
+              helperText={errors.systolic_bp}
             />
             <TextField
               label="Diastolic Blood Pressure (mmHg)"
@@ -123,6 +167,8 @@ const HealthTracking = () => {
               fullWidth
               margin="normal"
               required
+              error={!!errors.diastolic_bp}
+              helperText={errors.diastolic_bp}
             />
             <TextField
               label="Blood Glucose Level (mmol/L)"
@@ -133,6 +179,8 @@ const HealthTracking = () => {
               fullWidth
               margin="normal"
               required
+              error={!!errors.bs}
+              helperText={errors.bs}
             />
             <TextField
               label="Body Temperature (°F)"
@@ -143,6 +191,8 @@ const HealthTracking = () => {
               fullWidth
               margin="normal"
               required
+              error={!!errors.bt}
+              helperText={errors.bt}
             />
             <TextField
               label="Heart Rate (bpm)"
@@ -153,6 +203,8 @@ const HealthTracking = () => {
               fullWidth
               margin="normal"
               required
+              error={!!errors.heart_rate}
+              helperText={errors.heart_rate}
             />
             <Button
               type="submit"

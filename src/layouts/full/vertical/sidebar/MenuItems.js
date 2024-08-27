@@ -64,7 +64,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Anomaly Detection',
+    title: 'Brain Structure Detection',
     icon: IconDetails,
     href: '/ultrasound/anomaly-detection',
     userType: 'doctor',

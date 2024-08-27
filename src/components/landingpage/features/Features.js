@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Container, Typography, Grid, Card, CardContent, Button, styled } from '@mui/material';
 import { motion } from 'framer-motion';
 import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
+import Header from 'src/components/landingpage/header/Header';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import ChatIcon from '@mui/icons-material/Chat';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
@@ -116,12 +117,13 @@ const Features = () => {
   const [activeTab, setActiveTab] = useState('pregnant');
 
   return (
-    <Box sx={{ py: 8, bgcolor: 'background.default' }}>
+    <Box sx={{ py:1, bgcolor: 'background.default' }}>
+      <Header />
       <Container maxWidth="lg">
-        <Typography variant="h2" align="center" gutterBottom>
+        <Typography sx={{ py:6 }} variant="h2" align="center" gutterBottom>
           Key Features
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+        <Box sx={{ py : 6 , display: 'flex', justifyContent: 'center', mb: 4 }}>
           <FeatureButton
             startIcon={<PregnantWomanIcon />}
             active={activeTab === 'pregnant'}
