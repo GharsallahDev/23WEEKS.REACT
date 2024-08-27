@@ -12,7 +12,15 @@ import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import SearchIcon from '@mui/icons-material/Search';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
+import CallToAction from 'src/components/landingpage/CallToAction';
+import Footer from 'src/components/landingpage/footer/Footer';
+import AnimateFadeIn from 'src/components/landingpage/animation/Animation';
 
+const AnimatedSection = ({ children, delay = 0 }) => (
+  <AnimateFadeIn>
+    <Box sx={{ opacity: 0, animation: `fadeIn 0.5s ease-out ${delay}s forwards` }}>{children}</Box>
+  </AnimateFadeIn>
+);
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -166,6 +174,16 @@ const Features = () => {
           ))}
         </Grid>
       </Container>
+      <AnimatedSection delay={1}>
+        <CallToAction />
+      </AnimatedSection>
+      <Footer />
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </Box>
   );
 };
