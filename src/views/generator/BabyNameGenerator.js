@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, Container } from '@mui/material';
+import { Box, Typography, Button, Paper, Container, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
-import Question from './components/Question';
-import ProgressBar from './components/ProgressBar';
-import LoadingAnimation from './components/LoadingAnimation';
 import NameList from './components/NameList';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/baby.png';
-
+import config from 'src/config';
 const BCrumb = [
   {
     to: '/',
@@ -43,99 +40,89 @@ const StyledBox = styled(Box)(({ theme }) => ({
   '& > *': {
     marginBottom: theme.spacing(2),
   },
+  '& > *:not(:last-child)': {
+    marginBottom: theme.spacing(4), // Adding space between fields
+  },
 }));
 
-const questions = [
-  {
-    id: 1,
-    text: 'Are you expecting a boy or a girl?',
-    options: ['Boy', 'Girl', "I don't know yet"],
-  },
-  {
-    id: 2,
-    text: "What's your preferred name origin?",
-    options: ['African', 'Latin', 'Hebrew', 'Celtic', 'Nordic'],
-  },
-  {
-    id: 3,
-    text: 'Do you prefer traditional or modern names?',
-    options: ['Traditional', 'Modern', 'A mix of both'],
-  },
-  {
-    id: 4,
-    text: 'How many syllables do you prefer?',
-    options: ['One', 'Two', 'Three', 'No preference'],
-  },
-  {
-    id: 5,
-    text: 'What personality trait do you hope your child will have?',
-    options: ['Creative', 'Intelligent', 'Kind', 'Brave', 'Curious'],
-  },
-  {
-    id: 6,
-    text: 'What element or aspect of nature inspires you?',
-    options: ['Ocean', 'Mountains', 'Forest', 'Sky', 'Desert'],
-  },
+const originOptions = [
+  "African---Abaluhyan", "African---Akan", "African---American", "African---Bantu", "African---Botswana",
+  "African---Egyptian", "African---Ethiopian", "African---Ewe", "African---Fanti", "African---Ghanian",
+  "African---Hausa", "African---Ibo", "African---Kenyan", "African---Kikuyu", "African---Lesotho",
+  "African---Lugandan", "African---Malawian", "African---Musoga", "African---Nguni", "African---Nigerian",
+  "African---Ochi", "African---Rukonjo", "African---Runyoro", "African---Rutooro", "African---Rwandan",
+  "African---Somalian", "African---Swahili", "African---Tanzanian", "African---Ugandan", "African---Xhosha",
+  "African---Yoruba", "African---Yoruban", "African---Zimbabwe", "African---Zulu", "African---Zuni", "Arabic"
+];
+
+const categoryOptions = [
+  "Nature", "God", "Love", "Birth Order", "Leadership and Royalty", "Virtues", 
+  "Strength and Power", "Emotions", "Family Relations"
+];
+
+const letterOptions = [
+  "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
 ];
 
 const BabyNameGenerator = () => {
-  const [started, setStarted] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [generating, setGenerating] = useState(false);
+  const [gender, setGender] = useState('');
+  const [origin, setOrigin] = useState('');
+  const [category, setCategory] = useState('');
+  const [length, setLength] = useState('');
+  const [letter, setLetter] = useState('');
   const [names, setNames] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState(null);
+  const [expandedName, setExpandedName] = useState(null);
+  const namesPerPage = 4;
 
-  const handleStart = () => {
-    setStarted(true);
-  };
+  const generateNames = async () => {
+    setGenerating(true);
+    try {
+      const response = await fetch(`${config.apiUrl}/api/generate_name`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ gender, origin, category, length, letter }), // Include all options
+      });
 
-  const handleAnswer = (answer) => {
-    setAnswers({ ...answers, [currentQuestion]: answer });
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      setGenerating(true);
-      setTimeout(() => {
-        const generatedNames = generateNames(answers);
-        setNames(generatedNames);
-        setGenerating(false);
-      }, 3000);
+      if (!response.ok) {
+        throw new Error('Failed to generate names');
+      }
+
+      const data = await response.json();
+      setNames(data.names);
+      setCurrentPage(0); // Reset page to 0 when new names are generated
+    } catch (error) {
+      setError('An error occurred while generating names. Please try again.');
+      console.error('Error:', error);
+    } finally {
+      setGenerating(false);
     }
   };
 
   const handleReset = () => {
-    setStarted(false);
-    setCurrentQuestion(0);
-    setAnswers({});
+    setGender('');
+    setOrigin('');
+    setCategory('');
+    setLength('');
+    setLetter('');
     setNames([]);
+    setError(null);
+    setCurrentPage(0); // Reset page when resetting
   };
 
-  const generateNames = (answers) => {
-    const genderSpecificNames = {
-      Boy: ['Liam', 'Noah', 'Oliver', 'Elijah', 'William'],
-      Girl: ['Olivia', 'Emma', 'Ava', 'Charlotte', 'Sophia'],
-    };
-
-    const originSpecificNames = {
-      African: ['Zuri', 'Kwesi', 'Amara', 'Kobe', 'Nia'],
-      Latin: ['Luna', 'Nova', 'Leo', 'Aria', 'Cruz'],
-      Hebrew: ['Ezra', 'Abigail', 'Asher', 'Eliana', 'Levi'],
-      Celtic: ['Finn', 'Niamh', 'Rowan', 'Saoirse', 'Declan'],
-      Nordic: ['Freya', 'Bjorn', 'Astrid', 'Leif', 'Ingrid'],
-    };
-
-    let namePool = [];
-
-    if (answers[0] !== "I don't know yet") {
-      namePool = [...genderSpecificNames[answers[0]]];
-    } else {
-      namePool = [...genderSpecificNames.Boy, ...genderSpecificNames.Girl];
-    }
-
-    namePool = [...namePool, ...originSpecificNames[answers[1]]];
-
-    return namePool.sort(() => 0.5 - Math.random()).slice(0, 5);
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
+
+  const toggleNameDetails = (name) => {
+    setExpandedName((prevName) => (prevName === name ? null : name));
+  };
+
+  const currentNames = names.slice(currentPage * namesPerPage, (currentPage + 1) * namesPerPage);
 
   return (
     <PageContainer title="Baby Name Generator" sx={{ paddingTop: 0 }}>
@@ -150,34 +137,88 @@ const BabyNameGenerator = () => {
             AI Baby Name Generator
           </StyledTypography>
           <AnimatePresence mode="wait">
-            {!started && (
+            {!names.length && !generating && !error && (
               <motion.div
-                key="start"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  size="large"
-                  onClick={handleStart}
-                >
-                  Start Name Generator
-                </Button>
-              </motion.div>
-            )}
-            {started && !generating && names.length === 0 && (
-              <motion.div
-                key="question"
+                key="form"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
               >
                 <StyledBox>
-                  <Question question={questions[currentQuestion]} onAnswer={handleAnswer} />
-                  <ProgressBar current={currentQuestion + 1} total={questions.length} />
+                  <FormControl fullWidth>
+                    <InputLabel>Gender</InputLabel>
+                    <Select
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                      label="Gender"
+                    >
+                      <MenuItem value="">Any</MenuItem>
+                      <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Female">Female</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel>Origin</InputLabel>
+                    <Select
+                      value={origin}
+                      onChange={(e) => setOrigin(e.target.value)}
+                      label="Origin"
+                    >
+                      <MenuItem value="">Any</MenuItem>
+                      {originOptions.map(option => (
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel>Category</InputLabel>
+                    <Select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      label="Category"
+                    >
+                      <MenuItem value="">Any</MenuItem>
+                      {categoryOptions.map(option => (
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel>Length</InputLabel>
+                    <Select
+                      value={length}
+                      onChange={(e) => setLength(e.target.value)}
+                      label="Length"
+                    >
+                      <MenuItem value="">Any</MenuItem>
+                      <MenuItem value="Short">Short</MenuItem>
+                      <MenuItem value="Medium">Medium</MenuItem>
+                      <MenuItem value="Long">Long</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel>First letter</InputLabel>
+                    <Select
+                      value={letter}
+                      onChange={(e) => setLetter(e.target.value)}
+                      label="Letter"
+                    >
+                      <MenuItem value="">Any</MenuItem>
+                      {letterOptions.map(option => (
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    onClick={generateNames}
+                    disabled={generating}
+                  >
+                    Generate Names
+                  </Button>
                 </StyledBox>
               </motion.div>
             )}
@@ -188,10 +229,10 @@ const BabyNameGenerator = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <LoadingAnimation />
+                <Typography variant="h6" align="center">Generating names...</Typography>
               </motion.div>
             )}
-            {names.length > 0 && (
+            {currentNames.length > 0 && (
               <motion.div
                 key="names"
                 initial={{ opacity: 0, y: 50 }}
@@ -199,11 +240,42 @@ const BabyNameGenerator = () => {
                 exit={{ opacity: 0, y: -50 }}
               >
                 <StyledBox>
-                  <NameList names={names} />
+                  <NameList 
+                    names={currentNames} 
+                    expandedName={expandedName}
+                    toggleNameDetails={toggleNameDetails}
+                  />
+                  {names.length > (currentPage + 1) * namesPerPage && (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      onClick={handleLoadMore}
+                      sx={{ marginTop: 2 }}
+                    >
+                      Load More
+                    </Button>
+                  )}
                   <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
                     Start Over
                   </Button>
                 </StyledBox>
+              </motion.div>
+            )}
+            {error && (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Typography color="error" align="center">
+                  {error}
+                </Typography>
+                <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
+                  Try Again
+                </Button>
               </motion.div>
             )}
           </AnimatePresence>

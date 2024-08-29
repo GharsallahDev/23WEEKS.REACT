@@ -6,10 +6,9 @@ import Loadable from '../layouts/full/shared/loadable/Loadable';
 
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
 const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')));
-
+const AboutUs = Loadable(lazy(() => import('../components/landingpage/AboutUs/AboutUs.js')));
 const DoctorDash = Loadable(lazy(() => import('../views/dashboard/Doctor')));
 const WomanDash = Loadable(lazy(() => import('../views/dashboard/Woman')));
-
 const Test1 = Loadable(lazy(() => import('../views/dashboard/test1')));
 const Test2 = Loadable(lazy(() => import('../views/dashboard/test2')));
 const Chats = Loadable(lazy(() => import('../views/apps/chat/Chat')));
@@ -117,6 +116,7 @@ const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
 const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const Search  = Loadable(lazy(() => import('../views/generator/Search')));
+const Features = Loadable(lazy(() => import('../components/landingpage/featurespage')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const userType = useSelector(selectUserType);
@@ -178,6 +178,8 @@ const Router = [
       { path: '/auth/two-steps2', element: <TwoSteps2 /> },
       { path: '/auth/maintenance', element: <Maintenance /> },
       { path: '/landingpage', element: <Landingpage /> },
+      { path: '/about', element: <AboutUs/> },
+      { path: '/features', element: <Features/> },
     ],
   },
   {
@@ -254,7 +256,8 @@ const Router = [
         path: '/generator/names',
         element: (
           <ProtectedRoute allowedTypes={['user']}>
-            <BabyNameGenerator />
+            {' '}
+            <BabyNameGenerator />{' '}
           </ProtectedRoute>
         ),
       },

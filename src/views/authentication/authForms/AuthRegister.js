@@ -8,10 +8,10 @@ import { Box, Typography, Button, Divider, Alert, MenuItem, Stack } from '@mui/m
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 import CustomSelect from '../../../components/forms/theme-elements/CustomSelect';
-import AuthSocialButtons from './AuthSocialButtons';
 import { setCredentials } from '../../../store/auth/AuthSlice';
 
 import config from 'src/config';
+import ErrorBoundary from '../../../utils/ErrorBoundary'; // Import ErrorBoundary
 
 const validationSchema = yup.object({
   type: yup.string().required('Type is required'),
@@ -76,104 +76,113 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
   ];
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      {title && (
-        <Typography fontWeight="700" variant="h3" mb={1}>
-          {title}
-        </Typography>
-      )}
-      {subtext}
-      <AuthSocialButtons title="Sign up with" />
-      <Box mt={3}>
-        <Divider>
-          <Typography
-            component="span"
-            color="textSecondary"
-            variant="h6"
-            fontWeight="400"
-            position="relative"
-            px={2}
-          >
-            or sign up with
+    <ErrorBoundary> {/* Wrap the form with ErrorBoundary */}
+      <form onSubmit={formik.handleSubmit}>
+        {title && (
+          <Typography fontWeight="700" variant="h3" mb={1}>
+            {title}
           </Typography>
-        </Divider>
-      </Box>
-      {formik.errors.submit && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {formik.errors.submit}
-        </Alert>
-      )}
-      <Box>
-        <Stack mb={3}>
-          <CustomFormLabel htmlFor="type">Select Type</CustomFormLabel>
-          <CustomSelect
-            id="type"
-            name="type"
-            value={formik.values.type}
-            onChange={formik.handleChange}
-            error={formik.touched.type && Boolean(formik.errors.type)}
-            fullWidth
-            variant="outlined"
-          >
-            {types.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </CustomSelect>
-          {formik.touched.type && formik.errors.type && (
-            <Typography color="error" variant="caption">
-              {formik.errors.type}
+        )}
+        {subtext}
+        <Box mt={3}>
+          <Divider>
+            <Typography
+              component="span"
+              color="textSecondary"
+              variant="h6"
+              fontWeight="400"
+              position="relative"
+              px={2}
+            >
+              Sign Up
             </Typography>
-          )}
-          <CustomFormLabel htmlFor="full_name">Full Name</CustomFormLabel>
-          <CustomTextField
-            id="full_name"
-            name="full_name"
-            variant="outlined"
+          </Divider>
+        </Box>
+        {formik.errors.submit && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {formik.errors.submit}
+          </Alert>
+        )}
+        <Box>
+          <Stack mb={3}>
+            <CustomFormLabel htmlFor="type" required>
+              Select Type <span style={{ color: 'red' }}>*</span>
+            </CustomFormLabel>
+            <CustomSelect
+              id="type"
+              name="type"
+              value={formik.values.type}
+              onChange={formik.handleChange}
+              error={formik.touched.type && Boolean(formik.errors.type)}
+              fullWidth
+              variant="outlined"
+            >
+              {types.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+            {formik.touched.type && formik.errors.type && (
+              <Typography color="error" variant="caption">
+                {formik.errors.type}
+              </Typography>
+            )}
+            <CustomFormLabel htmlFor="full_name" required>
+              Full Name <span style={{ color: 'red' }}>*</span>
+            </CustomFormLabel>
+            <CustomTextField
+              id="full_name"
+              name="full_name"
+              variant="outlined"
+              fullWidth
+              value={formik.values.full_name}
+              onChange={formik.handleChange}
+              error={formik.touched.full_name && Boolean(formik.errors.full_name)}
+              helperText={formik.touched.full_name && formik.errors.full_name}
+            />
+            <CustomFormLabel htmlFor="email" required>
+              Email Address <span style={{ color: 'red' }}>*</span>
+            </CustomFormLabel>
+            <CustomTextField
+              id="email"
+              name="email"
+              variant="outlined"
+              fullWidth
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <CustomFormLabel htmlFor="password" required>
+              Password <span style={{ color: 'red' }}>*</span>
+            </CustomFormLabel>
+            <CustomTextField
+              id="password"
+              name="password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+            />
+          </Stack>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
             fullWidth
-            value={formik.values.full_name}
-            onChange={formik.handleChange}
-            error={formik.touched.full_name && Boolean(formik.errors.full_name)}
-            helperText={formik.touched.full_name && formik.errors.full_name}
-          />
-          <CustomFormLabel htmlFor="email">Email Address</CustomFormLabel>
-          <CustomTextField
-            id="email"
-            name="email"
-            variant="outlined"
-            fullWidth
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
-          <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
-          <CustomTextField
-            id="password"
-            name="password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
-        </Stack>
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          fullWidth
-          type="submit"
-          disabled={formik.isSubmitting}
-        >
-          {formik.isSubmitting ? 'Signing Up...' : 'Sign Up'}
-        </Button>
-      </Box>
-      {subtitle}
-    </form>
+            type="submit"
+            disabled={formik.isSubmitting}
+          >
+            {formik.isSubmitting ? 'Signing Up...' : 'Sign Up'}
+          </Button>
+        </Box>
+        {subtitle}
+      </form>
+    </ErrorBoundary>
   );
 };
 

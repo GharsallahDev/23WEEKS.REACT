@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -18,10 +18,10 @@ import CustomCheckbox from '../../../components/forms/theme-elements/CustomCheck
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 
-import AuthSocialButtons from './AuthSocialButtons';
 import { setCredentials } from '../../../store/auth/AuthSlice';
 
 import config from 'src/config';
+import ErrorBoundary from '../../../utils/ErrorBoundary'; // Import ErrorBoundary
 
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -52,24 +52,22 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
           body: JSON.stringify(values),
         });
 
-
         if (response.ok) {
           const data = await response.json();
           dispatch(
             setCredentials({
-              user: { type: data.type, email: values.email, full_name: data.full_name },
+              user: { type: data.type, full_name: data.full_name, email: values.email },
               token: data.access_token,
             }),
           );
-          // navigate('/dashboards/modern');
+          navigate('/dashboards/modern');
         } else {
           const errorData = await response.json();
-          console.error('Login failed:', errorData);
           formik.setErrors({ submit: errorData.msg || 'An error occurred during login.' });
         }
       } catch (err) {
-        console.error('Error during login:', err);
         formik.setErrors({ submit: 'An error occurred. Please try again.' });
+        console.error('Login error:', err);
       } finally {
         setSubmitting(false);
       }
@@ -77,41 +75,37 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      {title ? (
-        <Typography fontWeight="700" variant="h3" mb={1}>
-          {title}
-        </Typography>
-      ) : null}
-
-      {subtext}
-
-      <AuthSocialButtons title="Sign in with" />
-
-      <Box mt={3}>
-        <Divider>
-          <Typography
-            component="span"
-            color="textSecondary"
-            variant="h6"
-            fontWeight="400"
-            position="relative"
-            px={2}
-          >
-            or sign in with
+    <ErrorBoundary> {/* Wrap the form with ErrorBoundary */}
+      <form onSubmit={formik.handleSubmit}>
+        {title && (
+          <Typography fontWeight="700" variant="h3" mb={1}>
+            {title}
           </Typography>
-        </Divider>
-      </Box>
-
-      {formik.errors.submit && (
-        <Alert severity="error" sx={{ mt: 2 }}>
-          {formik.errors.submit}
-        </Alert>
-      )}
-
-      <Stack>
-        <Box>
-          <CustomFormLabel htmlFor="email">Email</CustomFormLabel>
+        )}
+        {subtext}
+        <Box mt={3}>
+          <Divider>
+            <Typography
+              component="span"
+              color="textSecondary"
+              variant="h6"
+              fontWeight="400"
+              position="relative"
+              px={2}
+            >
+              Login
+            </Typography>
+          </Divider>
+        </Box>
+        {formik.errors.submit && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {formik.errors.submit}
+          </Alert>
+        )}
+        <Stack spacing={3}>
+          <CustomFormLabel htmlFor="email" required>
+            Email Address <span style={{ color: 'red' }}>*</span>
+          </CustomFormLabel>
           <CustomTextField
             id="email"
             name="email"
@@ -122,10 +116,9 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
           />
-        </Box>
-
-        <Box>
-          <CustomFormLabel htmlFor="password">Password</CustomFormLabel>
+          <CustomFormLabel htmlFor="password" required>
+            Password <span style={{ color: 'red' }}>*</span>
+          </CustomFormLabel>
           <CustomTextField
             id="password"
             name="password"
@@ -137,44 +130,34 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
-        </Box>
-
-        <Stack justifyContent="space-between" direction="row" alignItems="center" my={2}>
           <FormGroup>
             <FormControlLabel
-              control={<CustomCheckbox defaultChecked />}
-              label="Remember this Device"
+              control={
+                <CustomCheckbox
+                  id="remember_me"
+                  name="remember_me"
+                  color="primary"
+                />
+              }
+              label="Remember me"
             />
           </FormGroup>
-          <Typography
-            component={Link}
-            to="/auth/forgot-password"
-            fontWeight="500"
-            sx={{
-              textDecoration: 'none',
-              color: 'primary.main',
-            }}
-          >
-            Forgot Password ?
-          </Typography>
         </Stack>
-      </Stack>
-
-      <Box>
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          fullWidth
-          type="submit"
-          disabled={formik.isSubmitting}
-        >
-          {formik.isSubmitting ? 'Signing In...' : 'Sign In'}
-        </Button>
-      </Box>
-
-      {subtitle}
-    </form>
+        <Box mt={2}>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            fullWidth
+            type="submit"
+            disabled={formik.isSubmitting}
+          >
+            {formik.isSubmitting ? 'Logging In...' : 'Login'}
+          </Button>
+        </Box>
+        {subtitle}
+      </form>
+    </ErrorBoundary>
   );
 };
 
