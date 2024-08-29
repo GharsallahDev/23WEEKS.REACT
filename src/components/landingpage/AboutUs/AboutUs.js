@@ -6,6 +6,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import GroupIcon from '@mui/icons-material/Group';
 import InfoIcon from '@mui/icons-material/Info';
+import iconmission from '@mui/icons-material/Interests';
 import NadiaImage from '../../../assets/images/profile/NADIA.jpg';
 import EyaImage from '../../../assets/images/profile/EYA.jpg';
 import MalekImage from '../../../assets/images/profile/MALEK.jpg';
@@ -13,6 +14,13 @@ import NourImage from '../../../assets/images/profile/NOUR.jpg';
 import CallToAction from 'src/components/landingpage/CallToAction';
 import Footer from 'src/components/landingpage/footer/Footer';
 import AnimateFadeIn from 'src/components/landingpage/animation/Animation';
+import QuoteImage from '../../../assets/images/aboutus/Untitled-16.png'; 
+import LOGO from '../../../assets/images/aboutus/Untitled-14.png';
+import vision from '../../../assets/images/aboutus/Untitled-3.png';
+import preg2 from '../../../assets/images/aboutus/Untitled-7.png';
+import preg3 from '../../../assets/images/aboutus/Untitled-13.png';
+import PregnantWomenImage from '../../../assets/images/aboutus/Untitled-12.png'; 
+import africa from '../../../assets/images/aboutus/africa.png'
 
 const AnimatedSection = ({ children, delay = 0 }) => (
   <AnimateFadeIn>
@@ -73,17 +81,28 @@ const AboutUs = () => {
         </Typography>
 
         <TitleWithIcon icon={InfoIcon} text="23Weeks" />
-        <Typography variant="body1" align="center" paragraph>
+        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
           23WEEKS simplifies the pregnancy journey for parents and boosts gynecological care with AI to enhance patient management and diagnostics.
         </Typography>
+        
+        <TitleWithIcon icon={iconmission} text="Our Mission" />
+        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
+        Our mission is to support both pregnant women and gynecologists by providing AI-driven tools and insights that enhance prenatal care, improve patient outcomes, and simplify the management of pregnancy-related tasks.
+        </Typography>
 
+        <Box sx={{ textAlign: 'center' }}>
+            <img src={vision} alt="Inspiring Quote" style={{ maxWidth: '30%', borderRadius: '8px' }} />
+          </Box>
         <TitleWithIcon icon={EmojiObjectsIcon} text="Our Vision" />
-        <Typography variant="body1" align="center" paragraph>
+        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
           To revolutionize pregnancy management and gynecological care by leveraging AI to provide personalized support, improve diagnostic accuracy, and streamline patient management.
         </Typography>
 
+        <Box sx={{ textAlign: 'center' }}>
+            <img src={QuoteImage} alt="Inspiring Quote" style={{ maxWidth: '30%', borderRadius: '8px' }} />
+        </Box>
         <TitleWithIcon icon={GroupIcon} text="Meet Team Harissa" />
-        <Typography variant="body1" align="center" paragraph>
+        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
           We are a group of passionate Tunisian AI students focused on improving healthcare in Africa. Our mission is to develop AI-driven solutions to enhance medical outcomes. We aim to advance medical practice and accessibility in the region.
         </Typography>
         <Typography sx={{ py: 8 }} variant="h1" align="center" gutterBottom>
@@ -148,6 +167,17 @@ const AboutUs = () => {
           </SocialMediaButton>
           
         </Box>
+        <Grid container spacing={2} justifyContent="center" sx={{ mb: 8 }}>
+            <Grid item xs={12} sm={4}>
+              <img src={PregnantWomenImage} alt="Pregnant Women 1" style={{ width: '100%', borderRadius: '8px' }} />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <img src={preg2} alt="Pregnant Women 2" style={{ width: '100%', borderRadius: '8px' }} />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <img src={preg3} alt="Pregnant Women 3" style={{ width: '100%', borderRadius: '8px' }} />
+            </Grid>
+          </Grid>
       </Container>
       <AnimatedSection delay={1}>
         <CallToAction />

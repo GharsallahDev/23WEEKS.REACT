@@ -7,7 +7,6 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/ultrasound.png';
 import config from 'src/config';
-
 const BCrumb = [
   {
     to: '/',
@@ -53,6 +52,11 @@ const ImageContainer = styled(Box)({
   borderRadius: 8,
   padding: 16,
   marginBottom: 16,
+});
+
+const InformationCard = styled(Card)({
+  marginTop: 24,
+  backgroundColor: 'primary.light',
 });
 
 const AnomalyDetection = () => {
@@ -108,14 +112,26 @@ const AnomalyDetection = () => {
   };
 
   return (
-    <PageContainer title="Anomaly Detection">
-      <Breadcrumb title="Anomaly Detection" items={BCrumb}>
+    <PageContainer title="Brain Structure Detection">
+      <Breadcrumb title="Brain Structure Detection" items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Ultrasound" width="155px" />
         </Box>
       </Breadcrumb>
 
       <Grid container spacing={3}>
+      <Grid item xs={12}>
+          <InformationCard>
+            <CardContent>
+              <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+                Why Monitoring CSP and LV is Important
+              </Typography>
+              <Typography variant="body1" paragraph>
+                Monitoring CSP and LV during pregnancy is a key component of comprehensive fetal evaluation, aiding in the early detection of potential issues, guiding appropriate management, and improving outcomes for both the baby and the family.
+              </Typography>
+            </CardContent>
+          </InformationCard>
+        </Grid>
         <Grid item xs={12} md={6}>
           <FixedHeightCard>
             <FixedHeightCardContent>
@@ -209,6 +225,8 @@ const AnomalyDetection = () => {
             </CardContent>
           </Card>
         </Grid>
+
+        
       </Grid>
     </PageContainer>
   );

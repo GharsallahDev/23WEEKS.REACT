@@ -116,7 +116,7 @@ const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
 const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const Search  = Loadable(lazy(() => import('../views/generator/Search')));
-const Features = Loadable(lazy(() => import('../components/landingpage/features/Features.js')));
+const Features = Loadable(lazy(() => import('../components/landingpage/featurespage')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const userType = useSelector(selectUserType);
@@ -256,7 +256,8 @@ const Router = [
         path: '/generator/names',
         element: (
           <ProtectedRoute allowedTypes={['user']}>
-            <BabyNameGenerator />
+            {' '}
+            <BabyNameGenerator />{' '}
           </ProtectedRoute>
         ),
       },

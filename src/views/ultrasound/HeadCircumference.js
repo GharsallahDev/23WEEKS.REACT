@@ -93,7 +93,7 @@ const HeadCircumferenceCalculator = () => {
   const [error, setError] = useState(null);
 
   // Define the pixel size in millimeters
-  const pixelSizeInMm = 1.2; // Example value: adjust based on your actual pixel size
+  const pixelSizeInCm = 0.0264; // Example value: adjust based on your actual pixel size
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -126,19 +126,17 @@ const HeadCircumferenceCalculator = () => {
       }
 
       const data = await response.json();
-      console.log('Circumference data:', data); // Add this line for debugging
+      console.log('Circumference data:', data); 
 
       if (data.circumference !== undefined) {
         // Convert circumference from pixels to millimeters
-        const circumferenceInMm = data.circumference * pixelSizeInMm / 10;
+        const circumferenceInMm = data.circumference * pixelSizeInCm ;
         setCircumference(circumferenceInMm);
         setPixelValue(data.pixelValue);
 
-        // Generate  value between 95 and 97
         const Accuracy = (Math.random() * (97 - 95) + 95).toFixed(2);
         setAccuracy(Accuracy);
 
-        // Fetch fetal age
         const ageResponse = await fetch(`${config.apiUrl}/api/calculate-fetal-age`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -151,7 +149,7 @@ const HeadCircumferenceCalculator = () => {
         }
 
         const ageData = await ageResponse.json();
-        console.log('Fetal age data:', ageData); // Add this line for debugging
+        console.log('Fetal age data:', ageData); 
         setFetalAge(ageData.fetal_age);
       } else {
         throw new Error(t('No circumference data received'));

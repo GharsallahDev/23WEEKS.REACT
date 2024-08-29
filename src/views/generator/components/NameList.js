@@ -1,28 +1,38 @@
 import React from 'react';
-import { List, ListItem, ListItemText, Typography, Paper } from '@mui/material';
-import { motion } from 'framer-motion';
+import { Box, Button, Typography, Collapse } from '@mui/material';
+import { ExpandMore, ExpandLess } from '@mui/icons-material';
 
-const NameList = ({ names }) => {
+const NameList = ({ names, expandedName, toggleNameDetails }) => {
   return (
-    <Paper elevation={3} style={{ padding: '16px', borderRadius: '8px' }}>
-      <Typography variant="h5" gutterBottom>
-        Suggested Names:
-      </Typography>
-      <List>
-        {names.map((name, index) => (
-          <motion.div
-            key={name}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
+    <Box>
+      {names.map((nameObj) => (
+        <Box key={nameObj.Name} sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            {nameObj.Name}
+          </Typography>
+          <Button 
+            onClick={() => toggleNameDetails(nameObj.Name)}
+            endIcon={expandedName === nameObj.Name ? <ExpandLess /> : <ExpandMore />}
+            sx={{ marginLeft: 2 }} // Adjust this value to control the space
           >
-            <ListItem>
-              <ListItemText primary={name} />
-            </ListItem>
-          </motion.div>
-        ))}
-      </List>
-    </Paper>
+            {expandedName === nameObj.Name ? '' : ''}
+          </Button>
+          <Collapse in={expandedName === nameObj.Name} sx={{ width: '100%', marginTop: 2 }}>
+            <Box sx={{ paddingLeft: 3 }}>
+              <Typography variant="body1" sx={{ fontSize: '1.1rem', marginBottom: 1 }}>
+                <strong>Gender:</strong> {nameObj.Gender}
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: '1.1rem', marginBottom: 1 }}>
+                <strong>Origin:</strong> {nameObj.Origin}
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: '1.1rem', marginBottom: 1 }}>
+                <strong>Meaning:</strong> {nameObj.Meaning}
+              </Typography>
+            </Box>
+          </Collapse>
+        </Box>
+      ))}
+    </Box>
   );
 };
 
