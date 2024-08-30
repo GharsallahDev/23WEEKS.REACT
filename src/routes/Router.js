@@ -116,6 +116,8 @@ const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
 const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const Search  = Loadable(lazy(() => import('../views/generator/Search')));
+const Yoga  = Loadable(lazy(() => import('../views/generator/yogavideos')));
+
 const Features = Loadable(lazy(() => import('../components/landingpage/featurespage')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -267,6 +269,15 @@ const Router = [
           <ProtectedRoute allowedTypes={['user']}>
             {' '}
             <Search />{' '}
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/generator/Yoga',
+        element: (
+          <ProtectedRoute allowedTypes={['user']}>
+            {' '}
+            <Yoga />{' '}
           </ProtectedRoute>
         ),
       },

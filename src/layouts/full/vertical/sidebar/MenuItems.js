@@ -19,6 +19,7 @@ import {
   IconSearch,
   IconDetails,
   IconHealthRecognition,
+  IconYoga,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -141,6 +142,13 @@ const Menuitems = [
     title: 'Blog',
     icon: IconChartDonut3,
     href: '/apps/blog/posts',
+    userType: 'user',
+  },
+  {
+    id: uniqueId(),
+    title: 'Yoga',
+    icon: IconYoga,
+    href: '/generator/Yoga',
     userType: 'user',
   },
   {
