@@ -6,6 +6,7 @@ import BlankCard from '../../shared/BlankCard';
 import CustomTextField from '../../forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
 import CustomSwitch from '../../forms/theme-elements/CustomSwitch';
+import { useTranslation } from 'react-i18next';
 
 import {
   IconArticle,
@@ -18,6 +19,7 @@ import {
 } from '@tabler/icons';
 
 const NotificationTab = () => {
+    const { t } = useTranslation();
   return (
     <>
       <Grid container spacing={3} justifyContent="center">
@@ -25,17 +27,15 @@ const NotificationTab = () => {
           <BlankCard>
             <CardContent>
               <Typography variant="h4" mb={2}>
-                Notification Preferences
+                {t('Notification Preferences')}
               </Typography>
               <Typography color="textSecondary">
-                Select the notificaitons ou would like to receive via email. Please note that you
-                cannot opt out of receving service messages, such as payment, security or legal
-                notifications.
+                {t('Select the notificaitons ou would like to receive via email. Please note that you cannot opt out of receving service messages, such as payment, security or legal notifications.')}
               </Typography>
 
-              <CustomFormLabel htmlFor="text-email">Email Address*</CustomFormLabel>
+              <CustomFormLabel htmlFor="text-email">{t('Email Address')}*</CustomFormLabel>
               <CustomTextField id="text-email" variant="outlined" fullWidth />
-              <Typography color="textSecondary">Required for notificaitons.</Typography>
+              <Typography color="textSecondary">{t('Required for notificaitons.')}</Typography>
 
               <Stack direction="row" spacing={2} mt={4}>
                 <Avatar
@@ -46,10 +46,10 @@ const NotificationTab = () => {
                 </Avatar>
                 <Box>
                   <Typography variant="h6" mb={1}>
-                    Our newsletter
+                    {t('Our newsletter')}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    We'll always let you know about important changes
+                    {t('We\'ll always let you know about important changes')}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 'auto !important' }}>
@@ -66,10 +66,10 @@ const NotificationTab = () => {
                 </Avatar>
                 <Box>
                   <Typography variant="h6" mb={1}>
-                    Email Notification
+                    {t('Email Notification')}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Turn on email notificaiton to get updates through email
+                    {t('Turn on email notificaiton to get updates through email')}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 'auto !important' }}>
@@ -85,10 +85,10 @@ const NotificationTab = () => {
           <BlankCard>
             <CardContent>
               <Typography variant="h4" mb={2}>
-                Date & Time
+                {t('Date & Time')}
               </Typography>
               <Typography color="textSecondary">
-                Time zones and calendar display settings.
+                {t('Time zones and calendar display settings.')}
               </Typography>
 
               {/* list 1 */}
@@ -101,7 +101,7 @@ const NotificationTab = () => {
                 </Avatar>
                 <Box>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Time zone
+                   { t('Time zone')}
                   </Typography>
                   <Typography variant="h6" mb={1}>
                     (UTC + 02:00) Athens, Bucharet
@@ -124,7 +124,7 @@ const NotificationTab = () => {
           <BlankCard>
             <CardContent>
               <Typography variant="h4" mb={2}>
-                Ignore Tracking
+                {t('Ignore Tracking')}
               </Typography>
 
               {/* list 1 */}
@@ -137,10 +137,10 @@ const NotificationTab = () => {
                 </Avatar>
                 <Box>
                   <Typography variant="h6" mb={1}>
-                    Ignore Browser Tracking
+                    {t('Ignore Browser Tracking')}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Browser Cookie
+                    {t('Browser Cookie')}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 'auto !important' }}>
@@ -154,10 +154,10 @@ const NotificationTab = () => {
 
       <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
         <Button size="large" variant="contained" color="primary">
-          Save
+          {t('Save')}
         </Button>
         <Button size="large" variant="text" color="error">
-          Cancel
+          {t('Cancel')}
         </Button>
       </Stack>
     </>

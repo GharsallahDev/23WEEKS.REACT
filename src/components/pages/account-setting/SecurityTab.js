@@ -16,8 +16,10 @@ import BlankCard from '../../shared/BlankCard';
 import CustomTextField from '../../forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
 import { IconDeviceLaptop, IconDeviceMobile, IconDotsVertical } from '@tabler/icons';
+import { useTranslation } from 'react-i18next';
 
 const SecurityTab = () => {
+    const { t } = useTranslation();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -36,12 +38,12 @@ const SecurityTab = () => {
           <BlankCard>
             <CardContent>
               <Typography variant="h4" mb={2}>
-                Change Password
+                {t('Change Password')}
               </Typography>
               <form onSubmit={handlePasswordChange}>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <CustomFormLabel htmlFor="current-password">Current Password</CustomFormLabel>
+                    <CustomFormLabel htmlFor="current-password">{t('Current Password')}</CustomFormLabel>
                     <CustomTextField
                       id="current-password"
                       variant="outlined"
@@ -53,7 +55,7 @@ const SecurityTab = () => {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <CustomFormLabel htmlFor="new-password">New Password</CustomFormLabel>
+                    <CustomFormLabel htmlFor="new-password">{t('New Password')}</CustomFormLabel>
                     <CustomTextField
                       id="new-password"
                       variant="outlined"
@@ -66,7 +68,7 @@ const SecurityTab = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <CustomFormLabel htmlFor="confirm-password">
-                      Confirm New Password
+                      {t('Confirm New Password')}
                     </CustomFormLabel>
                     <CustomTextField
                       id="confirm-password"
@@ -90,15 +92,11 @@ const SecurityTab = () => {
           <BlankCard>
             <CardContent>
               <Typography variant="h4" mb={2}>
-                Two-factor Authentication
+                {t('Two-factor Authentication')}
               </Typography>
               <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis sapiente sunt
-                  earum officiis laboriosam ut.
-                </Typography>
                 <Button variant="contained" color="primary">
-                  Enable
+                  {t('Enable')}
                 </Button>
               </Stack>
 
@@ -107,14 +105,14 @@ const SecurityTab = () => {
               {/* Authentication App */}
               <Stack direction="row" spacing={2} py={2} alignItems="center">
                 <Box>
-                  <Typography variant="h6">Authentication App</Typography>
+                  <Typography variant="h6">{t('Authentication App')}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Google auth app
+                    {t('Google auth app')}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 'auto !important' }}>
                   <Button variant="text" color="primary">
-                    Setup
+                    {t('Setup')}
                   </Button>
                 </Box>
               </Stack>
@@ -123,14 +121,14 @@ const SecurityTab = () => {
               {/* Another e-mail */}
               <Stack direction="row" spacing={2} py={2} alignItems="center">
                 <Box>
-                  <Typography variant="h6">Another e-mail</Typography>
+                  <Typography variant="h6">{t('Another e-mail')}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    E-mail to send verification link
+                    {t('E-mail to send verification link')}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 'auto !important' }}>
                   <Button variant="text" color="primary">
-                    Setup
+                    {t('Setup')}
                   </Button>
                 </Box>
               </Stack>
@@ -139,14 +137,14 @@ const SecurityTab = () => {
               {/* SMS Recovery */}
               <Stack direction="row" spacing={2} py={2} alignItems="center">
                 <Box>
-                  <Typography variant="h6">SMS Recovery</Typography>
+                  <Typography variant="h6">{t('SMS Recovery')}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Your phone number or something
+                    {t('Your phone number')}
                   </Typography>
                 </Box>
                 <Box sx={{ ml: 'auto !important' }}>
                   <Button variant="text" color="primary">
-                    Setup
+                    {t('Setup')}
                   </Button>
                 </Box>
               </Stack>
@@ -167,13 +165,10 @@ const SecurityTab = () => {
             </Avatar>
 
             <Typography variant="h5" mt={2}>
-              Devices
-            </Typography>
-            <Typography color="textSecondary" mt={1} mb={2}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit Rem.
+              {t('Devices')}
             </Typography>
             <Button variant="contained" color="primary">
-              Sign out from all devices
+              {t('Sign out from all devices')}
             </Button>
 
             {/* iPhone 14 */}
@@ -210,7 +205,7 @@ const SecurityTab = () => {
             </Stack>
             <Stack>
               <Button variant="text" color="primary">
-                Need Help ?
+                {t('Need Help ?')}
               </Button>
             </Stack>
           </CardContent>
@@ -221,10 +216,10 @@ const SecurityTab = () => {
       <Grid item xs={12}>
         <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }} mt={3}>
           <Button size="large" variant="contained" color="primary">
-            Save
+            {t('Save')}
           </Button>
           <Button size="large" variant="text" color="error">
-            Cancel
+            {t('Cancel')}
           </Button>
         </Stack>
       </Grid>

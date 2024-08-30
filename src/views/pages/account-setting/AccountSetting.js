@@ -2,6 +2,7 @@ import * as React from 'react';
 import PageContainer from 'src/components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import { Grid, Tabs, Tab, Box, CardContent, Divider } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 // components
 import AccountTab from '../../../components/pages/account-setting/AccountTab';
@@ -45,6 +46,7 @@ function a11yProps(index) {
 }
 
 const AccountSetting = () => {
+  const { t } = useTranslation();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -71,19 +73,19 @@ const AccountSetting = () => {
                 <Tab
                   iconPosition="start"
                   icon={<IconUserCircle size="22" />}
-                  label="Account"
+                  label={t("Account")}
                   {...a11yProps(0)}
                 />
                 <Tab
                   iconPosition="start"
                   icon={<IconLock size="22" />}
-                  label="Security"
+                  label={t("Security")}
                   {...a11yProps(1)}
                 />
                 <Tab
                   iconPosition="start"
                   icon={<IconBell size="22" />}
-                  label="Notifications"
+                  label={t("Notifications")}
                   {...a11yProps(2)}
                 />
               </Tabs>

@@ -8,7 +8,7 @@ const WelcomeCard = () => {
   const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
 
-  const pregnancyWeek = 12;
+  const pregnancyWeek = 18;
   const babySize = t('a lime');
 
   return (

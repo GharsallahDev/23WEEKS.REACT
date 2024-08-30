@@ -121,7 +121,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'AI Search Engine ',
+    title: 'AI Search Engine',
     icon: IconSearch,
     href: '/generator/search',
     userType: 'user',

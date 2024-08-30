@@ -7,6 +7,8 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/baby.png';
 import config from 'src/config';
+import { useTranslation } from 'react-i18next';
+
 const BCrumb = [
   {
     to: '/',
@@ -65,6 +67,7 @@ const letterOptions = [
 ];
 
 const BabyNameGenerator = () => {
+    const { t } = useTranslation();
   const [gender, setGender] = useState('');
   const [origin, setOrigin] = useState('');
   const [category, setCategory] = useState('');
@@ -126,7 +129,7 @@ const BabyNameGenerator = () => {
 
   return (
     <PageContainer title="Baby Name Generator" sx={{ paddingTop: 0 }}>
-      <Breadcrumb title="Baby Names Generator" items={BCrumb}>
+      <Breadcrumb title={t("Baby Names Generator")} items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
         </Box>
@@ -134,7 +137,7 @@ const BabyNameGenerator = () => {
       <StyledContainer>
         <StyledPaper>
           <StyledTypography variant="h5" align="center">
-            AI Baby Name Generator
+            {t('AI Baby Name Generator')}
           </StyledTypography>
           <AnimatePresence mode="wait">
             {!names.length && !generating && !error && (
@@ -146,7 +149,7 @@ const BabyNameGenerator = () => {
               >
                 <StyledBox>
                   <FormControl fullWidth>
-                    <InputLabel>Gender</InputLabel>
+                    <InputLabel>{t('Gender')}</InputLabel>
                     <Select
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
@@ -158,11 +161,11 @@ const BabyNameGenerator = () => {
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
-                    <InputLabel>Origin</InputLabel>
+                    <InputLabel>{t('Origin')}</InputLabel>
                     <Select
                       value={origin}
                       onChange={(e) => setOrigin(e.target.value)}
-                      label="Origin"
+                      label={t("Origin")}
                     >
                       <MenuItem value="">Any</MenuItem>
                       {originOptions.map(option => (
@@ -171,11 +174,11 @@ const BabyNameGenerator = () => {
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
-                    <InputLabel>Category</InputLabel>
+                    <InputLabel>{t('Category')}</InputLabel>
                     <Select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      label="Category"
+                      label={t("Category")}
                     >
                       <MenuItem value="">Any</MenuItem>
                       {categoryOptions.map(option => (
@@ -184,11 +187,11 @@ const BabyNameGenerator = () => {
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
-                    <InputLabel>Length</InputLabel>
+                    <InputLabel>{t('Length')}</InputLabel>
                     <Select
                       value={length}
                       onChange={(e) => setLength(e.target.value)}
-                      label="Length"
+                      label={t("Length")}
                     >
                       <MenuItem value="">Any</MenuItem>
                       <MenuItem value="Short">Short</MenuItem>
@@ -197,11 +200,11 @@ const BabyNameGenerator = () => {
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
-                    <InputLabel>First letter</InputLabel>
+                    <InputLabel>{t('First letter')}</InputLabel>
                     <Select
                       value={letter}
                       onChange={(e) => setLetter(e.target.value)}
-                      label="Letter"
+                      label={t("Letter")}
                     >
                       <MenuItem value="">Any</MenuItem>
                       {letterOptions.map(option => (
@@ -217,7 +220,7 @@ const BabyNameGenerator = () => {
                     onClick={generateNames}
                     disabled={generating}
                   >
-                    Generate Names
+                    {t('Generate Names')}
                   </Button>
                 </StyledBox>
               </motion.div>

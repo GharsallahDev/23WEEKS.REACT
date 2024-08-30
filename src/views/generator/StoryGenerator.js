@@ -7,6 +7,8 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/storyGen.png';
 import config from 'src/config';
+import { useTranslation } from 'react-i18next';
+
 const BCrumb = [
   {
     to: '/',
@@ -47,6 +49,7 @@ const formatText = (text) => {
 };
 
 const StoryGenerator = () => {
+    const { t } = useTranslation();
     const [topic, setTopic] = useState('');
     const [chapters, setChapters] = useState(1);
     const [language, setLanguage] = useState('en');
@@ -67,7 +70,7 @@ const StoryGenerator = () => {
       setCurrentText('');
       setCurrentIndex(0);
       setImages([]);
-      setPdfUrl(null); // Reset the PDF URL
+      setPdfUrl(null);
   
       try {
         const response = await fetch(`${config.apiUrl}/api/generate-story`, {
@@ -127,8 +130,8 @@ const StoryGenerator = () => {
     }, [storyContent, currentText, currentIndex]);
 
   return (
-    <PageContainer title="Story Generator" sx={{ paddingTop: 0 }}>
-      <Breadcrumb title="Story Generator " items={BCrumb}>
+    <PageContainer title={t('Story Generator')} sx={{ paddingTop: 0 }}>
+      <Breadcrumb title={t('Story Generator')} items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Ultrasound" width="120px" className="image" />
         </Box>
@@ -137,12 +140,12 @@ const StoryGenerator = () => {
         <StyledPaper>
           <StyledTypography variant="h7" align="center">
             <h2>
-              Generate a Story with <span className="bold">AMARI</span>
+              {t('Generate a Story')}
             </h2>
           </StyledTypography>
 
           <label htmlFor="topic" style={{ paddingBottom: '10px' }}>
-            Enter Topic:
+            {t('Enter Topic')}:
           </label>
           <TextField
             id="topic"
@@ -153,7 +156,7 @@ const StoryGenerator = () => {
             className="input-field"
           />
 
-          <label htmlFor="chapters">Number of Chapters:</label>
+          <label htmlFor="chapters">{t('Number of Chapters')}:</label>
           <input
             id="chapters"
             type="number"
@@ -164,7 +167,7 @@ const StoryGenerator = () => {
             className="input"
           />
 
-          <label htmlFor="language">Choose Language:</label>
+          <label htmlFor="language">{t('Choose Language')}:</label>
           <select
             id="language"
             value={language}
@@ -187,7 +190,7 @@ const StoryGenerator = () => {
             disabled={loading}
             className="generate-button"
           >
-            {loading ? 'Generating...' : 'Generate Story'}
+            {loading ? t('Generating...') : t('Generate Story')}
           </Button>
 
           <div className="story-container">
@@ -218,7 +221,7 @@ const StoryGenerator = () => {
 
           {currentIndex === storyContent.length && pdfUrl && (
             <Button variant="contained" color="secondary" onClick={handleOpenPdf}>
-              Open PDF
+              {t('Open PDF')}
             </Button>
           )}
         </StyledPaper>

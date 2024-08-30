@@ -9,8 +9,6 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 const AboutUs = Loadable(lazy(() => import('../components/landingpage/AboutUs/AboutUs.js')));
 const DoctorDash = Loadable(lazy(() => import('../views/dashboard/Doctor')));
 const WomanDash = Loadable(lazy(() => import('../views/dashboard/Woman')));
-const Test1 = Loadable(lazy(() => import('../views/dashboard/test1')));
-const Test2 = Loadable(lazy(() => import('../views/dashboard/test2')));
 const Chats = Loadable(lazy(() => import('../views/apps/chat/Chat')));
 const Notes = Loadable(lazy(() => import('../views/apps/notes/Notes')));
 const Calendar = Loadable(lazy(() => import('../views/apps/calendar/BigCalendar')));
@@ -306,8 +304,6 @@ const Router = [
           </ProtectedRoute>
         ),
       },
-      { path: '/test1', element: <Test1 /> },
-      { path: '/test2', element: <Test2 /> },
       { path: '/apps/chats', element: <Chats /> },
       { path: '/apps/notes', element: <Notes /> },
       { path: '/apps/calendar', element: <Calendar /> },

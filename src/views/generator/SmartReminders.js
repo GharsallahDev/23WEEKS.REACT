@@ -13,7 +13,7 @@ import {
   Stack,
   Alert,
   AlertTitle,
-  Button
+  Button,
 } from '@mui/material';
 import { IconMicrophone, IconSquareOff, IconTrash, IconEdit } from '@tabler/icons';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
@@ -21,6 +21,7 @@ import PageContainer from '../../components/container/PageContainer';
 import ParentCard from '../../components/shared/ParentCard';
 import config from 'src/config';
 import breadcrumbImg from 'src/assets/images/breadcrumb/calender.jpg';
+import { useTranslation } from 'react-i18next';
 
 const columns = [
   { id: 'event', label: 'Event', minWidth: 150 },
@@ -31,12 +32,10 @@ const columns = [
   { id: 'action', label: 'Action', minWidth: 170 },
 ];
 
-const BCrumb = [
-  { to: '/', title: 'Home' },
-  { title: 'Pregnancy Reminders' },
-];
+const BCrumb = [{ to: '/', title: 'Home' }, { title: 'Pregnancy Reminders' }];
 
 const PregnancyRemindersTable = () => {
+  const { t } = useTranslation();
   const [recording, setRecording] = useState(false);
   const [transcription, setTranscription] = useState('');
   const [status, setStatus] = useState('');
@@ -71,7 +70,7 @@ const PregnancyRemindersTable = () => {
         try {
           const response = await fetch(`${config.apiUrl}/transcribe`, {
             method: 'POST',
-            body: formData
+            body: formData,
           });
 
           if (!response.ok) {
@@ -86,7 +85,7 @@ const PregnancyRemindersTable = () => {
           const processResponse = await fetch(`${config.apiUrl}/api/process_text`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ transcription: result.transcription })
+            body: JSON.stringify({ transcription: result.transcription }),
           });
 
           if (!processResponse.ok) {
@@ -117,7 +116,7 @@ const PregnancyRemindersTable = () => {
       mediaRecorderRef.current.stop();
       setRecording(false);
       // Cleanup
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
       mediaRecorderRef.current = null;
       audioChunksRef.current = [];
     }
@@ -125,10 +124,10 @@ const PregnancyRemindersTable = () => {
 
   const formatTime = (time) => {
     if (!time) return '';
-    
+
     let [hour, minute] = time.split(':');
     let ampm = 'AM';
-    
+
     if (parseInt(hour, 10) >= 12) {
       ampm = 'PM';
       if (parseInt(hour, 10) > 12) {
@@ -137,27 +136,27 @@ const PregnancyRemindersTable = () => {
     } else if (hour === '0') {
       hour = 12; // Midnight case
     }
-    
+
     return `${hour}${ampm}`;
   };
 
   const getDayOfWeek = (dateString) => {
     if (!dateString) return '';
-    
-    const [day, month, year] = dateString.split('/').map(part => parseInt(part, 10));
+
+    const [day, month, year] = dateString.split('/').map((part) => parseInt(part, 10));
     const date = new Date(year, month - 1, day);
     const options = { weekday: 'long' };
     return date.toLocaleDateString('en-US', options);
   };
 
   return (
-    <PageContainer title="Pregnancy Reminders" description="Manage your pregnancy reminders">
-      <Breadcrumb title="Pregnancy Reminders" items={BCrumb}>
+    <PageContainer title={t('Pregnancy Reminders')} description="Manage your pregnancy reminders">
+      <Breadcrumb title={t('Pregnancy Reminders')} items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Breadcrumb" width="150px" />
         </Box>
       </Breadcrumb>
-      <ParentCard title="Pregnancy Reminders">
+      <ParentCard title={t('Pregnancy Reminders')}>
         <Paper variant="outlined">
           <Box mt={2} display="flex" flexDirection="column" alignItems="center">
             <Box display="flex" justifyContent="center" gap={2}>
@@ -168,7 +167,7 @@ const PregnancyRemindersTable = () => {
                 disabled={recording}
                 startIcon={<IconMicrophone />}
               >
-                Start Recording
+                {t('Start Recording')}
               </Button>
               <Button
                 variant="contained"
@@ -177,15 +176,23 @@ const PregnancyRemindersTable = () => {
                 disabled={!recording}
                 startIcon={<IconSquareOff />}
               >
-                Stop Recording
+                {t('Stop Recording')}
               </Button>
             </Box>
             <Typography variant="h6" mt={2}>
-              {recording ? 'Recording...' : 'Record Voice'}
+              {recording ? t('Recording...') : t('Record Voice')}
             </Typography>
             <Box mt={2}>
               {alert && (
-                <Alert severity={status === 'Processing...' ? 'info' : status.startsWith('Error') ? 'error' : 'success'}>
+                <Alert
+                  severity={
+                    status === 'Processing...'
+                      ? 'info'
+                      : status.startsWith('Error')
+                      ? 'error'
+                      : 'success'
+                  }
+                >
                   <AlertTitle>{status}</AlertTitle>
                   {alert}
                 </Alert>
@@ -194,7 +201,9 @@ const PregnancyRemindersTable = () => {
             </Box>
             {events.length > 0 && (
               <Box mt={2}>
-                <TableContainer sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' }, maxHeight: 440 }}>
+                <TableContainer
+                  sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' }, maxHeight: 440 }}
+                >
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
@@ -221,10 +230,14 @@ const PregnancyRemindersTable = () => {
                             <Typography variant="h6">{event.date}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant="h6">{event.time ? formatTime(event.time) : ''}</Typography>
+                            <Typography variant="h6">
+                              {event.time ? formatTime(event.time) : ''}
+                            </Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant="h6">{event.date ? getDayOfWeek(event.date) : ''}</Typography>
+                            <Typography variant="h6">
+                              {event.date ? getDayOfWeek(event.date) : ''}
+                            </Typography>
                           </TableCell>
                           <TableCell>
                             <Typography variant="h6">{event.recurrence}</Typography>

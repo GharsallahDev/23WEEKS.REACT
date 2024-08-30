@@ -6,6 +6,7 @@ import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/search.png';
 import config from 'src/config';
+import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -37,6 +38,7 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 }));
 
 function Search() {
+    const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
@@ -72,7 +74,7 @@ function Search() {
       <StyledContainer>
         <StyledPaper>
           <StyledTypography variant="h7" align="center">
-            <h2>Semantic Search</h2>
+            <h2>{t('Semantic Search')}</h2>
           </StyledTypography>
           <div>
             <TextField
@@ -80,7 +82,7 @@ function Search() {
               className="search-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Enter your query..."
+              placeholder={t("Enter your query...")}
               fullWidth
             />
             <Button
@@ -88,7 +90,7 @@ function Search() {
               className="search-button"
               sx={{ mt: 2 }} // Adds a margin top of 2 spacing units (default is 8px * 2 = 16px)
             >
-              Search
+              {t('Search')}
             </Button>
             {error && <p className="error-message">{error}</p>}
             <div className="results-container">

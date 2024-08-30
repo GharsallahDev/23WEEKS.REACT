@@ -7,8 +7,10 @@ import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
 import { setCredentials } from 'src/store/auth/AuthSlice';
 import config from 'src/config';
 import user1 from 'src/assets/images/profile/user-1.jpg';
+import { useTranslation } from 'react-i18next';
 
 const AccountTab = () => {
+    const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
@@ -119,10 +121,10 @@ const AccountTab = () => {
         <BlankCard>
           <CardContent>
             <Typography variant="h5" mb={1}>
-              Change Profile
+             { t('Change Profile')}
             </Typography>
             <Typography color="textSecondary" mb={3}>
-              Change your profile picture from here
+              {t('Change your profile picture from here')}
             </Typography>
             <Box display="flex" flexDirection="column" alignItems="center">
               <Avatar
@@ -132,15 +134,15 @@ const AccountTab = () => {
               />
               <Stack direction="row" spacing={2} mb={2}>
                 <Button variant="contained" color="primary" component="label">
-                  Upload
+                  {t('Upload')}
                   <input hidden accept="image/*" type="file" onChange={handleAvatarChange} />
                 </Button>
                 <Button variant="outlined" color="error" onClick={handleAvatarReset}>
-                  Reset
+                  {t('Reset')}
                 </Button>
               </Stack>
               <Typography variant="subtitle1" color="textSecondary">
-                Allowed JPG, GIF or PNG. Max size of 800K
+                {t('Allowed JPG, GIF or PNG. Max size of 800K')}
               </Typography>
             </Box>
           </CardContent>
@@ -151,10 +153,10 @@ const AccountTab = () => {
         <BlankCard>
           <CardContent>
             <Typography variant="h5" mb={1}>
-              Personal Details
+              {t('Personal Details')}
             </Typography>
             <Typography color="textSecondary" mb={3}>
-              To change your personal details, edit and save from here
+              {t('To change your personal details, edit and save from here')}
             </Typography>
             <form onSubmit={handleSubmit}>
               <Grid container spacing={3}>
@@ -165,7 +167,7 @@ const AccountTab = () => {
                     }}
                     htmlFor="text-name"
                   >
-                    Your Name
+                    {t('Your Name')}
                   </CustomFormLabel>
                   <CustomTextField
                     id="text-name"
@@ -183,7 +185,7 @@ const AccountTab = () => {
                     }}
                     htmlFor="text-email"
                   >
-                    Email
+                    {t('Email')}
                   </CustomFormLabel>
                   <CustomTextField
                     id="text-email"
@@ -200,10 +202,10 @@ const AccountTab = () => {
         </BlankCard>
         <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
           <Button size="large" variant="contained" color="primary" onClick={handleSubmit}>
-            Save
+            {t('Save')}
           </Button>
           <Button size="large" variant="text" color="error">
-            Cancel
+            {t('Cancel')}
           </Button>
         </Stack>
       </Grid>

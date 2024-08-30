@@ -3,6 +3,7 @@ import { Typography, Avatar, ListItemAvatar, Box } from '@mui/material';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import chatIcon from 'src/assets/images/chat/gpt.png';
 import { keyframes } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 
 const typingAnimation = keyframes`
   0% { opacity: .2; }
@@ -11,6 +12,7 @@ const typingAnimation = keyframes`
 `;
 
 const ChatContent = ({ messages, isChatActive, isBotTyping }) => {
+    const { t } = useTranslation();
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       {isChatActive ? (
@@ -25,7 +27,7 @@ const ChatContent = ({ messages, isChatActive, isBotTyping }) => {
                     </ListItemAvatar>
                     <Box>
                       <Typography variant="body2" color="grey.400" mb={1}>
-                        Dr Gyno
+                       { t('Dr Gyno')}
                       </Typography>
                       <Box
                         sx={{
@@ -92,7 +94,7 @@ const ChatContent = ({ messages, isChatActive, isBotTyping }) => {
         </Scrollbar>
       ) : (
         <Box display="flex" alignItems="center" justifyContent="center" flexGrow={1}>
-          <Typography variant="h4">No active chat. Start a conversation with Dr. Gyno!</Typography>
+          <Typography variant="h4">{t('No active chat. Start a conversation with Dr. Gyno!')}</Typography>
         </Box>
       )}
     </Box>

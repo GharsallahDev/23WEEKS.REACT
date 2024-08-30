@@ -49,7 +49,7 @@ const BabyDevelopment = () => {
               color: textColor,
               fontSize: '20px',
               fontWeight: '600',
-              label: t('Week 20'),
+              label: t('Week 18'),
             },
           },
         },
