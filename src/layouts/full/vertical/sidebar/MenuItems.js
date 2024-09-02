@@ -51,6 +51,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: 'Search',
+    icon: IconSearch,
+    href: '/ultrasound/OmimSearch',
+    userType: 'doctor',
+  },
+  {
+    id: uniqueId(),
     title: 'Quality Enhancement',
     icon: IconPhoto,
     href: '/ultrasoud/enhance_quality',

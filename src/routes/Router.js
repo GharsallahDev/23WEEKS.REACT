@@ -115,6 +115,7 @@ const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGene
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const Search  = Loadable(lazy(() => import('../views/generator/Search')));
 const Yoga  = Loadable(lazy(() => import('../views/generator/yogavideos')));
+const OmimSearch = Loadable(lazy(() => import('../views/ultrasound/OmimSearch')));
 
 const Features = Loadable(lazy(() => import('../components/landingpage/featurespage')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
@@ -249,6 +250,15 @@ const Router = [
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
             <ReportGeneration />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/ultrasound/OmimSearch',
+        element: (
+          <ProtectedRoute allowedTypes={['doctor']}>
+            {' '}
+            <OmimSearch />{' '}
           </ProtectedRoute>
         ),
       },
