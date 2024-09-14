@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './StoryGenerator.css';
 import { Box, Typography, Button, Paper, Container, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AnimatePresence } from 'framer-motion';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/storyGen.png';
 import config from 'src/config';
-import { useTranslation } from 'react-i18next';
-
 const BCrumb = [
   {
     to: '/',
     title: 'Generator',
   },
   {
-    title: 'Stories',
+    title: 'Stories for Kids',
   },
 ];
 
@@ -49,89 +46,146 @@ const formatText = (text) => {
 };
 
 const StoryGenerator = () => {
-    const { t } = useTranslation();
-    const [topic, setTopic] = useState('');
-    const [chapters, setChapters] = useState(1);
-    const [language, setLanguage] = useState('en');
-    const [loading, setLoading] = useState(false);
-    const [storyContent, setStoryContent] = useState([]);
-    const [currentText, setCurrentText] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [images, setImages] = useState([]);
-    const [pdfUrl, setPdfUrl] = useState(null); // Store the PDF URL
-  
-    const handleLanguageChange = (e) => setLanguage(e.target.value);
-    const handleTopicChange = (e) => setTopic(e.target.value);
-    const handleChaptersChange = (e) => setChapters(Number(e.target.value));
-  
-    const handleGenerateStory = async () => {
-      setLoading(true);
-      setStoryContent([]);
-      setCurrentText('');
-      setCurrentIndex(0);
-      setImages([]);
-      setPdfUrl(null);
-  
-      try {
-        const response = await fetch(`${config.apiUrl}/api/generate-story`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ topic, chapters, language }),
-          });
-          
-  
-        const data = await response.json();
-  
-        if (response.ok) {
-          setStoryContent(data.story);
-          setImages(new Array(data.story.length).fill(null)); // Placeholder for images
-  
-          data.images.forEach((image, i) => {
-            setImages((prevImages) => {
-              const newImages = [...prevImages];
-              newImages[i] = image;
-              return newImages;
-            });
-          });
-  
-          // Set the PDF URL
-          setPdfUrl(`http://localhost:5000${data.pdf_url}`);
-        } else {
-          console.error('Error generating story:', data.error);
+  const [topic, setTopic] = useState('');
+  const [chapters, setChapters] = useState(0);
+  const [language, setLanguage] = useState('en');
+  const [loading, setLoading] = useState(false);
+  const [storyContent, setStoryContent] = useState([]);
+  const [currentText, setCurrentText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [images, setImages] = useState([]);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [soundLoading, setSoundLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false); // State to track audio playback
+  const audioRef = useRef(null); // Ref to manage audio element
+
+  const handleLanguageChange = (e) => setLanguage(e.target.value);
+  const handleTopicChange = (e) => setTopic(e.target.value);
+  const handleChaptersChange = (e) => setChapters(Number(e.target.value));
+
+  const handleGenerateStory = async () => {
+    setLoading(true);
+    setStoryContent([]);
+    setCurrentText('');
+    setCurrentIndex(0);
+    setImages([]);
+    setPdfUrl(null);
+    setAudioUrl(null);
+
+    try {
+      const response = await fetch(`${config.apiUrl}/api/generate-story`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, chapters, language }),
+      });
+
+      if (!response.ok) {
+        console.error('Error generating story:', response.statusText);
+        return;
+      }
+
+      const data = await response.json();
+      setStoryContent(data.story);
+      setImages(new Array(data.story.length).fill(null));
+
+      data.images.forEach((image, i) => {
+        setImages((prevImages) => {
+          const newImages = [...prevImages];
+          newImages[i] = image;
+          return newImages;
+        });
+      });
+
+      setPdfUrl(`http://localhost:5000${data.pdf_url}`);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGenerateSound = async () => {
+    setSoundLoading(true);
+    try {
+      const storyText = storyContent.join(' ');
+      const response = await fetch(`${config.apiUrl}/api/generate_sound`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ story: storyText, language }),
+      });
+
+      if (!response.ok) {
+        console.error('Error generating sound:', response.statusText);
+        return;
+      }
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      setAudioUrl(audioUrl);
+    } catch (error) {
+      console.error('Error generating sound:', error);
+    } finally {
+      setSoundLoading(false);
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleStop = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    }
+  };
+
+  const handleOpenPdf = () => {
+    if (pdfUrl) {
+      window.open(pdfUrl, '_blank');
+    } else {
+      console.error('PDF URL is not available.');
+    }
+  };
+
+  useEffect(() => {
+    if (storyContent.length && currentIndex < storyContent.length) {
+      const timeoutId = setTimeout(() => {
+        setCurrentText((prev) => prev + storyContent[currentIndex].charAt(currentText.length));
+        if (currentText.length >= storyContent[currentIndex].length) {
+          setTimeout(() => {
+            setCurrentIndex((prev) => prev + 1);
+            setCurrentText('');
+          }, 1000);
         }
-      } catch (error) {
-        console.error('Error:', error);
-      } finally {
-        setLoading(false);
+      }, 25);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [storyContent, currentText, currentIndex]);
+
+  useEffect(() => {
+    // Cleanup the audio when the component is unmounted
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = ''; // Stop the audio from playing
+        audioRef.current.load();
       }
     };
-  
-    const handleOpenPdf = () => {
-      if (pdfUrl) {
-          window.open(pdfUrl, '_blank');
-      } else {
-          console.error('PDF URL is not available.');
-      }
-  };
-  
-    useEffect(() => {
-      if (storyContent.length && currentIndex < storyContent.length) {
-        const timeoutId = setTimeout(() => {
-          setCurrentText((prev) => prev + storyContent[currentIndex].charAt(currentText.length));
-          if (currentText.length >= storyContent[currentIndex].length) {
-            setTimeout(() => {
-              setCurrentIndex((prev) => prev + 1);
-              setCurrentText('');
-            }, 1000); // Delay before moving to the next chapter
-          }
-        }, 25); // Speed for the typewriter effect
-        return () => clearTimeout(timeoutId);
-      }
-    }, [storyContent, currentText, currentIndex]);
+  }, []);
 
   return (
-    <PageContainer title={t('Story Generator')} sx={{ paddingTop: 0 }}>
-      <Breadcrumb title={t('Story Generator')} items={BCrumb}>
+    <PageContainer title="Story Generator" sx={{ paddingTop: 0 }}>
+      <Breadcrumb title="Story Generator" items={BCrumb}>
         <Box>
           <img src={breadcrumbImg} alt="Ultrasound" width="120px" className="image" />
         </Box>
@@ -140,12 +194,12 @@ const StoryGenerator = () => {
         <StyledPaper>
           <StyledTypography variant="h7" align="center">
             <h2>
-              {t('Generate a Story')}
+              Generate a Story with <span className="bold">AMARI</span>
             </h2>
           </StyledTypography>
 
           <label htmlFor="topic" style={{ paddingBottom: '10px' }}>
-            {t('Enter Topic')}:
+            Enter Topic:
           </label>
           <TextField
             id="topic"
@@ -156,7 +210,7 @@ const StoryGenerator = () => {
             className="input-field"
           />
 
-          <label htmlFor="chapters">{t('Number of Chapters')}:</label>
+          <label htmlFor="chapters">Number of Chapters:</label>
           <input
             id="chapters"
             type="number"
@@ -167,20 +221,17 @@ const StoryGenerator = () => {
             className="input"
           />
 
-          <label htmlFor="language">{t('Choose Language')}:</label>
+          <label htmlFor="language">Choose Language:</label>
           <select
             id="language"
             value={language}
-            fullWidth
-            variant="outlined"
             onChange={handleLanguageChange}
             className="input"
           >
-            <option value="english">English</option>
-            <option value="french">French</option>
-            <option value="arabic">Arabic</option>
-            <option value="amharic">Amharic</option>
-            <option value="swahili">Swahili</option>
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="am">Amharic</option>
+            <option value="sw">Swahili</option>
           </select>
 
           <Button
@@ -190,8 +241,43 @@ const StoryGenerator = () => {
             disabled={loading}
             className="generate-button"
           >
-            {loading ? t('Generating...') : t('Generate Story')}
+            {loading ? 'Generating...' : 'Generate Story'}
           </Button>
+
+          {storyContent.length > 0 && (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleGenerateSound}
+              disabled={soundLoading}
+              className="generate-button"
+              style={{ marginTop: '20px' }}
+            >
+              {soundLoading ? 'Generating Sound...' : 'Generate Sound'}
+            </Button>
+          )}
+
+          {audioUrl && (
+            <div>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handlePlayPause}
+                style={{ marginTop: '20px' }}
+              >
+                {isPlaying ? 'Pause' : 'Play'}
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={handleStop}
+                style={{ marginTop: '20px', marginLeft: '10px' }}
+              >
+                Stop
+              </Button>
+              <audio ref={audioRef} src={audioUrl} />
+            </div>
+          )}
 
           <div className="story-container">
             {storyContent.map((chapter, index) => (
@@ -218,12 +304,6 @@ const StoryGenerator = () => {
               </div>
             ))}
           </div>
-
-          {currentIndex === storyContent.length && pdfUrl && (
-            <Button variant="contained" color="secondary" onClick={handleOpenPdf}>
-              {t('Open PDF')}
-            </Button>
-          )}
         </StyledPaper>
       </StyledContainer>
     </PageContainer>

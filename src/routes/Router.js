@@ -112,6 +112,8 @@ const HealthTracking = Loadable(lazy(() => import('../views/ultrasound/HealthTra
 const BabyNameGenerator = Loadable(lazy(() => import('../views/generator/BabyNameGenerator')));
 const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
 const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
+const SongGenerator = Loadable(lazy(() => import('../views/generator/SongGen')));
+
 const SmartReminders = Loadable(lazy(() => import('../views/generator/SmartReminders')));
 const Search  = Loadable(lazy(() => import('../views/generator/Search')));
 const Yoga  = Loadable(lazy(() => import('../views/generator/yogavideos')));
@@ -303,6 +305,15 @@ const Router = [
           <ProtectedRoute allowedTypes={['user']}>
             {' '}
             <StoryGeneration />{' '}
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/generator/song-generator',
+        element: (
+          <ProtectedRoute allowedTypes={['user']}>
+            {' '}
+            <SongGenerator />{' '}
           </ProtectedRoute>
         ),
       },

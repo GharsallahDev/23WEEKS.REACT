@@ -20,6 +20,7 @@ import {
   IconDetails,
   IconHealthRecognition,
   IconYoga,
+  IconMusic,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -121,6 +122,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: 'Songs Generator',
+    icon: IconMusic,
+    href: '/generator/song-generator',
+    userType: 'user',
+  },
+  {
+    id: uniqueId(),
     title: 'Smart Reminders',
     icon: IconAlarm,
     href: '/generator/reminders',
@@ -158,18 +166,7 @@ const Menuitems = [
     href: '/generator/Yoga',
     userType: 'user',
   },
-  {
-    id: uniqueId(),
-    title: 'Calendar',
-    icon: IconCalendar,
-    href: '/apps/calendar',
-  },
-  {
-    id: uniqueId(),
-    title: 'Messages',
-    icon: IconTicket,
-    href: '/apps/tickets',
-  },
+
   {
     navlabel: true,
     subheader: 'Pages',
