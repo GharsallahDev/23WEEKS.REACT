@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, Container, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Box, Typography, Button, Paper, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { motion, AnimatePresence } from 'framer-motion';
+import Question from './components/Question';
+import ProgressBar from './components/ProgressBar';
+import LoadingAnimation from './components/LoadingAnimation';
 import NameList from './components/NameList';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import breadcrumbImg from 'src/assets/images/breadcrumb/baby.png';
 import config from 'src/config';
-import { useTranslation } from 'react-i18next';
 
 const BCrumb = [
   {
@@ -42,186 +44,140 @@ const StyledBox = styled(Box)(({ theme }) => ({
   '& > *': {
     marginBottom: theme.spacing(2),
   },
-  '& > *:not(:last-child)': {
-    marginBottom: theme.spacing(4), // Adding space between fields
-  },
 }));
 
-const originOptions = [
-  "African---Abaluhyan", "African---Akan", "African---American", "African---Bantu", "African---Botswana",
-  "African---Egyptian", "African---Ethiopian", "African---Ewe", "African---Fanti", "African---Ghanian",
-  "African---Hausa", "African---Ibo", "African---Kenyan", "African---Kikuyu", "African---Lesotho",
-  "African---Lugandan", "African---Malawian", "African---Musoga", "African---Nguni", "African---Nigerian",
-  "African---Ochi", "African---Rukonjo", "African---Runyoro", "African---Rutooro", "African---Rwandan",
-  "African---Somalian", "African---Swahili", "African---Tanzanian", "African---Ugandan", "African---Xhosha",
-  "African---Yoruba", "African---Yoruban", "African---Zimbabwe", "African---Zulu", "African---Zuni", "Arabic"
-];
-
-const categoryOptions = [
-  "Nature", "God", "Love", "Birth Order", "Leadership and Royalty", "Virtues", 
-  "Strength and Power", "Emotions", "Family Relations"
-];
-
-const letterOptions = [
-  "A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+const questions = [
+  {
+    id: 1,
+    text: 'Are you expecting a boy or a girl?',
+    options: ['Boy', 'Girl'],
+  },
+  {
+    id: 2,
+    text: "What's your preferred name origin?",
+    options: ['Arabic', 'Swahili', 'Yoruba', 'Zulu', 'Amharic', 'Igbo'],
+  },
+  {
+    id: 3,
+    text: 'What is the meaning you want the name to reflect?',
+    options: ['Brave', 'Love', 'Peace', 'Strength', 'Wisdom'],
+  },
+  {
+    id: 4,
+    text: 'How long should the name be?',
+    options: ['Short (1-4 letters)', 'Medium (5-7 letters)', 'Long (8+ letters)'],
+  },
+  {
+    id: 5,
+    text: 'Which letter should the name start with?',
+    inputType: 'text',
+    placeholder: 'Enter a letter',
+    validate: (input) => /^[A-Za-z]$/.test(input) ? true : 'Please enter a single letter',
+  },
 ];
 
 const BabyNameGenerator = () => {
-    const { t } = useTranslation();
-  const [gender, setGender] = useState('');
-  const [origin, setOrigin] = useState('');
-  const [category, setCategory] = useState('');
-  const [length, setLength] = useState('');
-  const [letter, setLetter] = useState('');
-  const [names, setNames] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [started, setStarted] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
   const [generating, setGenerating] = useState(false);
+  const [names, setNames] = useState([]);
   const [error, setError] = useState(null);
-  const [expandedName, setExpandedName] = useState(null);
-  const namesPerPage = 4;
 
-  const generateNames = async () => {
-    setGenerating(true);
-    try {
-      const response = await fetch(`${config.apiUrl}/api/generate_name`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ gender, origin, category, length, letter }), // Include all options
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate names');
-      }
-
-      const data = await response.json();
-      setNames(data.names);
-      setCurrentPage(0); // Reset page to 0 when new names are generated
-    } catch (error) {
-      setError('An error occurred while generating names. Please try again.');
-      console.error('Error:', error);
-    } finally {
-      setGenerating(false);
-    }
+  const handleStart = () => {
+    setStarted(true);
   };
+
+  const handleAnswer = async (answer) => {
+    const updatedAnswers = { ...answers, [currentQuestion]: answer };
+    setAnswers(updatedAnswers);
+
+    if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+    } else {
+        setGenerating(true);
+        try {
+            const response = await fetch(`${config.apiUrl}/api/generate_name`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    gender: updatedAnswers[0],          
+                    origin: updatedAnswers[1],         
+                    meaning: updatedAnswers[2],       
+                    name_length: updatedAnswers[3],      
+                    start_letter: updatedAnswers[4],     
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to generate names: ${errorText}`);
+            }
+
+            const data = await response.json();
+            setNames(data.baby_names);  // Handle the list of names
+        } catch (error) {
+            setError(`An error occurred: ${error.message}`);
+            console.error('Error:', error);
+        } finally {
+            setGenerating(false);
+        }
+    }
+};
+
+ 
 
   const handleReset = () => {
-    setGender('');
-    setOrigin('');
-    setCategory('');
-    setLength('');
-    setLetter('');
+    setStarted(false);
+    setCurrentQuestion(0);
+    setAnswers({});
     setNames([]);
     setError(null);
-    setCurrentPage(0); // Reset page when resetting
   };
-
-  const handleLoadMore = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const toggleNameDetails = (name) => {
-    setExpandedName((prevName) => (prevName === name ? null : name));
-  };
-
-  const currentNames = names.slice(currentPage * namesPerPage, (currentPage + 1) * namesPerPage);
 
   return (
     <PageContainer title="Baby Name Generator" sx={{ paddingTop: 0 }}>
-      <Breadcrumb title={t("Baby Names Generator")} items={BCrumb}>
+      <Breadcrumb title="Baby Names Generator" items={BCrumb}>
         <Box>
-          <img src={breadcrumbImg} alt="Ultrasound" width="150px" />
+          <img src={breadcrumbImg} alt="Breadcrumb" width="150px" />
         </Box>
       </Breadcrumb>
       <StyledContainer>
         <StyledPaper>
           <StyledTypography variant="h5" align="center">
-            {t('AI Baby Name Generator')}
+            AI Baby Name Generator
           </StyledTypography>
           <AnimatePresence mode="wait">
-            {!names.length && !generating && !error && (
+            {!started && (
               <motion.div
-                key="form"
+                key="start"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  size="large"
+                  onClick={handleStart}
+                >
+                  Start Name Generator
+                </Button>
+              </motion.div>
+            )}
+            {started && !generating && names.length === 0 && !error && (
+              <motion.div
+                key="question"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
               >
                 <StyledBox>
-                  <FormControl fullWidth>
-                    <InputLabel>{t('Gender')}</InputLabel>
-                    <Select
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      label="Gender"
-                    >
-                      <MenuItem value="">Any</MenuItem>
-                      <MenuItem value="Male">Male</MenuItem>
-                      <MenuItem value="Female">Female</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <InputLabel>{t('Origin')}</InputLabel>
-                    <Select
-                      value={origin}
-                      onChange={(e) => setOrigin(e.target.value)}
-                      label={t("Origin")}
-                    >
-                      <MenuItem value="">Any</MenuItem>
-                      {originOptions.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <InputLabel>{t('Category')}</InputLabel>
-                    <Select
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
-                      label={t("Category")}
-                    >
-                      <MenuItem value="">Any</MenuItem>
-                      {categoryOptions.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <InputLabel>{t('Length')}</InputLabel>
-                    <Select
-                      value={length}
-                      onChange={(e) => setLength(e.target.value)}
-                      label={t("Length")}
-                    >
-                      <MenuItem value="">Any</MenuItem>
-                      <MenuItem value="Short">Short</MenuItem>
-                      <MenuItem value="Medium">Medium</MenuItem>
-                      <MenuItem value="Long">Long</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <InputLabel>{t('First letter')}</InputLabel>
-                    <Select
-                      value={letter}
-                      onChange={(e) => setLetter(e.target.value)}
-                      label={t("Letter")}
-                    >
-                      <MenuItem value="">Any</MenuItem>
-                      {letterOptions.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    size="large"
-                    onClick={generateNames}
-                    disabled={generating}
-                  >
-                    {t('Generate Names')}
-                  </Button>
+                  <Question question={questions[currentQuestion]} onAnswer={handleAnswer} />
+                  <ProgressBar current={currentQuestion + 1} total={questions.length} />
                 </StyledBox>
               </motion.div>
             )}
@@ -232,10 +188,10 @@ const BabyNameGenerator = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <Typography variant="h6" align="center">Generating names...</Typography>
+                <LoadingAnimation />
               </motion.div>
             )}
-            {currentNames.length > 0 && (
+            {names.length > 0 && (
               <motion.div
                 key="names"
                 initial={{ opacity: 0, y: 50 }}
@@ -243,23 +199,7 @@ const BabyNameGenerator = () => {
                 exit={{ opacity: 0, y: -50 }}
               >
                 <StyledBox>
-                  <NameList 
-                    names={currentNames} 
-                    expandedName={expandedName}
-                    toggleNameDetails={toggleNameDetails}
-                  />
-                  {names.length > (currentPage + 1) * namesPerPage && (
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      size="large"
-                      onClick={handleLoadMore}
-                      sx={{ marginTop: 2 }}
-                    >
-                      Load More
-                    </Button>
-                  )}
+                  <NameList names={names} />
                   <Button variant="outlined" color="primary" fullWidth onClick={handleReset}>
                     Start Over
                   </Button>
