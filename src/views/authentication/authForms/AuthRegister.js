@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -8,10 +7,9 @@ import { Box, Typography, Button, Divider, Alert, MenuItem, Stack } from '@mui/m
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 import CustomSelect from '../../../components/forms/theme-elements/CustomSelect';
-import { setCredentials } from '../../../store/auth/AuthSlice';
 
 import config from 'src/config';
-import ErrorBoundary from '../../../utils/ErrorBoundary'; // Import ErrorBoundary
+import ErrorBoundary from '../../../utils/ErrorBoundary';
 
 const validationSchema = yup.object({
   type: yup.string().required('Type is required'),
@@ -27,7 +25,6 @@ const validationSchema = yup.object({
 });
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -50,13 +47,18 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
         });
         if (response.ok) {
           const data = await response.json();
-          dispatch(
-            setCredentials({
+          sessionStorage.setItem(
+            'registrationData',
+            JSON.stringify({
               user: { type: values.type, full_name: values.full_name, email: values.email },
               token: data.access_token,
             }),
           );
-          navigate('/dashboards/modern');
+          if (values.type === 'doctor') {
+            navigate('/auth/register/doctor-info');
+          } else {
+            navigate('/auth/register/patient-info');
+          }
         } else {
           const errorData = await response.json();
           setErrors({ submit: errorData.msg || 'An error occurred during registration.' });
@@ -76,7 +78,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
   ];
 
   return (
-    <ErrorBoundary> {/* Wrap the form with ErrorBoundary */}
+    <ErrorBoundary>
       <form onSubmit={formik.handleSubmit}>
         {title && (
           <Typography fontWeight="700" variant="h3" mb={1}>
@@ -177,7 +179,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
             type="submit"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? 'Signing Up...' : 'Sign Up'}
+            {formik.isSubmitting ? 'Signing Up...' : 'Next'}
           </Button>
         </Box>
         {subtitle}

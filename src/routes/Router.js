@@ -119,6 +119,11 @@ const Search  = Loadable(lazy(() => import('../views/generator/Search')));
 const Yoga  = Loadable(lazy(() => import('../views/generator/yogavideos')));
 const OmimSearch = Loadable(lazy(() => import('../views/ultrasound/OmimSearch')));
 
+const DoctorSignupExtra = Loadable(lazy(() => import('../views/authentication/DoctorSignupExtra')));
+const PatientSignupExtra = Loadable(
+  lazy(() => import('../views/authentication/PatientSignupExtra')),
+);
+
 const Features = Loadable(lazy(() => import('../components/landingpage/featurespage')));
 const ProtectedRoute = ({ children, allowedTypes }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -174,6 +179,22 @@ const Router = [
           </PublicOnlyRoute>
         ),
       },
+      {
+        path: '/auth/register/doctor-info',
+        element: (
+          <PublicOnlyRoute>
+            <DoctorSignupExtra />
+          </PublicOnlyRoute>
+        ),
+      },
+      {
+        path: '/auth/register/patient-info',
+        element: (
+          <PublicOnlyRoute>
+            <PatientSignupExtra />
+          </PublicOnlyRoute>
+        ),
+      },
       { path: '/auth/register2', element: <Register2 /> },
       { path: '/auth/forgot-password', element: <ForgotPassword /> },
       { path: '/auth/forgot-password2', element: <ForgotPassword2 /> },
@@ -181,8 +202,8 @@ const Router = [
       { path: '/auth/two-steps2', element: <TwoSteps2 /> },
       { path: '/auth/maintenance', element: <Maintenance /> },
       { path: '/landingpage', element: <Landingpage /> },
-      { path: '/about', element: <AboutUs/> },
-      { path: '/features', element: <Features/> },
+      { path: '/about', element: <AboutUs /> },
+      { path: '/features', element: <Features /> },
     ],
   },
   {
@@ -412,8 +433,7 @@ const Router = [
         path: '/auth/register',
         element: (
           <PublicOnlyRoute>
-            {' '}
-            <Register />{' '}
+            <Register />
           </PublicOnlyRoute>
         ),
       },
