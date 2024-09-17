@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Box, Typography, Button, Divider, Alert, MenuItem, Stack } from '@mui/material';
@@ -7,6 +8,7 @@ import { Box, Typography, Button, Divider, Alert, MenuItem, Stack } from '@mui/m
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../../components/forms/theme-elements/CustomFormLabel';
 import CustomSelect from '../../../components/forms/theme-elements/CustomSelect';
+import { setCredentials } from '../../../store/auth/AuthSlice';
 
 import config from 'src/config';
 import ErrorBoundary from '../../../utils/ErrorBoundary';
@@ -26,6 +28,7 @@ const validationSchema = yup.object({
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -47,10 +50,15 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
         });
         if (response.ok) {
           const data = await response.json();
+          const userData = {
+            type: values.type,
+            full_name: values.full_name,
+            email: values.email,
+          };
           sessionStorage.setItem(
             'registrationData',
             JSON.stringify({
-              user: { type: values.type, full_name: values.full_name, email: values.email },
+              user: userData,
               token: data.access_token,
             }),
           );

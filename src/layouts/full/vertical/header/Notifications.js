@@ -109,11 +109,6 @@ const Notifications = () => {
             </Box>
           ))}
         </Scrollbar>
-        <Box p={3} pb={1}>
-          <Button to="/notifications" variant="outlined" component={Link} color="primary" fullWidth>
-            See all Notifications
-          </Button>
-        </Box>
       </Menu>
     </Box>
   );

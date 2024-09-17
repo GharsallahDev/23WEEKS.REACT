@@ -13,35 +13,30 @@ const TopCards = () => {
 
   const topcards = [
     {
-      href: '/appointments',
       icon: icon4,
       title: t('Appointments'),
       digits: '12',
       bgcolor: 'primary',
     },
     {
-      href: '/patients',
       icon: icon2,
       title: t('Patients'),
       digits: '3,685',
       bgcolor: 'secondary',
     },
     {
-      href: '/ultrasounds',
       icon: icon5,
       title: t('Ultrasounds'),
       digits: '256',
       bgcolor: 'success',
     },
     {
-      href: '/procedures',
       icon: icon3,
       title: t('Procedures'),
       digits: '932',
       bgcolor: 'warning',
     },
     {
-      href: '/lab-results',
       icon: icon1,
       title: t('Lab Results'),
       digits: '48',

@@ -79,7 +79,7 @@ const Header = () => {
                 color="primary"
                 variant="contained"
                 component={Link}
-                to={userType === 'patient' ? '/dashboards/patient' : '/dashboards/doctor'}
+                to={userType === 'patient' ? '/dashboard/patient' : '/dashboard/doctor'}
               >
                 Dashboard
               </StyledButton>

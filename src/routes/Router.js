@@ -135,7 +135,7 @@ const ProtectedRoute = ({ children, allowedTypes }) => {
   }
 
   if (allowedTypes && !allowedTypes.includes(userType)) {
-    const dashboardRoute = userType === 'doctor' ? '/dashboards/doctor' : '/dashboards/woman';
+    const dashboardRoute = userType === 'doctor' ? '/dashboard/doctor' : '/dashboard/woman';
     return <Navigate to={dashboardRoute} replace />;
   }
 
@@ -148,7 +148,7 @@ const PublicOnlyRoute = ({ children }) => {
   const location = useLocation();
 
   if (isAuthenticated) {
-    const dashboardRoute = userType === 'doctor' ? '/dashboards/doctor' : '/dashboards/woman';
+    const dashboardRoute = userType === 'doctor' ? '/dashboard/doctor' : '/dashboard/woman';
     return <Navigate to={dashboardRoute} state={{ from: location }} replace />;
   }
 
@@ -211,7 +211,7 @@ const Router = [
     element: <FullLayout />,
     children: [
       {
-        path: '/dashboards/doctor',
+        path: '/dashboard/doctor',
         element: (
           <ProtectedRoute allowedTypes={['doctor']}>
             <DoctorDash />
@@ -219,7 +219,7 @@ const Router = [
         ),
       },
       {
-        path: '/dashboards/woman',
+        path: '/dashboard/woman',
         element: (
           <ProtectedRoute allowedTypes={['user']}>
             <WomanDash />

@@ -60,7 +60,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
               token: data.access_token,
             }),
           );
-          navigate('/dashboards/modern');
+
         } else {
           const errorData = await response.json();
           formik.setErrors({ submit: errorData.msg || 'An error occurred during login.' });

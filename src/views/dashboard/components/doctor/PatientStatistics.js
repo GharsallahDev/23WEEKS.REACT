@@ -114,9 +114,6 @@ const PatientStatistics = () => {
               <Typography variant="h5">40</Typography>
             </Stack>
           </Stack>
-          <Button color="primary" variant="contained" fullWidth>
-            {t('View Full Report')}
-          </Button>
         </Grid>
       </Grid>
     </DashboardCard>

@@ -34,8 +34,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Doctor Dashboard',
     icon: IconBuildingHospital,
-    href: '/dashboards/doctor',
-    // chip: 'New',
+    href: '/dashboard/doctor',
     chipColor: 'secondary',
     userType: 'doctor',
   },
@@ -43,7 +42,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'Woman Dashboard',
     icon: IconWoman,
-    href: '/dashboards/woman',
+    href: '/dashboard/woman',
     userType: 'user',
   },
   {
