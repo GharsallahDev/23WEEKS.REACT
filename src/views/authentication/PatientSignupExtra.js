@@ -3,19 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Box, Typography, Button, Stack, MenuItem } from '@mui/material';
-import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
-import CustomSelect from '../../components/forms/theme-elements/CustomSelect';
+import { Box, Typography, Button, TextField, MenuItem, Container, Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { setCredentials } from '../../store/auth/AuthSlice';
 import PageContainer from 'src/components/container/PageContainer';
 
 const validationSchema = yup.object({
   pregnancyStage: yup.string().required('Pregnancy stage is required'),
-  dueDate: yup.date().required('Due date is required'),
-  previousPregnancies: yup.number().required('Number of previous pregnancies is required').min(0),
+  dueDate: yup.date().required('Pregnancy Date is required'),
 });
 
-const PatientSignupExtra = () => {
+// Styled components for consistency
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  borderRadius: 16,
+  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+  width: '100%',
+  maxWidth: 600,
+}));
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: theme.spacing(2, 0),
+}));
+
+const DoctorSignupExtra = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,7 +37,6 @@ const PatientSignupExtra = () => {
     initialValues: {
       pregnancyStage: '',
       dueDate: '',
-      previousPregnancies: '',
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -37,7 +50,7 @@ const PatientSignupExtra = () => {
         }),
       );
 
-      navigate('/dashboards/woman');
+      navigate('/dashboard/woman');
     },
   });
 
@@ -48,62 +61,55 @@ const PatientSignupExtra = () => {
   ];
 
   return (
-    <PageContainer
-      title="Patient Sign Up"
-      description="Additional information for patient registration"
-    >
-      <form onSubmit={formik.handleSubmit}>
-        <Typography variant="h6" mb={3}>
-          Pregnancy Information
-        </Typography>
-        <Stack spacing={3}>
-          <CustomSelect
-            fullWidth
-            id="pregnancyStage"
-            name="pregnancyStage"
-            label="Pregnancy Stage"
-            value={formik.values.pregnancyStage}
-            onChange={formik.handleChange}
-            error={formik.touched.pregnancyStage && Boolean(formik.errors.pregnancyStage)}
-          >
-            {pregnancyStages.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </CustomSelect>
-          <CustomTextField
-            fullWidth
-            id="dueDate"
-            name="dueDate"
-            label="Due Date"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            value={formik.values.dueDate}
-            onChange={formik.handleChange}
-            error={formik.touched.dueDate && Boolean(formik.errors.dueDate)}
-            helperText={formik.touched.dueDate && formik.errors.dueDate}
-          />
-          <CustomTextField
-            fullWidth
-            id="previousPregnancies"
-            name="previousPregnancies"
-            label="Number of Previous Pregnancies"
-            type="number"
-            value={formik.values.previousPregnancies}
-            onChange={formik.handleChange}
-            error={formik.touched.previousPregnancies && Boolean(formik.errors.previousPregnancies)}
-            helperText={formik.touched.previousPregnancies && formik.errors.previousPregnancies}
-          />
-        </Stack>
-        <Box mt={3}>
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Complete Registration
-          </Button>
-        </Box>
-      </form>
+    <PageContainer title="Patient Sign Up" description="Additional information for patient registration">
+      <StyledContainer>
+        <StyledPaper>
+          <Typography variant="h5" align="center" mb={3}>
+            Pregnancy Information
+          </Typography>
+          <form onSubmit={formik.handleSubmit}>
+            <TextField
+              select
+              label="Pregnancy Stage"
+              name="pregnancyStage"
+              value={formik.values.pregnancyStage}
+              onChange={formik.handleChange}
+              error={formik.touched.pregnancyStage && Boolean(formik.errors.pregnancyStage)}
+              helperText={formik.touched.pregnancyStage && formik.errors.pregnancyStage}
+              fullWidth
+              margin="normal"
+            >
+              {pregnancyStages.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              fullWidth
+              id="dueDate"
+              name="dueDate"
+              label="Pregnancy Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={formik.values.dueDate}
+              onChange={formik.handleChange}
+              error={formik.touched.dueDate && Boolean(formik.errors.dueDate)}
+              helperText={formik.touched.dueDate && formik.errors.dueDate}
+              margin="normal"
+            />
+
+            <Box mt={3}>
+              <Button color="primary" variant="contained" fullWidth type="submit">
+                Complete Registration
+              </Button>
+            </Box>
+          </form>
+        </StyledPaper>
+      </StyledContainer>
     </PageContainer>
   );
 };
 
-export default PatientSignupExtra;
+export default DoctorSignupExtra;

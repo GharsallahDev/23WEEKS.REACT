@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
 import welcomeImg from 'src/assets/images/backgrounds/baby-inside-woman-womb.png';
 import { useSelector } from 'react-redux';
 
@@ -12,51 +12,53 @@ const WelcomeCard = () => {
   const babySize = t('a lime');
 
   return (
-    <Card
-      elevation={0}
-      sx={{
-        backgroundColor: (theme) => theme.palette.primary.light,
-        minHeight: 'auto', // Reduce card height
-      }}
-    >
-      <CardContent
+    <Box sx={{ width: '100%', my: 2 }}>
+      <Card
+        elevation={0}
         sx={{
-          p: { xs: 2, sm: 2.5 }, // Reduced padding
-          '&:last-child': { pb: { xs: 2, sm: 2.5 } }, // Reduced padding
+          backgroundColor: (theme) => theme.palette.primary.light,
+          width: '100%', 
+          maxWidth: '100%', 
         }}
       >
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={7}>
-            <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
+        <CardContent
+          sx={{
+            p: { xs: 2, sm: 3 }, // Adjust padding for different screen sizes
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center', // Center content
+            justifyContent: 'center',
+          }}
+        >
+          <Grid container spacing={2} alignItems="center" justifyContent="center">
+            <Grid item xs={10} sm={7} sx={{ textAlign: { xs: 'left', sm: 'left' } }}>
               <Typography variant="h5" gutterBottom>
                 {t('Welcome back {name}!', { name: user ? user.full_name : t('Full Name') })}
               </Typography>
               <Typography variant="body1" sx={{ mb: 1 }}>
-                {t('Week {week}: Your baby is about the size of {size}.', {
+                {t('Welcome To 23 Weeks!', {
                   week: pregnancyWeek,
                   size: babySize,
                 })}
               </Typography>
-              <Button variant="contained" color="primary" size="medium">
-                {t('Track Progress')}
-              </Button>
-            </Box>
+              {/* Button can be added here if needed */}
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={5}
+              sx={{ display: 'flex', justifyContent: 'center' }}
+            >
+              <img
+                src={welcomeImg}
+                alt={t('Pregnancy visual')}
+                style={{ maxWidth: '130px', width: '100%', height: 'auto' }} // Adjust size as needed
+              />
+            </Grid>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={5}
-            sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-end' } }}
-          >
-            <img
-              src={welcomeImg}
-              alt={t('Pregnancy visual')}
-              style={{ maxWidth: '130px', width: '100%', height: 'auto' }} // Slightly reduced max-width
-            />
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Initial state can be empty or based on localStorage
 const initialState = {
-  user: JSON.parse(localStorage.getItem('user')),
-  token: localStorage.getItem('token'),
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: localStorage.getItem('token') || null,
   isAuthenticated: !!localStorage.getItem('token'),
 };
 
@@ -29,10 +30,18 @@ const authSlice = createSlice({
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     },
+    updateUser: (state, action) => {
+      const updatedUser = action.payload;
+      state.user = {
+        ...state.user,
+        ...updatedUser,
+      };
+      localStorage.setItem('user', JSON.stringify(state.user));
+    },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, updateUser } = authSlice.actions;
 
 export default authSlice.reducer;
 
