@@ -1,49 +1,49 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
 import { useTranslation } from 'react-i18next';
-import { Typography, Box, Button } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import week3 from 'src/assets/images/fruits/week 3.png';
-import week4 from 'src/assets/images/fruits/week 4.png';
-import week5 from 'src/assets/images/fruits/week 5.png';
-import week6 from 'src/assets/images/fruits/week 6.png';
-import week7 from 'src/assets/images/fruits/week 7.png';
-import week8 from 'src/assets/images/fruits/week 8.png';
-import week9 from 'src/assets/images/fruits/week 9.png';
-import week10 from 'src/assets/images/fruits/week 10.png';
-import week11 from 'src/assets/images/fruits/week 11.png';
-import week12 from 'src/assets/images/fruits/week 12.png';
-import week13 from 'src/assets/images/fruits/week 13.png';
-import week14 from 'src/assets/images/fruits/week 14.png';
-import week15 from 'src/assets/images/fruits/week 15.png';
-import week16 from 'src/assets/images/fruits/week 16.png';
-import week17 from 'src/assets/images/fruits/week 17.png';
-import week18 from 'src/assets/images/fruits/week 18.png';
-import week19 from 'src/assets/images/fruits/week 19.png';
-import week20 from 'src/assets/images/fruits/week 20.png';
-import week21 from 'src/assets/images/fruits/week 21.png';
-import week22 from 'src/assets/images/fruits/week 22.png';
-import week23 from 'src/assets/images/fruits/week 23.png';
-import week24 from 'src/assets/images/fruits/week 24.png';
-import week25 from 'src/assets/images/fruits/week 25.png';
-import week26 from 'src/assets/images/fruits/week 26.png';
-import week27 from 'src/assets/images/fruits/week 27.png';
-import week28 from 'src/assets/images/fruits/week 28.png';
-import week29 from 'src/assets/images/fruits/week 29.png';
-import week30 from 'src/assets/images/fruits/week 30.png';
-import week31 from 'src/assets/images/fruits/week 31.png';
-import week32 from 'src/assets/images/fruits/week 32.png';
-import week33 from 'src/assets/images/fruits/week 33.png';
-import week34 from 'src/assets/images/fruits/week 34.png';
-import week35 from 'src/assets/images/fruits/week 35.png';
-import week36 from 'src/assets/images/fruits/week 36.png';
-import week37 from 'src/assets/images/fruits/week 36.png';
-import week38 from 'src/assets/images/fruits/week 39.png';
-import week39 from 'src/assets/images/fruits/week 39.png';
-import week40 from 'src/assets/images/fruits/week 40.png';
-import week41 from 'src/assets/images/fruits/week 41.png';
+import week3 from "src/assets/images/fruits/week 3.png";
+import week4 from "src/assets/images/fruits/week 4.png";
+import week5 from "src/assets/images/fruits/week 5.png";
+import week6 from "src/assets/images/fruits/week 6.png";
+import week7 from "src/assets/images/fruits/week 7.png";
+import week8 from "src/assets/images/fruits/week 8.png";
+import week9 from "src/assets/images/fruits/week 9.png";
+import week10 from "src/assets/images/fruits/week 10.png";
+import week11 from "src/assets/images/fruits/week 11.png";
+import week12 from "src/assets/images/fruits/week 12.png";
+import week13 from "src/assets/images/fruits/week 13.png";
+import week14 from "src/assets/images/fruits/week 14.png";
+import week15 from "src/assets/images/fruits/week 15.png";
+import week16 from "src/assets/images/fruits/week 16.png";
+import week17 from "src/assets/images/fruits/week 17.png";
+import week18 from "src/assets/images/fruits/week 18.png";
+import week19 from "src/assets/images/fruits/week 19.png";
+import week20 from "src/assets/images/fruits/week 20.png";
+import week21 from "src/assets/images/fruits/week 21.png";
+import week22 from "src/assets/images/fruits/week 22.png";
+import week23 from "src/assets/images/fruits/week 23.png";
+import week24 from "src/assets/images/fruits/week 24.png";
+import week25 from "src/assets/images/fruits/week 25.png";
+import week26 from "src/assets/images/fruits/week 26.png";
+import week27 from "src/assets/images/fruits/week 27.png";
+import week28 from "src/assets/images/fruits/week 28.png";
+import week29 from "src/assets/images/fruits/week 29.png";
+import week30 from "src/assets/images/fruits/week 30.png";
+import week31 from "src/assets/images/fruits/week 31.png";
+import week32 from "src/assets/images/fruits/week 32.png";
+import week33 from "src/assets/images/fruits/week 33.png";
+import week34 from "src/assets/images/fruits/week 34.png";
+import week35 from "src/assets/images/fruits/week 35.png";
+import week36 from "src/assets/images/fruits/week 36.png";
+import week37 from "src/assets/images/fruits/week 36.png";
+import week38 from "src/assets/images/fruits/week 39.png";
+import week39 from "src/assets/images/fruits/week 39.png";
+import week40 from "src/assets/images/fruits/week 40.png";
+import week41 from "src/assets/images/fruits/week 41.png";
 
 const weeksData = [
   {
@@ -537,59 +537,41 @@ const weeksData = [
 ];
 
 function WeekFruit() {
-  const { t } = useTranslation();
-  const sliderRef = useRef(null);
+    const { t } = useTranslation();
   const currentWeek = 4;
   const size = weeksData.find((w) => w.week === currentWeek)?.name.toLowerCase();
 
   const settings = {
     centerMode: true,
-    centerPadding: '0px',
+    centerPadding: '60px',
     slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
+    autoplaySpeed: 3000,
     arrows: true,
-    infinite: false,
-    initialSlide: weeksData.findIndex((w) => w.week === currentWeek),
+    infinite: true,
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 1,
-          centerMode: true,
+          centerMode: false,
         },
       },
     ],
   };
-
-  const goToCurrentWeek = () => {
-    const currentWeekIndex = weeksData.findIndex((w) => w.week === currentWeek);
-    sliderRef.current.slickGoTo(currentWeekIndex);
-  };
-
-  useEffect(() => {
-    // Center the current week card on component mount
-    goToCurrentWeek();
-  }, []);
 
   return (
     <Box sx={{ textAlign: 'center', py: 6 }}>
       <Typography
         variant="h2"
         gutterBottom
-        sx={{ color: '#dd1367', fontWeight: 'bold', mb: 6, mt: 4 }}
+        sx={{ color: '#dd1367', fontWeight: 'bold', mb: 6, mt: 4, mr: 10 }}
       >
         {t('week_info', { week: currentWeek, size })}
       </Typography>
 
-      <Box sx={{ position: 'relative', maxWidth: '1000px', margin: '0 auto' }}>
-        <Slider ref={sliderRef} {...settings}>
+      <Box sx={{ position: 'relative' }}>
+        <Slider {...settings}>
           {weeksData.map((week, index) => (
             <Box
               key={index}
@@ -599,8 +581,11 @@ function WeekFruit() {
                 alignItems: 'center',
                 height: '460px',
                 py: 4,
-                px: 2,
                 transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: week.week !== currentWeek ? 'scale(1.1)' : 'none',
+                  zIndex: week.week !== currentWeek ? 10 : 1,
+                },
               }}
             >
               <Box
@@ -618,11 +603,6 @@ function WeekFruit() {
                   bgcolor: 'background.paper',
                   boxShadow: week.week === currentWeek ? '0 0 15px rgba(221, 19, 103, 0.5)' : 3,
                   transform: week.week === currentWeek ? 'translateY(-10px)' : 'none',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: week.week !== currentWeek ? 'scale(1.05)' : 'translateY(-10px)',
-                    zIndex: week.week !== currentWeek ? 10 : 1,
-                  },
                 }}
               >
                 <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
@@ -675,56 +655,6 @@ function WeekFruit() {
           ))}
         </Slider>
       </Box>
-
-      <Button variant="contained" color="primary" onClick={goToCurrentWeek} sx={{ mt: 4 }}>
-        {t('Go to Current Week')}
-      </Button>
-
-      <style jsx="true">{`
-        .slick-slide {
-          transition: all 0.3s ease;
-        }
-        .slick-center {
-          transform: scale(1.05);
-        }
-        .slick-prev,
-        .slick-next {
-          z-index: 1;
-          width: 40px;
-          height: 40px;
-          background: #dd1367;
-          border-radius: 50%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .slick-prev:hover,
-        .slick-next:hover {
-          background-color: #b51055;
-        }
-        .slick-prev {
-          left: -50px;
-        }
-        .slick-next {
-          right: -50px;
-        }
-        .slick-prev:before,
-        .slick-next:before {
-          padding-top: 5px;
-          font-size: 30px;
-          line-height: 1;
-          opacity: 1;
-          color: white;
-          display: block;
-          text-align: center;
-        }
-        .slick-list {
-          margin: 0 -10px;
-        }
-        .slick-slide > div {
-          padding: 0 10px;
-        }
-      `}</style>
     </Box>
   );
 }

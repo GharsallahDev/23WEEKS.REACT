@@ -58,7 +58,7 @@ const Woman = () => {
                     sx={{ fontSize: '1.0rem', lineHeight: 1.6, color: '#555', mb: 3 }}
                   >
                     {t(
-                      "women_card_message",
+                      "women_card_message1",
                     )}
                   </Typography>
                   <Typography
@@ -67,7 +67,7 @@ const Woman = () => {
                     sx={{ fontSize: '1.0rem', lineHeight: 1.6, color: '#555', mb: 3 }}
                   >
                     {t(
-                      "Cherish every moment, and remember, you're not alone—your new adventure is just beginning, and we're thrilled to be part of it!",
+                      "women_card_message2",
                     )}
                   </Typography>
                   <Button
