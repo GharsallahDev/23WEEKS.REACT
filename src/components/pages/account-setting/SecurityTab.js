@@ -1,227 +1,130 @@
 import React, { useState } from 'react';
-import {
-  Avatar,
-  Box,
-  CardContent,
-  Grid,
-  IconButton,
-  Typography,
-  Button,
-  Divider,
-  Stack,
-} from '@mui/material';
-
-// components
+import { Grid, Typography, Button, Stack, CardContent, Alert } from '@mui/material';
 import BlankCard from '../../shared/BlankCard';
 import CustomTextField from '../../forms/theme-elements/CustomTextField';
 import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
-import { IconDeviceLaptop, IconDeviceMobile, IconDotsVertical } from '@tabler/icons';
 import { useTranslation } from 'react-i18next';
+import config from 'src/config'; // Make sure to import your API config
 
 const SecurityTab = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [alert, setAlert] = useState({ message: '', severity: 'info' });
 
-  const handlePasswordChange = (event) => {
+  const handlePasswordChange = async (event) => {
     event.preventDefault();
-    // Implement password change logic here
-    console.log('Password change requested');
+
+    // Validate the new password and confirm password
+    if (newPassword !== confirmPassword) {
+      setAlert({ message: t('New password and confirm password do not match'), severity: 'error' });
+      return;
+    }
+
+    try {
+      const response = await fetch(`${config.apiUrl}/auth/update-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          current_password: currentPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.msg || t('Failed to update password'));
+      }
+
+      setAlert({ message: t('Password updated successfully'), severity: 'success' });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (error) {
+      console.error('Error updating password:', error);
+      setAlert({ message: error.message, severity: 'error' });
+    }
   };
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} lg={8}>
-        <Stack spacing={3}>
-          {/* Password Change Section */}
-          <BlankCard>
-            <CardContent>
-              <Typography variant="h4" mb={2}>
-                {t('Change Password')}
-              </Typography>
-              <form onSubmit={handlePasswordChange}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <CustomFormLabel htmlFor="current-password">{t('Current Password')}</CustomFormLabel>
-                    <CustomTextField
-                      id="current-password"
-                      variant="outlined"
-                      fullWidth
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CustomFormLabel htmlFor="new-password">{t('New Password')}</CustomFormLabel>
-                    <CustomTextField
-                      id="new-password"
-                      variant="outlined"
-                      fullWidth
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CustomFormLabel htmlFor="confirm-password">
-                      {t('Confirm New Password')}
-                    </CustomFormLabel>
-                    <CustomTextField
-                      id="confirm-password"
-                      variant="outlined"
-                      fullWidth
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                    />
-                  </Grid>
-                </Grid>
-                <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-                  Change Password
-                </Button>
-              </form>
-            </CardContent>
-          </BlankCard>
+      {alert.message && (
+        <Grid item xs={12}>
+          <Alert
+            severity={alert.severity}
+            onClose={() => setAlert({ message: '', severity: 'info' })}
+          >
+            {alert.message}
+          </Alert>
+        </Grid>
+      )}
 
-          {/* Two-factor Authentication Section */}
-          <BlankCard>
-            <CardContent>
-              <Typography variant="h4" mb={2}>
-                {t('Two-factor Authentication')}
-              </Typography>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-                <Button variant="contained" color="primary">
-                  {t('Enable')}
-                </Button>
-              </Stack>
-
-              <Divider />
-
-              {/* Authentication App */}
-              <Stack direction="row" spacing={2} py={2} alignItems="center">
-                <Box>
-                  <Typography variant="h6">{t('Authentication App')}</Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {t('Google auth app')}
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto !important' }}>
-                  <Button variant="text" color="primary">
-                    {t('Setup')}
-                  </Button>
-                </Box>
-              </Stack>
-              <Divider />
-
-              {/* Another e-mail */}
-              <Stack direction="row" spacing={2} py={2} alignItems="center">
-                <Box>
-                  <Typography variant="h6">{t('Another e-mail')}</Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {t('E-mail to send verification link')}
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto !important' }}>
-                  <Button variant="text" color="primary">
-                    {t('Setup')}
-                  </Button>
-                </Box>
-              </Stack>
-              <Divider />
-
-              {/* SMS Recovery */}
-              <Stack direction="row" spacing={2} py={2} alignItems="center">
-                <Box>
-                  <Typography variant="h6">{t('SMS Recovery')}</Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {t('Your phone number')}
-                  </Typography>
-                </Box>
-                <Box sx={{ ml: 'auto !important' }}>
-                  <Button variant="text" color="primary">
-                    {t('Setup')}
-                  </Button>
-                </Box>
-              </Stack>
-            </CardContent>
-          </BlankCard>
-        </Stack>
-      </Grid>
-
-      {/* Devices Section */}
-      <Grid item xs={12} lg={4}>
+      <Grid item xs={12}>
         <BlankCard>
           <CardContent>
-            <Avatar
-              variant="rounded"
-              sx={{ bgcolor: 'primary.light', color: 'primary.main', width: 48, height: 48 }}
-            >
-              <IconDeviceLaptop size="26" />
-            </Avatar>
-
-            <Typography variant="h5" mt={2}>
-              {t('Devices')}
+            <Typography variant="h5" mb={1}>
+              {t('Change Password')}
             </Typography>
-            <Button variant="contained" color="primary">
-              {t('Sign out from all devices')}
-            </Button>
-
-            {/* iPhone 14 */}
-            <Stack direction="row" spacing={2} py={2} mt={3} alignItems="center">
-              <IconDeviceMobile size="26" />
-              <Box>
-                <Typography variant="h6">iPhone 14</Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  London UK, Oct 23 at 1:15 AM
-                </Typography>
-              </Box>
-              <Box sx={{ ml: 'auto !important' }}>
-                <IconButton>
-                  <IconDotsVertical size="22" />
-                </IconButton>
-              </Box>
-            </Stack>
-            <Divider />
-
-            {/* Macbook Air */}
-            <Stack direction="row" spacing={2} py={2} alignItems="center">
-              <IconDeviceLaptop size="26" />
-              <Box>
-                <Typography variant="h6">Macbook Air </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Gujarat India, Oct 24 at 3:15 AM
-                </Typography>
-              </Box>
-              <Box sx={{ ml: 'auto !important' }}>
-                <IconButton>
-                  <IconDotsVertical size="22" />
-                </IconButton>
-              </Box>
-            </Stack>
-            <Stack>
-              <Button variant="text" color="primary">
-                {t('Need Help ?')}
-              </Button>
-            </Stack>
+            <Typography color="textSecondary" mb={3}>
+              {t('Update your password from here')}
+            </Typography>
+            <form onSubmit={handlePasswordChange}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <CustomFormLabel htmlFor="current-password">
+                    {t('Current Password')}
+                  </CustomFormLabel>
+                  <CustomTextField
+                    id="current-password"
+                    variant="outlined"
+                    fullWidth
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <CustomFormLabel htmlFor="new-password">{t('New Password')}</CustomFormLabel>
+                  <CustomTextField
+                    id="new-password"
+                    variant="outlined"
+                    fullWidth
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <CustomFormLabel htmlFor="confirm-password">
+                    {t('Confirm New Password')}
+                  </CustomFormLabel>
+                  <CustomTextField
+                    id="confirm-password"
+                    variant="outlined"
+                    fullWidth
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </Grid>
+              </Grid>
+              <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }} mt={3}>
+                <Button size="large" type="submit" variant="contained" color="primary">
+                  {t('Save')}
+                </Button>
+              </Stack>
+            </form>
           </CardContent>
         </BlankCard>
-      </Grid>
-
-      {/* Save and Cancel Buttons */}
-      <Grid item xs={12}>
-        <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }} mt={3}>
-          <Button size="large" variant="contained" color="primary">
-            {t('Save')}
-          </Button>
-          <Button size="large" variant="text" color="error">
-            {t('Cancel')}
-          </Button>
-        </Stack>
       </Grid>
     </Grid>
   );

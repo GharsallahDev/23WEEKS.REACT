@@ -200,12 +200,9 @@ const AccountTab = () => {
             </form>
           </CardContent>
         </BlankCard>
-        <Stack direction="row" spacing={2} sx={{ justifyContent: 'end' }} mt={3}>
+        <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }} mt={3}>
           <Button size="large" variant="contained" color="primary" onClick={handleSubmit}>
             {t('Save')}
-          </Button>
-          <Button size="large" variant="text" color="error">
-            {t('Cancel')}
           </Button>
         </Stack>
       </Grid>

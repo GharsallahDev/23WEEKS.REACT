@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import AccountTab from '../../../components/pages/account-setting/AccountTab';
 import { IconBell, IconLock, IconUserCircle } from '@tabler/icons';
 import BlankCard from '../../../components/shared/BlankCard';
-import NotificationTab from '../../../components/pages/account-setting/NotificationTab';
 import SecurityTab from '../../../components/pages/account-setting/SecurityTab';
 
 const BCrumb = [
@@ -82,12 +81,6 @@ const AccountSetting = () => {
                   label={t("Security")}
                   {...a11yProps(1)}
                 />
-                <Tab
-                  iconPosition="start"
-                  icon={<IconBell size="22" />}
-                  label={t("Notifications")}
-                  {...a11yProps(2)}
-                />
               </Tabs>
             </Box>
             <Divider />
@@ -97,9 +90,6 @@ const AccountSetting = () => {
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <SecurityTab />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <NotificationTab />
               </TabPanel>
             </CardContent>
           </BlankCard>
