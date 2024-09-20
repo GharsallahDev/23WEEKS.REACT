@@ -1,49 +1,96 @@
 @import "~slick-carousel/slick/slick.css";
+
 @import "~slick-carousel/slick/slick-theme.css";
 
+ 
+
 .app {
+
   text-align: center;
+
 }
+
+ 
 
 .week-card {
+
   border: 1px solid #ddd;
+
   border-radius: 10px;
+
   padding: 40px;
+
   width: 260px;
+
   text-align: center;
+
   background-color: white;
+
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
   display: flex;
+
   flex-direction: column; /* Flexbox for vertical alignment */
+
   justify-content: space-between; /* Space between title, image, and description */
+
   height: 100%; /* Ensure card takes full height */
+
 }
+
+ 
 
 .week-card img {
+
   height: auto;
+
   margin-bottom: 15px;
+
   display: block;
+
   margin-left: auto;
+
   margin-right: auto;
+
   width: 95%;
+
 }
+
+ 
 
 .slick-slide {
+
   transition: transform 0.5s ease;
+
 }
+
+ 
 
 .slick-slide.slick-center {
+
   transform: scale(1.1);
+
 }
+
+ 
 
 .slick-prev:before, .slick-next:before {
-  color: black; 
+
+  color: black;
+
 }
 
+ 
+
 .week-slider {
+
   width: 85%;
+
   margin: 0 auto;
+
 }
+
+ 
 
 .slider-item {
   display: flex;
@@ -51,11 +98,18 @@
   align-items: stretch; /* Make sure the week-card stretches to full height */
 }
 
+ 
+
 .week-card h2, .week-card p {
+
   margin: 10px 0;
+
 }
+
+ 
 
 .slider-item .week-card {
-  height: 100%; /* Ensure all cards take the height of their parent */
-}
 
+  height: 100%; /* Ensure all cards take the height of their parent */
+
+}
