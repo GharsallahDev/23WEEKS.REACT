@@ -40,7 +40,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Woman Dashboard',
+    title: 'Pregnancy Dashboard',
     icon: IconWoman,
     href: '/dashboard/woman',
     userType: 'user',
@@ -94,7 +94,7 @@ const Menuitems = [
   {
     id: uniqueId(),
     title: 'Health Tracking',
-    icon:  IconHealthRecognition,
+    icon: IconHealthRecognition,
     href: '/ultrasound/HealthTracking',
     userType: 'doctor',
   },
