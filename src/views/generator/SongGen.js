@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, Container, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Typography, Button, Paper, Container, TextField, Checkbox, FormControlLabel, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
 import axios from 'axios';
 import breadcrumbImg from 'src/assets/images/breadcrumb/notes.png';
 import config from 'src/config';
+
 const BCrumb = [
   {
     to: '/',
@@ -17,22 +18,22 @@ const BCrumb = [
 ];
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-padding: theme.spacing(4),
-borderRadius: 16,
-boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-width: '100%',
-maxWidth: 600,
+  padding: theme.spacing(4),
+  borderRadius: 16,
+  boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+  width: '100%',
+  maxWidth: 600,
 }));
 
 const StyledContainer = styled(Container)(({ theme }) => ({
-display: 'flex',
-flexDirection: 'column',
-alignItems: 'center',
-padding: theme.spacing(2, 0),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: theme.spacing(2, 0),
 }));
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
-marginBottom: theme.spacing(3),
+  marginBottom: theme.spacing(3),
 }));
 
 const StoryGenerator = () => {
@@ -81,9 +82,7 @@ const StoryGenerator = () => {
       <StyledContainer>
         <StyledPaper>
           <StyledTypography variant="h7" align="center">
-            <h2>
-              Generate a Song
-            </h2>
+            <h2>Generate a Song</h2>
           </StyledTypography>
           <TextField
             id="description"
@@ -96,48 +95,61 @@ const StoryGenerator = () => {
             sx={{ mb: 2, width: '100%' }}
           />
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={isCustom}
-                onChange={() => setIsCustom(!isCustom)}
-                color="primary"
-              />
-            }
-            label="Custom Mode"
-          />
+          <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isCustom}
+                  onChange={() => setIsCustom(!isCustom)}
+                  color="primary"
+                />
+              }
+              label="Custom Mode"
+              sx={{ mb: 2 }}
+            />
 
-          {isCustom && (
-            <>
-              <TextField
-                id="title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter song title"
-                sx={{ mt: 2, width: '100%' }}
-              />
+            {isCustom && (
+              <>
+                <TextField
+                  id="title"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter song title"
+                  sx={{ mb: 2, width: '100%' }}
+                />
 
-              <TextField
-                id="tags"
-                type="text"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="Enter song tags (comma separated)"
-                sx={{ mt: 2, width: '100%' }}
-              />
-            </>
-          )}
+                <TextField
+                  id="tags"
+                  type="text"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  placeholder="Enter song tags (comma separated)"
+                  sx={{ mb: 2, width: '100%' }}
+                />
+              </>
+            )}
 
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={handleGenerateSong}
-            disabled={loading}
-            sx={{ mt: 2 }}
-          >
-            {loading ? 'Generating...' : 'Generate Song'}
-          </Button>
+            {/* Display a "Please wait" message with CircularProgress while loading */}
+            {loading && (
+              <Box display="flex" alignItems="center" flexDirection="column" mt={2} mb={2}>
+                <CircularProgress color="primary" />
+                <Typography color="textSecondary" sx={{ mt: 2 }}>
+                  Please wait, we are generating your song...
+                </Typography>
+              </Box>
+            )}
+
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleGenerateSong}
+              disabled={loading}
+              sx={{ mt: 2 }}
+            >
+              {loading ? 'Generating...' : 'Generate Song'}
+            </Button>
+          </Box>
 
           {/* Display any error messages */}
           {error && (
@@ -148,7 +160,6 @@ const StoryGenerator = () => {
 
           {/* Display the audio player once the song URL is available */}
           {songUrl && (
-            
             <Box mt={4} textAlign="center">
               <audio controls>
                 <source src={songUrl} type="audio/mpeg" />
@@ -163,4 +174,3 @@ const StoryGenerator = () => {
 };
 
 export default StoryGenerator;
-
