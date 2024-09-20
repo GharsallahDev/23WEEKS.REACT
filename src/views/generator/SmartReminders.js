@@ -14,8 +14,11 @@ import {
   Alert,
   AlertTitle,
   Button,
+  Card,
+  CardContent,
+  Tooltip
 } from '@mui/material';
-import { IconMicrophone, IconSquareOff, IconTrash, IconEdit } from '@tabler/icons';
+import { IconMicrophone, IconSquareOff, IconTrash, IconEdit, IconInfoCircle } from '@tabler/icons';
 import Breadcrumb from '../../layouts/full/shared/breadcrumb/Breadcrumb';
 import PageContainer from '../../components/container/PageContainer';
 import ParentCard from '../../components/shared/ParentCard';
@@ -48,6 +51,7 @@ const PregnancyRemindersTable = () => {
     setStatus('Recording...');
     setAlert('');
     setTranscription('');
+    setEvents([]); // Clear previous events
     setRecording(true);
 
     try {
@@ -95,8 +99,14 @@ const PregnancyRemindersTable = () => {
 
           const processResult = await processResponse.json();
           setEvents(processResult.events || []);
-          setStatus('Recording stopped.');
-          setAlert('Transcription completed successfully!');
+
+          if (processResult.events && processResult.events.length > 0) {
+            setStatus('Recording stopped.');
+            setAlert('Transcription completed successfully!');
+          } else {
+            setStatus('Recording stopped.');
+            setAlert('Reminder not set. Please try again with the correct format as shown in the example.');
+          }
         } catch (error) {
           setStatus('Error during transcription.');
           setAlert(`Error: ${error.message}`);
@@ -128,16 +138,17 @@ const PregnancyRemindersTable = () => {
     let [hour, minute] = time.split(':');
     let ampm = 'AM';
 
-    if (parseInt(hour, 10) >= 12) {
+    hour = parseInt(hour, 10);
+    if (hour >= 12) {
       ampm = 'PM';
-      if (parseInt(hour, 10) > 12) {
+      if (hour > 12) {
         hour -= 12;
       }
-    } else if (hour === '0') {
+    } else if (hour === 0) {
       hour = 12; // Midnight case
     }
 
-    return `${hour}${ampm}`;
+    return `${hour}:${minute} ${ampm}`;
   };
 
   const getDayOfWeek = (dateString) => {
@@ -157,27 +168,53 @@ const PregnancyRemindersTable = () => {
         </Box>
       </Breadcrumb>
       <ParentCard title={t('Pregnancy Reminders')}>
+
+        {/* Example Section */}
+        <Box mt={2} mb={2} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+          <Card variant="outlined" sx={{ width: '100%', maxWidth: '500px', borderRadius: '16px', boxShadow: 2 }}>
+            <CardContent>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <IconInfoCircle size={28} color="primary" />
+                <Box>
+                  <Typography variant="h6" fontWeight="500">
+                    {t('How to Set a Reminder')}
+                  </Typography>
+                  <Typography variant="body1">
+                    {t(
+                      'Please provide details like the event name, date, time, and recurrence to ensure your reminder is saved correctly. Example: "Doctor Appointment at 3:00 PM every month".'
+                    )}
+                  </Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Box>
+
         <Paper variant="outlined">
           <Box mt={2} display="flex" flexDirection="column" alignItems="center">
             <Box display="flex" justifyContent="center" gap={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleStartRecording}
-                disabled={recording}
-                startIcon={<IconMicrophone />}
-              >
-                {t('Start Recording')}
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleStopRecording}
-                disabled={!recording}
-                startIcon={<IconSquareOff />}
-              >
-                {t('Stop Recording')}
-              </Button>
+              <Tooltip title={t('Ensure you specify the event, date, time, and occurrence clearly.')}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleStartRecording}
+                  disabled={recording}
+                  startIcon={<IconMicrophone />}
+                >
+                  {t('Start Recording')}
+                </Button>
+              </Tooltip>
+              <Tooltip title={t('Click to stop recording and process your voice note.')}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleStopRecording}
+                  disabled={!recording}
+                  startIcon={<IconSquareOff />}
+                >
+                  {t('Stop Recording')}
+                </Button>
+              </Tooltip>
             </Box>
             <Typography variant="h6" mt={2}>
               {recording ? t('Recording...') : t('Record Voice')}
@@ -190,7 +227,9 @@ const PregnancyRemindersTable = () => {
                       ? 'info'
                       : status.startsWith('Error')
                       ? 'error'
-                      : 'success'
+                      : status === 'Recording stopped.' && events.length > 0
+                      ? 'success'
+                      : 'warning'
                   }
                 >
                   <AlertTitle>{status}</AlertTitle>
