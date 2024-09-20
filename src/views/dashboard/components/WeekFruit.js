@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Typography, Box, Button } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
+import week1 from 'src/assets/images/fruits/week 1.png';
+import week2 from 'src/assets/images/fruits/week 2.png';
 import week3 from 'src/assets/images/fruits/week 3.png';
 import week4 from 'src/assets/images/fruits/week 4.png';
 import week5 from 'src/assets/images/fruits/week 5.png';
@@ -46,6 +47,30 @@ import week40 from 'src/assets/images/fruits/week 40.png';
 import week41 from 'src/assets/images/fruits/week 41.png';
 
 const weeksData = [
+  {
+    week: 1,
+
+    name: 'baby is forming',
+
+    imgSrc: week1,
+
+    title: 'Week 1',
+
+    description:
+      'At week 1, your body is preparing for pregnancy. Though you are not technically pregnant yet, your body is laying the groundwork, including ovulation and hormonal changes.',
+  },
+  {
+    week: 2,
+
+    name: 'baby is forming',
+
+    imgSrc: week2,
+
+    title: 'Week 2',
+
+    description:
+      'At week 2, ovulation occurs, and the egg is ready to be fertilized. This is the critical moment where conception may happen.',
+  },
   {
     week: 3,
 
