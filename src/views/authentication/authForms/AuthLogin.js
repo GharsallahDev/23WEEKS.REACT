@@ -21,7 +21,7 @@ import CustomFormLabel from '../../../components/forms/theme-elements/CustomForm
 import { setCredentials } from '../../../store/auth/AuthSlice';
 
 import config from 'src/config';
-import ErrorBoundary from '../../../utils/ErrorBoundary'; // Import ErrorBoundary
+import ErrorBoundary from '../../../utils/ErrorBoundary';
 
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -54,13 +54,24 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
 
         if (response.ok) {
           const data = await response.json();
+          const userData = {
+            type: data.type,
+            full_name: data.full_name,
+            email: values.email,
+            current_pregnancy_week: data.current_pregnancy_week,
+          };
           dispatch(
             setCredentials({
-              user: { type: data.type, full_name: data.full_name, email: values.email },
+              user: userData,
               token: data.access_token,
             }),
           );
 
+          if (data.type === 'doctor') {
+            navigate('/dashboard/doctor');
+          } else {
+            navigate('/dashboard/woman');
+          }
         } else {
           const errorData = await response.json();
           formik.setErrors({ submit: errorData.msg || 'An error occurred during login.' });
@@ -75,7 +86,9 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
   });
 
   return (
-    <ErrorBoundary> {/* Wrap the form with ErrorBoundary */}
+    <ErrorBoundary>
+      {' '}
+      {/* Wrap the form with ErrorBoundary */}
       <form onSubmit={formik.handleSubmit}>
         {title && (
           <Typography fontWeight="700" variant="h3" mb={1}>
@@ -132,13 +145,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
           />
           <FormGroup>
             <FormControlLabel
-              control={
-                <CustomCheckbox
-                  id="remember_me"
-                  name="remember_me"
-                  color="primary"
-                />
-              }
+              control={<CustomCheckbox id="remember_me" name="remember_me" color="primary" />}
               label="Remember me"
             />
           </FormGroup>

@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, Container, TextField, Checkbox, FormControlLabel, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Container,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  CircularProgress,
+  Alert,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
@@ -36,7 +47,7 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(3),
 }));
 
-const StoryGenerator = () => {
+const SongGenerator = () => {
   const [description, setDescription] = useState('');
   const [isCustom, setIsCustom] = useState(false);
   const [title, setTitle] = useState('');
@@ -60,7 +71,7 @@ const StoryGenerator = () => {
       });
 
       if (response.status === 200) {
-        setSongUrl(response.data.song_url);  // Set the song URL to play
+        setSongUrl(response.data.song_url); // Set the song URL to play
       } else {
         setError(response.data.error || 'An error occurred while generating the song.');
       }
@@ -84,6 +95,12 @@ const StoryGenerator = () => {
           <StyledTypography variant="h7" align="center">
             <h2>Generate a Song</h2>
           </StyledTypography>
+
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            Please note that the song generation process may take a few minutes. We appreciate your
+            patience.
+          </Alert>
+
           <TextField
             id="description"
             type="text"
@@ -173,4 +190,4 @@ const StoryGenerator = () => {
   );
 };
 
-export default StoryGenerator;
+export default SongGenerator;

@@ -45,6 +45,15 @@ const formatText = (text) => {
     ));
 };
 
+const AudioControlsContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  marginTop: theme.spacing(2),
+  '& > *': {
+    margin: theme.spacing(0, 1),
+  },
+}));
+
 const StoryGenerator = () => {
   const [topic, setTopic] = useState('');
   const [chapters, setChapters] = useState(0);
@@ -57,8 +66,8 @@ const StoryGenerator = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [soundLoading, setSoundLoading] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false); // State to track audio playback
-  const audioRef = useRef(null); // Ref to manage audio element
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   const handleLanguageChange = (e) => setLanguage(e.target.value);
   const handleTopicChange = (e) => setTopic(e.target.value);
@@ -149,14 +158,6 @@ const StoryGenerator = () => {
     }
   };
 
-  const handleOpenPdf = () => {
-    if (pdfUrl) {
-      window.open(pdfUrl, '_blank');
-    } else {
-      console.error('PDF URL is not available.');
-    }
-  };
-
   useEffect(() => {
     if (storyContent.length && currentIndex < storyContent.length) {
       const timeoutId = setTimeout(() => {
@@ -222,12 +223,7 @@ const StoryGenerator = () => {
           />
 
           <label htmlFor="language">Choose Language:</label>
-          <select
-            id="language"
-            value={language}
-            onChange={handleLanguageChange}
-            className="input"
-          >
+          <select id="language" value={language} onChange={handleLanguageChange} className="input">
             <option value="en">English</option>
             <option value="fr">French</option>
             <option value="am">Amharic</option>
@@ -257,26 +253,16 @@ const StoryGenerator = () => {
             </Button>
           )}
 
-          {audioUrl && (
-            <div>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handlePlayPause}
-                style={{ marginTop: '20px' }}
-              >
+          {audioUrl && language === 'en' && (
+            <AudioControlsContainer>
+              <Button color="primary" variant="contained" onClick={handlePlayPause}>
                 {isPlaying ? 'Pause' : 'Play'}
               </Button>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={handleStop}
-                style={{ marginTop: '20px', marginLeft: '10px' }}
-              >
+              <Button color="secondary" variant="contained" onClick={handleStop}>
                 Stop
               </Button>
               <audio ref={audioRef} src={audioUrl} />
-            </div>
+            </AudioControlsContainer>
           )}
 
           <div className="story-container">

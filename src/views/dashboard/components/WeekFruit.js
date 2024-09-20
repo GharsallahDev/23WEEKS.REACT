@@ -2,8 +2,11 @@ import React, { useRef, useEffect } from 'react';
 import Slider from 'react-slick';
 import { useTranslation } from 'react-i18next';
 import { Typography, Box, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+
 import week1 from 'src/assets/images/fruits/week 1.png';
 import week2 from 'src/assets/images/fruits/week 2.png';
 import week3 from 'src/assets/images/fruits/week 3.png';
@@ -564,7 +567,9 @@ const weeksData = [
 function WeekFruit() {
   const { t } = useTranslation();
   const sliderRef = useRef(null);
-  const currentWeek = 4;
+
+  const currentWeek = useSelector((state) => state.auth.user?.current_pregnancy_week) || 1;
+
   const size = weeksData.find((w) => w.week === currentWeek)?.name.toLowerCase();
 
   const settings = {
@@ -595,13 +600,18 @@ function WeekFruit() {
 
   const goToCurrentWeek = () => {
     const currentWeekIndex = weeksData.findIndex((w) => w.week === currentWeek);
-    sliderRef.current.slickGoTo(currentWeekIndex);
+    if (sliderRef.current) {
+      sliderRef.current.slickGoTo(currentWeekIndex);
+    }
   };
 
   useEffect(() => {
-    // Center the current week card on component mount
     goToCurrentWeek();
-  }, []);
+  }, [currentWeek]);
+
+  if (!currentWeek) {
+    return <div>Loading pregnancy information...</div>;
+  }
 
   return (
     <Box sx={{ textAlign: 'center', py: 6 }}>

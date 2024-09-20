@@ -3,17 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Box, Typography, Button, TextField, MenuItem, Container, Paper } from '@mui/material';
+import { Box, Typography, Button, TextField, Container, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { setCredentials } from '../../store/auth/AuthSlice';
 import PageContainer from 'src/components/container/PageContainer';
+import config from 'src/config';
 
 const validationSchema = yup.object({
-  pregnancyStage: yup.string().required('Pregnancy stage is required'),
-  dueDate: yup.date().required('Pregnancy Date is required'),
+  pregnancyStartDate: yup.date().required('Pregnancy Start Date is required'),
 });
 
-// Styled components for consistency
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   borderRadius: 16,
@@ -29,39 +28,61 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   padding: theme.spacing(2, 0),
 }));
 
-const DoctorSignupExtra = () => {
+const PatientSignupExtra = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      pregnancyStage: '',
-      dueDate: '',
+      pregnancyStartDate: new Date().toISOString().split('T')[0],
     },
     validationSchema,
     onSubmit: async (values) => {
       const registrationData = JSON.parse(sessionStorage.getItem('registrationData'));
-      const updatedUserData = { ...registrationData.user, ...values };
 
-      dispatch(
-        setCredentials({
-          user: updatedUserData,
-          token: registrationData.token,
-        }),
-      );
+      try {
+        const response = await fetch(`${config.apiUrl}/auth/register/patient-info`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${registrationData.token}`,
+          },
+          body: JSON.stringify({
+            pregnancy_start_date: values.pregnancyStartDate,
+          }),
+        });
 
-      navigate('/dashboard/woman');
+        if (response.ok) {
+          const data = await response.json();
+          const updatedUserData = {
+            ...registrationData.user,
+            ...data.user,
+          };
+
+          dispatch(
+            setCredentials({
+              user: updatedUserData,
+              token: registrationData.token,
+            }),
+          );
+
+          navigate('/dashboard/woman');
+        } else {
+          const errorData = await response.json();
+          formik.setErrors({ submit: errorData.msg || 'An error occurred during registration.' });
+        }
+      } catch (err) {
+        formik.setErrors({ submit: 'An error occurred. Please try again.' });
+        console.error('Registration error:', err);
+      }
     },
   });
 
-  const pregnancyStages = [
-    { value: 'first_trimester', label: 'First Trimester' },
-    { value: 'second_trimester', label: 'Second Trimester' },
-    { value: 'third_trimester', label: 'Third Trimester' },
-  ];
-
   return (
-    <PageContainer title="Patient Sign Up" description="Additional information for patient registration">
+    <PageContainer
+      title="Patient Sign Up"
+      description="Additional information for patient registration"
+    >
       <StyledContainer>
         <StyledPaper>
           <Typography variant="h5" align="center" mb={3}>
@@ -69,34 +90,16 @@ const DoctorSignupExtra = () => {
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <TextField
-              select
-              label="Pregnancy Stage"
-              name="pregnancyStage"
-              value={formik.values.pregnancyStage}
-              onChange={formik.handleChange}
-              error={formik.touched.pregnancyStage && Boolean(formik.errors.pregnancyStage)}
-              helperText={formik.touched.pregnancyStage && formik.errors.pregnancyStage}
               fullWidth
-              margin="normal"
-            >
-              {pregnancyStages.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              fullWidth
-              id="dueDate"
-              name="dueDate"
-              label="Pregnancy Date"
+              id="pregnancyStartDate"
+              name="pregnancyStartDate"
+              label="Pregnancy Start Date"
               type="date"
               InputLabelProps={{ shrink: true }}
-              value={formik.values.dueDate}
+              value={formik.values.pregnancyStartDate}
               onChange={formik.handleChange}
-              error={formik.touched.dueDate && Boolean(formik.errors.dueDate)}
-              helperText={formik.touched.dueDate && formik.errors.dueDate}
+              error={formik.touched.pregnancyStartDate && Boolean(formik.errors.pregnancyStartDate)}
+              helperText={formik.touched.pregnancyStartDate && formik.errors.pregnancyStartDate}
               margin="normal"
             />
 
@@ -112,4 +115,4 @@ const DoctorSignupExtra = () => {
   );
 };
 
-export default DoctorSignupExtra;
+export default PatientSignupExtra;
