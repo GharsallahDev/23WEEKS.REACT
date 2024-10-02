@@ -54,12 +54,19 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
 
         if (response.ok) {
           const data = await response.json();
+
           const userData = {
-            type: data.type,
+            id: data.id,
             full_name: data.full_name,
-            email: values.email,
+            email: data.email,
+            type: data.type,
+            avatar: data.avatar,
             current_pregnancy_week: data.current_pregnancy_week,
+            pregnancy_info: data.pregnancy_info,
+            created_at: data.created_at,
+            updated_at: data.updated_at,
           };
+
           dispatch(
             setCredentials({
               user: userData,

@@ -7,6 +7,7 @@ import CustomFormLabel from '../../forms/theme-elements/CustomFormLabel';
 import { setCredentials } from 'src/store/auth/AuthSlice';
 import config from 'src/config';
 import user1 from 'src/assets/images/profile/user-1.jpg';
+import user2 from 'src/assets/images/profile/user-10.jpg';
 import { useTranslation } from 'react-i18next';
 
 const AccountTab = () => {
@@ -14,7 +15,7 @@ const AccountTab = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const [avatar, setAvatar] = useState(user.avatar || user1);
+  const [avatar, setAvatar] = useState(user.avatar || (user.type === 'doctor' ? user1 : user2));
   const [formData, setFormData] = useState({
     full_name: user.full_name || '',
     email: user.email || '',
@@ -40,9 +41,8 @@ const AccountTab = () => {
     }
   };
 
-  // Updated handleAvatarReset to reset the avatar to an empty string
   const handleAvatarReset = () => {
-    setAvatar(''); // Reset to empty string
+    setAvatar('');
   };
 
   const handleSubmit = async (e) => {
@@ -52,7 +52,6 @@ const AccountTab = () => {
       formDataToSend.append('full_name', formData.full_name);
       formDataToSend.append('email', formData.email);
 
-      // Send empty string for avatar if it was reset
       if (avatar === '') {
         formDataToSend.append('avatar', '');
       } else if (avatar !== user.avatar && avatar !== user1) {
@@ -79,7 +78,7 @@ const AccountTab = () => {
             ...user,
             full_name: result.full_name,
             email: result.email,
-            avatar: result.avatar || user1, // Update avatar or fallback to default
+            avatar: result.avatar || user1,
           },
           token: localStorage.getItem('token'),
         }),
@@ -92,7 +91,6 @@ const AccountTab = () => {
     }
   };
 
-  // Helper function to convert data URI to Blob
   const dataURItoBlob = (dataURI) => {
     const byteString = atob(dataURI.split(',')[1]);
     const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];

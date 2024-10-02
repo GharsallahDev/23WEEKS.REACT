@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Box, Typography, Button, TextField, Container, Paper } from '@mui/material';
+import { differenceInMonths, isValid } from 'date-fns';
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Paper,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { setCredentials } from '../../store/auth/AuthSlice';
 import PageContainer from 'src/components/container/PageContainer';
 import config from 'src/config';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 
 const validationSchema = yup.object({
-  pregnancyStartDate: yup.date().required('Pregnancy Start Date is required'),
+  pregnancyStartDate: yup
+    .date()
+    .required('Pregnancy Start Date is required')
+    .test('is-too-old', 'Pregnancy Start Date cannot be more than 9 months ago', (value) => {
+      if (!isValid(value)) return false;
+      const today = new Date();
+      return differenceInMonths(today, value) <= 9;
+    }),
+  gynecologistId: yup.number().nullable(),
 });
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -31,16 +54,40 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 const PatientSignupExtra = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch(`${config.apiUrl}/api/doctor_list`);
+        if (response.ok) {
+          const data = await response.json();
+          setDoctors(data);
+        } else {
+          console.error('Failed to fetch doctors');
+        }
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
-      pregnancyStartDate: new Date().toISOString().split('T')[0],
+      pregnancyStartDate: null,
+      gynecologistId: '',
     },
     validationSchema,
     onSubmit: async (values) => {
       const registrationData = JSON.parse(sessionStorage.getItem('registrationData'));
 
       try {
+        const formattedDate = values.pregnancyStartDate
+          ? values.pregnancyStartDate.toISOString().split('T')[0]
+          : null;
+
         const response = await fetch(`${config.apiUrl}/auth/register/patient-info`, {
           method: 'POST',
           headers: {
@@ -48,7 +95,8 @@ const PatientSignupExtra = () => {
             Authorization: `Bearer ${registrationData.token}`,
           },
           body: JSON.stringify({
-            pregnancy_start_date: values.pregnancyStartDate,
+            pregnancy_start_date: formattedDate,
+            gynecologist_id: values.gynecologistId || null,
           }),
         });
 
@@ -89,19 +137,53 @@ const PatientSignupExtra = () => {
             Pregnancy Information
           </Typography>
           <form onSubmit={formik.handleSubmit}>
-            <TextField
-              fullWidth
-              id="pregnancyStartDate"
-              name="pregnancyStartDate"
-              label="Pregnancy Start Date"
-              type="date"
-              InputLabelProps={{ shrink: true }}
-              value={formik.values.pregnancyStartDate}
-              onChange={formik.handleChange}
-              error={formik.touched.pregnancyStartDate && Boolean(formik.errors.pregnancyStartDate)}
-              helperText={formik.touched.pregnancyStartDate && formik.errors.pregnancyStartDate}
-              margin="normal"
-            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Pregnancy Start Date"
+                value={formik.values.pregnancyStartDate}
+                onChange={(date) => formik.setFieldValue('pregnancyStartDate', date)}
+                renderInput={(params) => (
+                  <CustomTextField
+                    {...params}
+                    fullWidth
+                    margin="normal"
+                    error={
+                      formik.touched.pregnancyStartDate && Boolean(formik.errors.pregnancyStartDate)
+                    }
+                    helperText={
+                      formik.touched.pregnancyStartDate && formik.errors.pregnancyStartDate
+                    }
+                  />
+                )}
+              />
+            </LocalizationProvider>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="gynecologist-label">Gynecologist</InputLabel>
+              <Select
+                labelId="gynecologist-label"
+                id="gynecologistId"
+                name="gynecologistId"
+                value={formik.values.gynecologistId}
+                onChange={formik.handleChange}
+                label="Gynecologist"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {doctors.map((doctor) => (
+                  <MenuItem key={doctor.id} value={doctor.id}>
+                    {doctor.full_name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            {formik.errors.submit && (
+              <Typography color="error" variant="body2">
+                {formik.errors.submit}
+              </Typography>
+            )}
 
             <Box mt={3}>
               <Button color="primary" variant="contained" fullWidth type="submit">
