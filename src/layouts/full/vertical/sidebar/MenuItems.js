@@ -139,6 +139,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: 'Chat',
+    icon: IconMessage2,
+    href: '/chat',
+    userType: 'doctor',
+  },
+  {
+    id: uniqueId(),
     title: 'Notes',
     icon: IconNotes,
     href: '/apps/notes',
