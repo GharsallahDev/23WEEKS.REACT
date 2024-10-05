@@ -10,14 +10,15 @@ import {
   Badge,
 } from '@mui/material';
 import { formatDistanceToNowStrict } from 'date-fns';
-import defaultAvatar from 'src/assets/images/profile/user-10.jpg';
+import defaultPatientAvatar from 'src/assets/images/profile/user-10.jpg';
+import defaultUserAvatar from 'src/assets/images/profile/user-1.jpg';
 import { useSelector } from 'react-redux';
 
 const ChatListing = ({ conversations, onPatientSelect, selectedPatient, doctorName }) => {
   const user = useSelector((state) => state.auth.user);
 
-  const getAvatarSrc = (avatarUrl) => {
-    return avatarUrl || defaultAvatar;
+  const getAvatarSrc = (avatarUrl, isUser = false) => {
+    return avatarUrl || (isUser ? defaultUserAvatar : defaultPatientAvatar);
   };
 
   return (
@@ -40,7 +41,7 @@ const ChatListing = ({ conversations, onPatientSelect, selectedPatient, doctorNa
         >
           <Avatar
             alt={user.full_name}
-            src={getAvatarSrc(user.avatar)}
+            src={getAvatarSrc(user.avatar, true)}
             sx={{ width: 54, height: 54 }}
           />
         </Badge>

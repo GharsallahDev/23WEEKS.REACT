@@ -21,6 +21,11 @@ const BCrumb = [
   },
 ];
 
+const UserType = {
+  USER: 'user',
+  GYNECOLOGIST: 'gynecologist',
+};
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,11 +58,25 @@ const AccountSetting = () => {
     setValue(newValue);
   };
 
+  const isUser = user?.type === UserType.USER;
+
+  const tabs = [
+    { icon: <IconUserCircle size="22" />, label: t('Account'), component: <AccountTab /> },
+    ...(isUser
+      ? [
+          {
+            icon: <IconBabyCarriage size="22" />,
+            label: t('Pregnancy'),
+            component: <PregnancyTab />,
+          },
+        ]
+      : []),
+    { icon: <IconLock size="22" />, label: t('Security'), component: <SecurityTab /> },
+  ];
+
   return (
     <PageContainer title="Account Setting" description="this is Account Setting page">
-      {/* breadcrumb */}
       <Breadcrumb title="Account Setting" items={BCrumb} />
-      {/* end breadcrumb */}
 
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -70,46 +89,24 @@ const AccountSetting = () => {
                 aria-label="basic tabs example"
                 variant="scrollable"
               >
-                <Tab
-                  iconPosition="start"
-                  icon={<IconUserCircle size="22" />}
-                  label={t('Account')}
-                  {...a11yProps(0)}
-                />
-                {/* Move Pregnancy tab here, only show if user type is 'user' */}
-                {user?.type === 'user' && (
+                {tabs.map((tab, index) => (
                   <Tab
+                    key={index}
                     iconPosition="start"
-                    icon={<IconBabyCarriage size="22" />}
-                    label={t('Pregnancy')}
-                    {...a11yProps(1)}
+                    icon={tab.icon}
+                    label={tab.label}
+                    {...a11yProps(index)}
                   />
-                )}
-                <Tab
-                  iconPosition="start"
-                  icon={<IconLock size="22" />}
-                  label={t('Security')}
-                  {...a11yProps(user?.type === 'user' ? 2 : 1)}
-                />
+                ))}
               </Tabs>
             </Box>
             <Divider />
             <CardContent>
-              <TabPanel value={value} index={0}>
-                <AccountTab />
-              </TabPanel>
-              {/* Adjusted index for PregnancyTab based on user type */}
-              {user?.type === 'user' && (
-                <TabPanel value={value} index={1}>
-                  <PregnancyTab />
+              {tabs.map((tab, index) => (
+                <TabPanel key={index} value={value} index={index}>
+                  {tab.component}
                 </TabPanel>
-              )}
-              <TabPanel
-                value={user?.type === 'user' ? value : value - 1}
-                index={user?.type === 'user' ? 2 : 1}
-              >
-                <SecurityTab />
-              </TabPanel>
+              ))}
             </CardContent>
           </BlankCard>
         </Grid>
