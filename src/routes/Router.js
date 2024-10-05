@@ -111,6 +111,7 @@ const AnomalyDetection = Loadable (lazy(() => import('../views/ultrasound/Anomal
 const HealthTracking = Loadable(lazy(() => import('../views/ultrasound/HealthTracking')));
 const BabyNameGenerator = Loadable(lazy(() => import('../views/generator/BabyNameGenerator')));
 const ChatBot = Loadable(lazy(() => import('../views/generator/Bot')));
+const Chat = Loadable(lazy(() => import('../views/chat/Chat')));
 const StoryGeneration = Loadable(lazy(() => import('../views/generator/StoryGenerator.js')));
 const SongGenerator = Loadable(lazy(() => import('../views/generator/SongGen')));
 
@@ -317,6 +318,14 @@ const Router = [
         element: (
           <ProtectedRoute allowedTypes={['user']}>
             <ChatBot />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/chat',
+        element: (
+          <ProtectedRoute allowedTypes={['doctor']}>
+            <Chat />
           </ProtectedRoute>
         ),
       },

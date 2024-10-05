@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { differenceInMonths, isValid } from 'date-fns';
+import { differenceInMonths, isValid, isPast } from 'date-fns';
 import {
   Box,
   Typography,
@@ -27,9 +27,15 @@ import CustomTextField from '../../components/forms/theme-elements/CustomTextFie
 const validationSchema = yup.object({
   pregnancyStartDate: yup
     .date()
+    .nullable()
     .required('Pregnancy Start Date is required')
-    .test('is-too-old', 'Pregnancy Start Date cannot be more than 9 months ago', (value) => {
-      if (!isValid(value)) return false;
+    .test('is-valid-date', 'Invalid date', (value) => value === null || isValid(value))
+    .test('is-not-future', 'Pregnancy Start Date cannot be in the future', (value) => {
+      if (!value) return true;
+      return isPast(value);
+    })
+    .test('is-not-too-old', 'Pregnancy Start Date cannot be more than 9 months ago', (value) => {
+      if (!value) return true;
       const today = new Date();
       return differenceInMonths(today, value) <= 9;
     }),
@@ -84,9 +90,11 @@ const PatientSignupExtra = () => {
       const registrationData = JSON.parse(sessionStorage.getItem('registrationData'));
 
       try {
-        const formattedDate = values.pregnancyStartDate
-          ? values.pregnancyStartDate.toISOString().split('T')[0]
-          : null;
+        if (!values.pregnancyStartDate) {
+          throw new Error('Pregnancy Start Date is required');
+        }
+
+        const formattedDate = values.pregnancyStartDate.toISOString().split('T')[0];
 
         const response = await fetch(`${config.apiUrl}/auth/register/patient-info`, {
           method: 'POST',
@@ -120,7 +128,7 @@ const PatientSignupExtra = () => {
           formik.setErrors({ submit: errorData.msg || 'An error occurred during registration.' });
         }
       } catch (err) {
-        formik.setErrors({ submit: 'An error occurred. Please try again.' });
+        formik.setErrors({ submit: err.message || 'An error occurred. Please try again.' });
         console.error('Registration error:', err);
       }
     },
@@ -153,8 +161,11 @@ const PatientSignupExtra = () => {
                     helperText={
                       formik.touched.pregnancyStartDate && formik.errors.pregnancyStartDate
                     }
+                    inputProps={{ ...params.inputProps, readOnly: true }}
+                    onClick={params.inputProps.onClick}
                   />
                 )}
+                maxDate={new Date()} // This ensures no future dates can be selected
               />
             </LocalizationProvider>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Avatar,
   List,
@@ -15,75 +15,56 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 import Scrollbar from '../../custom-scroll/Scrollbar';
+import { SelectChat, fetchChats, SearchChat } from '../../../store/apps/chat/ChatSlice';
+import { last } from 'lodash';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { IconChevronDown, IconSearch } from '@tabler/icons';
-import chatbotIcon from 'src/assets/images/chat/gpt.png';
-
-// Static list of chats
-const staticChats = [
-  {
-    id: 1,
-    name: 'Chat 1',
-    messages: [
-      {
-        senderId: 1,
-        msg: 'Hello!',
-        type: 'text',
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Chat 2',
-    messages: [
-      {
-        senderId: 2,
-        msg: 'How are you?',
-        type: 'text',
-      },
-    ],
-  },
-];
+import user1 from 'src/assets/images/profile/user-1.jpg';
 
 const ChatListing = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [searchText, setSearchText] = useState('');
-  const [activeChat, setActiveChat] = useState(null);
+  const dispatch = useDispatch();
+  const activeChat = useSelector((state) => state.chatReducer.chatContent);
 
-  const open = Boolean(anchorEl);
+  useEffect(() => {
+    dispatch(fetchChats());
+  }, [dispatch]);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const filterChats = (chats, cSearch) => {
+    if (chats)
+      return chats.filter((t) => t.name.toLocaleLowerCase().includes(cSearch.toLocaleLowerCase()));
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSearch = (event) => {
-    setSearchText(event.target.value);
-  };
-
-  const filterChats = (chats, searchText) => {
-    if (searchText) {
-      return chats.filter((chat) => chat.name.toLowerCase().includes(searchText.toLowerCase()));
-    }
     return chats;
   };
 
+  const chats = useSelector((state) =>
+    filterChats(state.chatReducer.chats, state.chatReducer.chatSearch),
+  );
+
   const getDetails = (conversation) => {
+    let displayText = '';
+
     const lastMessage = conversation.messages[conversation.messages.length - 1];
     if (lastMessage) {
       const sender = lastMessage.senderId === conversation.id ? 'You: ' : '';
       const message = lastMessage.type === 'image' ? 'Sent a photo' : lastMessage.msg;
-      return `${sender}${message}`;
+      displayText = `${sender}${message}`;
     }
-    return '';
+
+    return displayText;
   };
 
+  const lastActivity = (chat) => last(chat.messages)?.createdAt;
 
-  const chats = filterChats(staticChats, searchText);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div>
@@ -100,13 +81,13 @@ const ChatListing = () => {
           overlap="circular"
           color="success"
         >
-          <Avatar alt="Gyno" src={chatbotIcon} sx={{ width: 50, height: 50 }} />
+          <Avatar alt="Remy Sharp" src={user1} sx={{ width: 54, height: 54 }} />
         </Badge>
         <Box>
           <Typography variant="body1" fontWeight={600}>
-            Dr Gyno
+            John Deo
           </Typography>
-          <Typography variant="body2">Advanced Prenatal Care Agent</Typography>
+          <Typography variant="body2">Marketing Manager</Typography>
         </Box>
       </Box>
       {/* ------------------------------------------- */}
@@ -127,7 +108,7 @@ const ChatListing = () => {
             ),
           }}
           fullWidth
-          onChange={handleSearch}
+          onChange={(e) => dispatch(SearchChat(e.target.value))}
         />
       </Box>
       {/* ------------------------------------------- */}
@@ -160,11 +141,11 @@ const ChatListing = () => {
           </Menu>
         </Box>
         <Scrollbar sx={{ height: { lg: 'calc(100vh - 100px)', md: '100vh' }, maxHeight: '600px' }}>
-          {chats.length ? (
+          {chats && chats.length ? (
             chats.map((chat) => (
               <ListItemButton
                 key={chat.id}
-                onClick={() => setActiveChat(chat.id)}
+                onClick={() => dispatch(SelectChat(chat.id))}
                 sx={{
                   mb: 0.5,
                   py: 2,
@@ -173,6 +154,27 @@ const ChatListing = () => {
                 }}
                 selected={activeChat === chat.id}
               >
+                <ListItemAvatar>
+                  <Badge
+                    color={
+                      chat.status === 'online'
+                        ? 'success'
+                        : chat.status === 'busy'
+                        ? 'error'
+                        : chat.status === 'away'
+                        ? 'warning'
+                        : 'secondary'
+                    }
+                    variant="dot"
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    overlap="circular"
+                  >
+                    <Avatar alt="Remy Sharp" src={chat.thumb} sx={{ width: 42, height: 42 }} />
+                  </Badge>
+                </ListItemAvatar>
                 <ListItemText
                   primary={
                     <Typography variant="subtitle2" fontWeight={600} mb={0.5}>
@@ -185,6 +187,13 @@ const ChatListing = () => {
                   }}
                   sx={{ my: 0 }}
                 />
+                <Box sx={{ flexShrink: '0' }} mt={0.5}>
+                  <Typography variant="body2">
+                    {formatDistanceToNowStrict(new Date(lastActivity(chat)), {
+                      addSuffix: false,
+                    })}
+                  </Typography>
+                </Box>
               </ListItemButton>
             ))
           ) : (

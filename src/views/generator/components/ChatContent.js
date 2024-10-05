@@ -1,11 +1,11 @@
-import React from 'react';
-import { Typography, Avatar, ListItemAvatar, Box } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
+import { Box, Typography, Avatar } from '@mui/material';
 import Scrollbar from 'src/components/custom-scroll/Scrollbar';
 import chatIcon from 'src/assets/images/chat/gpt.png';
-import { keyframes } from '@emotion/react';
+import { formatDistanceToNowStrict } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import img1 from 'src/assets/images/profile/user-1.jpg';
-import img2 from 'src/assets/images/profile/user-10.jpg';
+import user1 from 'src/assets/images/profile/user-1.jpg';
+import { keyframes } from '@emotion/react';
 
 const typingAnimation = keyframes`
   0% { opacity: .2; }
@@ -13,26 +13,68 @@ const typingAnimation = keyframes`
   100% { opacity: .2; }
 `;
 
-const ChatContent = ({ messages, isTyping, chatMode, user }) => {
+const ChatContent = ({ messages, isTyping, chatMode, user, gynecologist }) => {
   const { t } = useTranslation();
+  const messagesEndRef = useRef(null);
 
-  const getAvatarSrc = (sender) => {
-    if (sender === 'bot') return chatIcon;
-    if (sender === 'doctor') return user?.pregnancy_info?.gynecologist?.avatar || img1;
-    return img2; // Default for user
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const getSenderName = (sender) => {
-    if (sender === 'bot') return t('Dr Gyno');
-    if (sender === 'doctor')
-      return user?.pregnancy_info?.gynecologist?.full_name || t('Gynecologist');
-    return t('You');
+  useEffect(scrollToBottom, [messages]);
+
+  const getAvatarSrc = (isBot) => {
+    if (chatMode === 'bot') {
+      return isBot ? chatIcon : user?.avatar || user1;
+    } else {
+      return isBot ? user?.pregnancy_info?.gynecologist?.avatar || user1 : user?.avatar || user1;
+    }
+  };
+
+  const getSenderName = (isBot) => {
+    if (chatMode === 'bot') {
+      return isBot ? t('Dr Gyno') : t('You');
+    } else {
+      return isBot ? gynecologist?.full_name || t('Gynecologist') : t('You');
+    }
+  };
+
+  const isMessageFromBot = (message) => {
+    return message.is_bot === true || message.sender === 'bot' || message.sender === 'doctor';
   };
 
   return (
-    <Scrollbar style={{ flexGrow: 1 }}>
-      <Box p={3}>
-        {messages.length === 0 ? (
+    <Scrollbar style={{ height: '100%', overflow: 'auto' }}>
+      <Box sx={{ padding: 2 }}>
+        {messages.length > 0 ? (
+          messages.map((message, index) => {
+            const isBot = isMessageFromBot(message);
+            return (
+              <Box
+                key={message.id || `message-${index}`}
+                sx={{
+                  display: 'flex',
+                  justifyContent: isBot ? 'flex-start' : 'flex-end',
+                  mb: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    maxWidth: '70%',
+                    backgroundColor: isBot ? 'grey.200' : 'primary.light',
+                    borderRadius: 2,
+                    padding: 1,
+                  }}
+                >
+                  <Typography variant="body1">{message.content}</Typography>
+                  <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
+                    {formatDistanceToNowStrict(new Date(message.timestamp), { addSuffix: true })}
+                  </Typography>
+                </Box>
+              </Box>
+            );
+          })
+        ) : (
           <Box
             display="flex"
             flexDirection="column"
@@ -49,68 +91,20 @@ const ChatContent = ({ messages, isTyping, chatMode, user }) => {
               {t('Type a message below to get started.')}
             </Typography>
           </Box>
-        ) : (
-          messages.map((message, index) => (
-            <Box key={index} mb={2}>
-              {message.sender !== 'user' ? (
-                <Box display="flex">
-                  <ListItemAvatar>
-                    <Avatar
-                      alt={getSenderName(message.sender)}
-                      src={getAvatarSrc(message.sender)}
-                      sx={{ width: 40, height: 40 }}
-                    />
-                  </ListItemAvatar>
-                  <Box>
-                    <Typography variant="body2" color="grey.400" mb={1}>
-                      {getSenderName(message.sender)}
-                    </Typography>
-                    <Box
-                      sx={{
-                        p: 2,
-                        backgroundColor: 'grey.100',
-                        borderRadius: '10px',
-                        maxWidth: '80%',
-                      }}
-                    >
-                      <Typography>{message.content}</Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              ) : (
-                <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
-                  <Box
-                    sx={{
-                      p: 2,
-                      backgroundColor: 'primary.light',
-                      borderRadius: '10px',
-                      maxWidth: '80%',
-                    }}
-                  >
-                    <Typography>{message.content}</Typography>
-                  </Box>
-                </Box>
-              )}
-            </Box>
-          ))
         )}
         {isTyping && (
-          <Box display="flex" alignItems="center" mb={2}>
-            <ListItemAvatar>
-              <Avatar
-                alt={getSenderName(chatMode)}
-                src={getAvatarSrc(chatMode)}
-                sx={{ width: 40, height: 40 }}
-              />
-            </ListItemAvatar>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Avatar
+              alt={getSenderName(true)}
+              src={getAvatarSrc(true)}
+              sx={{ width: 40, height: 40, mr: 1 }}
+            />
             <Box
               sx={{
-                width: 60,
-                height: 30,
-                backgroundColor: 'grey.100',
-                borderRadius: '10px',
-                display: 'flex',
-                justifyContent: 'center',
+                p: 1,
+                backgroundColor: 'grey.200',
+                borderRadius: 2,
+                display: 'inline-flex',
                 alignItems: 'center',
               }}
             >
@@ -131,6 +125,7 @@ const ChatContent = ({ messages, isTyping, chatMode, user }) => {
             </Box>
           </Box>
         )}
+        <div ref={messagesEndRef} />
       </Box>
     </Scrollbar>
   );
