@@ -6,7 +6,7 @@ import Features from 'src/components/landingpage/features/Features';
 import Testimonials from 'src/components/landingpage/testimonial/Testimonial';
 import AiTechnology from 'src/components/landingpage/AiTechnology';
 import Pricing from 'src/components/landingpage/Pricing';
-import CallToAction from 'src/components/landingpage/CallToAction';
+import Download from 'src/components/landingpage/Download/Download';
 import Footer from 'src/components/landingpage/footer/Footer';
 import AnimateFadeIn from 'src/components/landingpage/animation/Animation';
 
@@ -20,14 +20,9 @@ const Landingpage = () => {
   return (
     <Box sx={{ width: '100vw', maxWidth: '100%', overflowX: 'hidden' }}>
       <Header />
-      <AnimatedSection>
-        <HeroSection />
-      </AnimatedSection>
+      <HeroSection />
       <AnimatedSection delay={0.2}>
         <Features />
-      </AnimatedSection>
-      <AnimatedSection delay={0.4}>
-        <Testimonials />
       </AnimatedSection>
       <AnimatedSection delay={0.6}>
         <AiTechnology />
@@ -35,8 +30,11 @@ const Landingpage = () => {
       <AnimatedSection delay={0.8}>
         <Pricing />
       </AnimatedSection>
+      <AnimatedSection delay={0.4}>
+        <Testimonials />
+      </AnimatedSection>
       <AnimatedSection delay={1}>
-        <CallToAction />
+        <Download />
       </AnimatedSection>
       <Footer />
       <style>{`

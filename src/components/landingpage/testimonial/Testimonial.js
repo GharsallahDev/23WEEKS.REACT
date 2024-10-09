@@ -1,66 +1,68 @@
-import React from 'react';
-import { Box, Container, Typography, Card, CardContent, Avatar, Grid } from '@mui/material';
-import { motion } from 'framer-motion';
-
-const testimonials = [
-  {
-    name: 'Dr. Ahmed Souki',
-    role: 'Gynecologist',
-    content: '23Weeks has been an invaluable tool in my practice. The advanced features for monitoring and reporting have significantly improved my ability to provide top-notch care to my patients.',
-    avatar: '/path/to/dr-ahmed-souki.jpg', 
-  },
-  {
-    name: 'Dr. Zied Kammoun',
-    role: 'Gynecologist and Expert Partner',
-    content: 'I am truly impressed with the 23Weeks solution. Its comprehensive approach to prenatal care is unmatched, and I’m proud to partner with such an innovative solution.',
-    avatar: '/path/to/dr-zied-kammoun.jpg', 
-  },
-  {
-    name: 'Amina Diallo',
-    role: 'Expectant Mother',
-    content: '23Weeks has been a blessing throughout my pregnancy. The personalized care plans and symptom tracking have provided me with much-needed support and reassurance.',
-    avatar: '/path/to/amina-diallo.jpg',
-  },
-];
+import React, { useEffect, useRef } from 'react';
+import { testimonials } from '../../../constants/index.js';
+import TestimonialItem from '../../TestimonialItem.js';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Testimonials = () => {
+  const halfLength = Math.floor(testimonials.length / 2);
+  const sectionRef = useRef(null);
+
+  // Register the ScrollTrigger plugin
+  gsap.registerPlugin(ScrollTrigger);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+
+    gsap.fromTo(
+      el.querySelectorAll('.testimonial-item'),
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  }, []);
+
   return (
-    <Box sx={{ py: 8, bgcolor: 'background.default' }}>
-      <Container maxWidth="lg">
-        <Typography variant="h2" align="center" gutterBottom>
-          What Our Users Say
-        </Typography>
-        <Grid container spacing={4} sx={{ mt: 4 }}>
-          {testimonials.map((testimonial, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                style={{ height: '100%' }}
-              >
-                <Card elevation={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <Typography variant="body1" paragraph sx={{ fontStyle: 'italic', mb: 2, flexGrow: 1 }}>
-                      "{testimonial.content}"
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar src={testimonial.avatar} sx={{ width: 60, height: 60, mr: 2 }} />
-                      <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{testimonial.name}</Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {testimonial.role}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+    <section ref={sectionRef} className="relative z-2 py-24 md:py-28 lg:py-40">
+      <div className="container block lg:flex">
+        <div className="testimonials_head-res relative z-2 mr-20 flex-300">
+          <p className="caption mb-5 max-md:mb-2.5">Wall of Support</p>
+          <h3 className="h3 max-md:h5 text-p6">What Our Users Say</h3>
+        </div>
+
+        <div className="testimonials_inner-after testimonials_inner-before relative -my-12 -mr-3 flex items-start max-lg:static max-md:block">
+          <div className="testimonials_group-after flex-50">
+            {testimonials.slice(0, halfLength).map((testimonial) => (
+              <TestimonialItem
+                key={testimonial.id}
+                item={testimonial}
+                containerClassName="testimonial-item last:after:hidden last:after:max-md:block"
+              />
+            ))}
+          </div>
+
+          <div className="flex-50">
+            {testimonials.slice(halfLength).map((testimonial) => (
+              <TestimonialItem
+                key={testimonial.id}
+                item={testimonial}
+                containerClassName="testimonial-item last:after:hidden after:right-auto after:left-0 after:max-md:-left-4 md:px-12"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

@@ -1,66 +1,98 @@
-import React from 'react';
-import { Box, Container, Typography, Grid, Paper } from '@mui/material';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import DataUsageIcon from '@mui/icons-material/DataUsage';
-import SecurityIcon from '@mui/icons-material/Security';
+import { technology } from '../../constants/index';
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, Card, CardContent, styled } from '@mui/material';
+import { Element } from 'react-scroll';
+import clsx from 'clsx';
+import { gsap } from 'gsap';
 
-const features = [
-  {
-    icon: SmartToyIcon,
-    title: 'Advanced AI Algorithms',
-    description:
-      'Our AI uses state-of-the-art machine learning models to provide personalized advice and support.',
+const StyledCard = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  transition: 'transform 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'translateY(-10px)',
   },
-  {
-    icon: DataUsageIcon,
-    title: 'Data-Driven Insights',
-    description:
-      'We analyze vast amounts of medical data to offer accurate predictions and recommendations.',
-  },
-  {
-    icon: SecurityIcon,
-    title: 'Privacy and Security',
-    description:
-      'Your data is protected with enterprise-grade encryption and follows strict privacy guidelines.',
-  },
-];
+}));
+
+const CardContentStyled = styled(CardContent)(({ theme }) => ({
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+}));
 
 const AiTechnology = () => {
+  // Add GSAP animations
+  useEffect(() => {
+    gsap.fromTo(
+      '.tech-card',
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        delay: 0.2,
+        stagger: 0.1,
+        ease: 'power3.out',
+      }
+    );
+  }, []);
+
   return (
-    <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
-      <Container maxWidth="lg">
-        <Typography variant="h3" component="h2" align="center" gutterBottom>
-          Our AI Technology
-        </Typography>
-        <Typography variant="h6" align="center" color="text.secondary" paragraph>
-          Leveraging cutting-edge artificial intelligence to revolutionize prenatal care
-        </Typography>
-        <Grid container spacing={4} sx={{ mt: 4 }}>
-          {features.map((feature) => (
-            <Grid item xs={12} md={4} key={feature.title}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <feature.icon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" component="h3" gutterBottom align="center">
-                  {feature.title}
-                </Typography>
-                <Typography variant="body1" color="text.secondary" align="center">
-                  {feature.description}
-                </Typography>
-              </Paper>
+    <section>
+      <Element name="pricing" id="Features">
+        <div className="container">
+          <div className="pricing-head_before relative mx-auto pt-3 max-xl:max-w-4xl max-lg:border-none max-md:pb-32 max-md:pt-16">
+            <h3 className="h4 max-lg:h4 max-md:h5 z-3 relative mx-auto mb-5 mt-40 max-w-lg text-center text-p6 max-md:mb-11 max-sm:max-w-sm">
+              Our AI Technology
+            </h3>
+            <h6 className=" text-lg max-lg:h4 max-md:h5 z-3 relative mx-auto mb-14 max-w-lg text-center text-gray-500 max-md:mb-11 max-sm:max-w-sm">
+              Leveraging cutting-edge artificial intelligence to revolutionize prenatal care
+            </h6>
+          </div>
+          <div className="scroll-hide relative z-2 mt-16 flex items-start max-xl:gap-5 max-xl:overflow-auto max-xl:pt-6">
+            <Grid container spacing={3}>
+              {technology.map((tech, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <div style={{ height: '100%' }}>
+                    <StyledCard
+                      className="tech-card"
+                      style={{
+                        backgroundColor: '#fff6f9',
+                        borderRadius: '25px',
+                        padding: '15px',
+                      }}
+                    >
+                      <CardContentStyled className=" items-center text-center">
+                        <Box className=" place-items-center">
+                          <tech.icon
+                            sx={{
+                              fontSize: 70,
+                              color: 'primary.main',
+                              mb: 2,
+                              backgroundColor: '#ffe4f0',
+                              borderRadius: '50%',
+                            }}
+                            style={{ padding: '15px' }}
+                          />
+                          <h3 className=" text-xl font-medium font-poppins z-3 relative mx-auto max-w-lg text-p6 max-md:mb-11 max-sm:max-w-sm">
+                            {tech.title}
+                          </h3>
+                        </Box>
+                        <h6 className=" text-base mt-5  font-poppins z-3 relative mx-auto max-w-lg text-gray-500 max-md:mb-11 max-sm:max-w-sm ">
+                          {tech.description}
+                        </h6>
+                      </CardContentStyled>
+                    </StyledCard>
+                  </div>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+          </div>
+        </div>
+      </Element>
+    </section>
   );
 };
 

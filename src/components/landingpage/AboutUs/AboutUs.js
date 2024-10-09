@@ -1,196 +1,298 @@
 import React from 'react';
-import { Box, Container, Typography, Grid, Card, CardContent, Avatar, Button, styled } from '@mui/material';
-import Header from 'src/components/landingpage/header/Header';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
-import GroupIcon from '@mui/icons-material/Group';
-import InfoIcon from '@mui/icons-material/Info';
-import iconmission from '@mui/icons-material/Interests';
-import NadiaImage from '../../../assets/images/profile/NADIA.jpg';
-import EyaImage from '../../../assets/images/profile/EYA.jpg';
-import MalekImage from '../../../assets/images/profile/MALEK.jpg';
-import NourImage from '../../../assets/images/profile/NOUR.jpg';
-import CallToAction from 'src/components/landingpage/CallToAction';
+import { Box, Container, Typography, Grid, Avatar, IconButton } from '@mui/material';
+import AboutImage from '../../../assets/images/aboutus/Untitled-14.png'; // Use your image path
+import Header from '../header/Header';
+import { motion } from 'framer-motion';
+import { Element } from 'react-scroll';
+import { members } from '../../../constants/index';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Footer from 'src/components/landingpage/footer/Footer';
-import AnimateFadeIn from 'src/components/landingpage/animation/Animation';
-import QuoteImage from '../../../assets/images/aboutus/Untitled-16.png'; 
-import LOGO from '../../../assets/images/aboutus/Untitled-14.png';
-import vision from '../../../assets/images/aboutus/Untitled-3.png';
-import preg2 from '../../../assets/images/aboutus/Untitled-7.png';
-import preg3 from '../../../assets/images/aboutus/Untitled-13.png';
-import PregnantWomenImage from '../../../assets/images/aboutus/Untitled-12.png'; 
-import africa from '../../../assets/images/aboutus/africa.png'
 
-const AnimatedSection = ({ children, delay = 0 }) => (
-  <AnimateFadeIn>
-    <Box sx={{ opacity: 0, animation: `fadeIn 0.5s ease-out ${delay}s forwards` }}>{children}</Box>
-  </AnimateFadeIn>
-);
-const StyledCard = styled(Card)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  height: '70%',
-  transition: 'transform 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'translateY(-10px)',
-  },
-}));
-
-const CardContentStyled = styled(CardContent)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const TeamMemberCard = styled(Card)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
-  height: '100%',
-  padding: theme.spacing(2),
-  transition: 'transform 0.3s ease-in-out',
-  '&:hover': {
-    transform: 'scale(1.05)',
-  },
-}));
-
-const SocialMediaButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
-
-const TitleWithIcon = ({ icon: Icon, text }) => (
-  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 4 }}>
-    <Icon sx={{ color: '#dd1367', mr: 2 }} />
-    <Typography variant="h4" align="center" sx={{ color: '#dd1367' }}>
-      {text}
-    </Typography>
-  </Box>
-);
-
-const AboutUs = () => {
+const AboutAndMission = () => {
   return (
-    <Box sx={{ py: 6, bgcolor: 'background.default' }}>
+    <>
       <Header />
-      
-      <Container maxWidth="lg">
-        <Typography sx={{ py: 8, color: '#dd1367' }} variant="h1" align="center" gutterBottom>
-          About Us
-        </Typography>
+      <section className="relative pt-32 max-lg:pt-52 max-lg:pb-36 max-md:pt-36 max-md:pb-32">
+        <Element name="hero">
+          <div className="container">
+            <Grid
+              container
+              spacing={4}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ textAlign: { xs: 'center', md: 'left' } }} // Center text on small screens, left align on larger
+            >
+              {/* About Text */}
+              <Grid item xs={12} md={6}>
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }} // Start faded and lower
+                  animate={{ opacity: 1, y: 0 }} // Move up and fade in
+                  transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                >
+                  <motion.h1
+                    className="font-poppins mb-6 h2 text-black uppercase max-lg:mb- max-lg:h2 max-md:mb-4 max-md:text-5xl max-md:leading-12"
+                    initial={{ opacity: 0, y: 50 }} // Starts faded out and below its position
+                    animate={{ opacity: 1, y: 0 }} // Moves up and fades in
+                    transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                  >
+                    About{' '}
+                    <span className="text-p6" style={{ fontFamily: 'Anton' }}>
+                      {' '}
+                      23 Weeks
+                    </span>
+                  </motion.h1>
+                  <motion.p
+                    className="max-w-440 mb-14 body-1 max-md:mb-10"
+                    initial={{ opacity: 0, x: -30 }} // Starts faded out and shifted left
+                    animate={{ opacity: 1, x: 0 }} // Moves to its correct position
+                    transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }} // Slight delay for a staggered effect
+                  >
+                    23WEEKS simplifies the pregnancy journey for parents and boosts gynecological
+                    care with AI to enhance patient management and diagnostics.
+                  </motion.p>
+                </motion.div>
+              </Grid>
 
-        <TitleWithIcon icon={InfoIcon} text="23Weeks" />
-        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
-          23WEEKS simplifies the pregnancy journey for parents and boosts gynecological care with AI to enhance patient management and diagnostics.
-        </Typography>
-        
-        <TitleWithIcon icon={iconmission} text="Our Mission" />
-        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
-        Our mission is to support both pregnant women and gynecologists by providing AI-driven tools and insights that enhance prenatal care, improve patient outcomes, and simplify the management of pregnancy-related tasks.
-        </Typography>
-
-        <Box sx={{ textAlign: 'center' }}>
-            <img src={vision} alt="Inspiring Quote" style={{ maxWidth: '30%', borderRadius: '8px' }} />
-          </Box>
-        <TitleWithIcon icon={EmojiObjectsIcon} text="Our Vision" />
-        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
-          To revolutionize pregnancy management and gynecological care by leveraging AI to provide personalized support, improve diagnostic accuracy, and streamline patient management.
-        </Typography>
-
-        <Box sx={{ textAlign: 'center' }}>
-            <img src={QuoteImage} alt="Inspiring Quote" style={{ maxWidth: '30%', borderRadius: '8px' }} />
-        </Box>
-        <TitleWithIcon icon={GroupIcon} text="Meet Team Harissa" />
-        <Typography variant="h6" align="center" paragraph sx={{ fontSize: '1.25rem' }}>
-          We are a group of passionate Tunisian AI students focused on improving healthcare in Africa. Our mission is to develop AI-driven solutions to enhance medical outcomes. We aim to advance medical practice and accessibility in the region.
-        </Typography>
-        <Typography sx={{ py: 8 }} variant="h1" align="center" gutterBottom>
-        
-        </Typography>
-        <Grid container spacing={10} sx={{ mb: 8 }}>
-          <Grid item xs={12} sm={6} md={6}>
-            <TeamMemberCard>
-              <Avatar sx={{ width: 120, height: 120, mb: 2 }} src={NadiaImage} />
-              <CardContentStyled>
-                <Typography variant="h6">Nadia Trabelsi</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  AI Engineer
-                </Typography>
-              </CardContentStyled>
-            </TeamMemberCard>
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <TeamMemberCard>
-              <Avatar sx={{ width: 120, height: 120, mb: 2 }} src={EyaImage} />
-              <CardContentStyled>
-                <Typography variant="h6">Eya Ben Moulehem</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  AI Engineer
-                </Typography>
-              </CardContentStyled>
-            </TeamMemberCard>
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <TeamMemberCard>
-              <Avatar sx={{ width: 120, height: 120, mb: 2 }} src={MalekImage} />
-              <CardContentStyled>
-                <Typography variant="h6">Malek Gharsallah</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  AI Engineer
-                </Typography>
-              </CardContentStyled>
-            </TeamMemberCard>
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <TeamMemberCard>
-              <Avatar sx={{ width: 120, height: 120, mb: 2 }} src={NourImage} />
-              <CardContentStyled>
-                <Typography variant="h6">Nour Ben Ammar</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  AI Engineer
-                </Typography>
-              </CardContentStyled>
-            </TeamMemberCard>
-          </Grid>
-        </Grid>
-
-        <Typography variant="h4" align="center" gutterBottom>
-          Follow Us
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <SocialMediaButton variant="outlined" color="primary" startIcon={<FacebookIcon />} href="https://www.facebook.com/profile.php?id=61564761629073&locale=fr_FR" target="_blank">
-            Facebook
-          </SocialMediaButton>
-          <SocialMediaButton variant="outlined" color="primary" startIcon={<InstagramIcon />} href="https://www.instagram.com/twenty3weeks?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
-            Instagram
-          </SocialMediaButton>
-          
-        </Box>
-        <Grid container spacing={2} justifyContent="center" sx={{ mb: 8 }}>
-            <Grid item xs={12} sm={4}>
-              <img src={PregnantWomenImage} alt="Pregnant Women 1" style={{ width: '100%', borderRadius: '8px' }} />
+              {/* About Image */}
+              <Grid item xs={12} md={6}>
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }} // Start faded and shifted to the right
+                  animate={{ opacity: 1, x: 0 }} // Move to correct position
+                  transition={{ duration: 1, ease: 'easeOut' }}
+                >
+                  <Box sx={{ textAlign: 'center' }}>
+                    <img
+                      src={AboutImage}
+                      alt="23weeks"
+                      style={{ maxWidth: '100%', borderRadius: '8px' }}
+                    />
+                  </Box>
+                </motion.div>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <img src={preg2} alt="Pregnant Women 2" style={{ width: '100%', borderRadius: '8px' }} />
+          </div>
+        </Element>
+      </section>
+      <section className="relative pt-32 max-lg:pt-52 max-lg:pb-36 max-md:pt-36 max-md:pb-32">
+        <Element name="hero">
+          <div className="container">
+            <Grid
+              container
+              spacing={4}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ textAlign: { xs: 'center', md: 'left' } }} // Center text on small screens, left align on larger
+            >
+              {/* About Image */}
+              <Grid item xs={12} md={6}>
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }} // Start faded and shifted to the left
+                  animate={{ opacity: 1, x: 0 }} // Move to correct position
+                  transition={{ duration: 1, ease: 'easeOut' }}
+                >
+                  <Box sx={{ textAlign: 'center' }}>
+                    <img
+                      src={AboutImage}
+                      alt="23weeks"
+                      style={{ maxWidth: '100%', borderRadius: '8px' }}
+                    />
+                  </Box>
+                </motion.div>
+              </Grid>
+
+              {/* About Text */}
+              <Grid item xs={12} md={6}>
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }} // Start faded and lower
+                  animate={{ opacity: 1, y: 0 }} // Move up and fade in
+                  transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                >
+                  <motion.h1
+                    className="font-poppins mb-6 h2 text-black uppercase max-lg:mb- max-lg:h2 max-md:mb-4 max-md:text-5xl max-md:leading-12"
+                    initial={{ opacity: 0, y: 50 }} // Starts faded out and below its position
+                    animate={{ opacity: 1, y: 0 }} // Moves up and fades in
+                    transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                  >
+                    Our <span className="text-p6">Mission</span>
+                  </motion.h1>
+                  <motion.p
+                    className="max-w-440 mb-14 body-1 max-md:mb-10"
+                    initial={{ opacity: 0, x: -30 }} // Starts faded out and shifted left
+                    animate={{ opacity: 1, x: 0 }} // Moves to its correct position
+                    transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }} // Slight delay for a staggered effect
+                  >
+                    Our mission is to support both pregnant women and gynecologists by providing
+                    AI-driven tools and insights that enhance prenatal care, improve patient
+                    outcomes, and simplify the management of pregnancy-related tasks.
+                  </motion.p>
+                </motion.div>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <img src={preg3} alt="Pregnant Women 3" style={{ width: '100%', borderRadius: '8px' }} />
+          </div>
+        </Element>
+      </section>
+      <section className="relative pt-32 max-lg:pt-52 max-lg:pb-36 max-md:pt-36 max-md:pb-32">
+        <Element name="hero">
+          <div className="container">
+            <Grid
+              container
+              spacing={4}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ textAlign: { xs: 'center', md: 'left' } }}
+            >
+              {/* About Text */}
+              <Grid item xs={12} md={6}>
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }} // Start faded and lower
+                  animate={{ opacity: 1, y: 0 }} // Move up and fade in
+                  transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                >
+                  <motion.h1
+                    className="font-poppins mb-6 h2 text-black uppercase max-lg:mb- max-lg:h2 max-md:mb-4 max-md:text-5xl max-md:leading-12"
+                    initial={{ opacity: 0, y: 50 }} // Starts faded out and below its position
+                    animate={{ opacity: 1, y: 0 }} // Moves up and fades in
+                    transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                  >
+                    Our{' '}
+                    <span className="text-p6" style={{ fontFamily: 'Anton' }}>
+                      {' '}
+                      Vision
+                    </span>
+                  </motion.h1>
+                  <motion.p
+                    className="max-w-440 mb-14 body-1 max-md:mb-10"
+                    initial={{ opacity: 0, x: -30 }} // Starts faded out and shifted left
+                    animate={{ opacity: 1, x: 0 }} // Moves to its correct position
+                    transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }} // Slight delay for a staggered effect
+                  >
+                    To revolutionize pregnancy management and gynecological care by leveraging AI to
+                    provide personalized support, improve diagnostic accuracy, and streamline
+                    patient management.
+                  </motion.p>
+                </motion.div>
+              </Grid>
+
+              {/* About Image */}
+              <Grid item xs={12} md={6}>
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }} // Start faded and shifted to the right
+                  animate={{ opacity: 1, x: 0 }} // Move to correct position
+                  transition={{ duration: 1, ease: 'easeOut' }}
+                >
+                  <Box sx={{ textAlign: 'center' }}>
+                    <img
+                      src={AboutImage}
+                      alt="23weeks"
+                      style={{ maxWidth: '100%', borderRadius: '8px' }}
+                    />
+                  </Box>
+                </motion.div>
+              </Grid>
             </Grid>
-          </Grid>
-      </Container>
-      <AnimatedSection delay={1}>
-        <CallToAction />
-      </AnimatedSection>
-      <Footer />
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
-    </Box>
+          </div>
+        </Element>
+      </section>
+      <section className="relative mt-40 max-lg:pt-52 max-lg:pb-36 max-md:pt-36 max-md:pb-32">
+        <Element name="hero">
+          <div className="container">
+            <Grid
+              container
+              spacing={4}
+              justifyContent="center"
+              alignItems="center"
+              sx={{ textAlign: { xs: 'center', md: 'left' } }} // Center text on small screens, left align on larger
+            >
+              {/* About Text */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }} // Start faded and lower
+                animate={{ opacity: 1, y: 0 }} // Move up and fade in
+                transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+              >
+                <motion.h1
+                  className="font-poppins mb-6 h2 text-black uppercase max-lg:mb- max-lg:h2 max-md:mb-4 max-md:text-5xl max-md:leading-12"
+                  initial={{ opacity: 0, y: 50 }} // Starts faded out and below its position
+                  animate={{ opacity: 1, y: 0 }} // Moves up and fades in
+                  transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                >
+                  Meet Team <span className="text-red-500"> Harissa</span>
+                </motion.h1>
+              </motion.div>
+            </Grid>
+            <motion.p
+              className="text-center mb-14 body-1 max-md:mb-10"
+              initial={{ opacity: 0, y: 50 }} // Starts faded out and shifted left
+              animate={{ opacity: 1, y: 0 }} // Moves to its correct position
+              transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+            >
+              We are a group of passionate Tunisian AI students focused on improving healthcare in
+              Africa. Our mission is to develop AI-driven solutions to enhance medical outcomes. We
+              aim to advance medical practice and accessibility in the region.
+            </motion.p>
+            {/* Team Members */}
+            <Grid container spacing={4} justifyContent="center">
+              {members.map((member, index) => (
+                <Grid item xs={12} sm={6} md={3} key={index}>
+                  <Box
+                    sx={{
+                      textAlign: 'center',
+                      bgcolor: '#fff',
+                      p: 3,
+                      borderRadius: '8px',
+                      boxShadow: 2,
+                      marginBottom: '60px',
+                    }}
+                  >
+                    {/* Image with rounded border and shadow */}
+                    <Box
+                      component="img"
+                      src={member.icon}
+                      alt={member.title}
+                      sx={{
+                        width: 120,
+                        height: 120,
+                        borderRadius: '50%',
+                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Adds shadow to the image
+                        mx: 'auto',
+                        mb: 2,
+                        objectFit: 'cover', // Ensures image fits within its container
+                      }}
+                    />
+                    <motion.h4
+                      className="font-poppins text-lg font-semibold text-p6 mt-3 max-lg:mb- max-lg:h2 max-md:mb-4 max-md:text-5xl max-md:leading-12"
+                      initial={{ opacity: 0, y: 50 }} // Starts faded out and below its position
+                      animate={{ opacity: 1, y: 0 }} // Moves up and fades in
+                      transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                    >
+                      {member.title}
+                    </motion.h4>
+                    <motion.h4
+                      className="font-poppins text-sm font-medium text-gray-700 mt-3 max-lg:mb- max-lg:h2 max-md:mb-4 max-md:text-5xl max-md:leading-12"
+                      initial={{ opacity: 0, y: 50 }} // Starts faded out and below its position
+                      animate={{ opacity: 1, y: 0 }} // Moves up and fades in
+                      transition={{ duration: 1, ease: 'easeOut' }} // Smooth entrance
+                    >
+                      {member.description}
+                    </motion.h4>
+                    {/* LinkedIn Button */}
+                    <IconButton
+                      component="a"
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LinkedInIcon className="text-p6" />
+                    </IconButton>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </div>
+        </Element>
+        <Footer />
+      </section>
+    </>
   );
 };
 
-export default AboutUs;
+export default AboutAndMission;
