@@ -1,8 +1,9 @@
-import { Element, Link as LinkScroll } from 'react-scroll';
+import { Element } from 'react-scroll';
 import Image from 'src/assets/images/landingpage/test.png';
 import zap from 'src/assets/images/landingpage/zap.svg';
 import Button from "../Button.js";
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const HeroSection = () => {
   return (
@@ -31,8 +32,7 @@ const HeroSection = () => {
               diagnostics.
             </motion.p>
 
-            {/* Button with Hover Animation */}
-            <LinkScroll to="features" offset={-100} spy smooth>
+            <Link to="/auth/login">
               <motion.div
                 whileHover={{ scale: 1.1 }} // Scales up slightly on hover
                 whileTap={{ scale: 0.95 }} // Scales down slightly on click
@@ -40,7 +40,7 @@ const HeroSection = () => {
               >
                 <Button icon={zap}>Try it now</Button>
               </motion.div>
-            </LinkScroll>
+            </Link>
           </div>
 
           {/* Floating Image with Animation */}

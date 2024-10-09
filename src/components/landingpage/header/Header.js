@@ -1,11 +1,15 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { Link as LinkScroll } from 'react-scroll';
+import { Link as LinkScroll, scroller } from 'react-scroll';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 
 const Header = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollTarget, setScrollTarget] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,18 +23,42 @@ const Header = () => {
     };
   }, []);
 
-  const NavLink = ({ title, offset = 0 }) => (
-    <LinkScroll
-      onClick={() => setIsOpen(false)}
-      to={title}
-      offset={offset}
-      spy
-      smooth
-      activeClass="nav-active"
+  useEffect(() => {
+    if (scrollTarget && location.pathname === '/') {
+      scroller.scrollTo(scrollTarget, {
+        duration: 800,
+        delay: 0,
+        smooth: 'easeInOutQuart',
+        offset: scrollTarget === 'Home' ? -200 : -100,
+      });
+      setScrollTarget(null);
+    }
+  }, [location, scrollTarget]);
+
+  const handleNavClick = (section) => {
+    if (location.pathname !== '/') {
+      setScrollTarget(section); 
+      navigate('/');
+    } else {
+      scroller.scrollTo(section, {
+        duration: 800,
+        delay: 0,
+        smooth: 'easeInOutQuart',
+        offset: section === 'Home' ? -200 : -100,
+      });
+    }
+  };
+
+  const NavLink = ({ title, section }) => (
+    <div
+      onClick={() => {
+        setIsOpen(false);
+        handleNavClick(section);
+      }}
       className="base-bold text-black-100 uppercase transition-colors duration-500 cursor-pointer hover:text-p6 max-lg:my-4 max-lg:h5"
     >
       {title}
-    </LinkScroll>
+    </div>
   );
 
   return (
@@ -55,9 +83,9 @@ const Header = () => {
             <nav className="max-lg:relative max-lg:z-2 max-lg:my-auto">
               <ul className="flex max-lg:block max-lg:px-12">
                 <li className="nav-li">
-                  <NavLink title="Home" offset={-200} />
+                  <NavLink title="Home" section="Home" />
                   <div className="dot" />
-                  <NavLink title="Features" offset={-100} />
+                  <NavLink title="Features" section="Features" />
                 </li>
 
                 <li className="nav-logo">
@@ -75,9 +103,15 @@ const Header = () => {
                 </li>
 
                 <li className="nav-li">
-                  <NavLink title="Pricing" />
+                  <NavLink title="Pricing" section="Pricing" />
                   <div className="dot" />
-                  <NavLink title="About" />
+                  <Link
+                    to="/about"
+                    onClick={() => setIsOpen(false)}
+                    className="base-bold text-black-100 uppercase transition-colors duration-500 cursor-pointer hover:text-p6 max-lg:my-4 max-lg:h5"
+                  >
+                    About
+                  </Link>
                 </li>
               </ul>
             </nav>
