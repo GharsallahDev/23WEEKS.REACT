@@ -9,6 +9,9 @@ import {
   Paper,
   CircularProgress,
   Fade,
+  Card,
+  Grid, 
+  CardContent
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -135,7 +138,10 @@ const UltrasoundReportGenerator = () => {
       setIsGenerating(false);
     }
   };
-
+  const InformationCard = styled(Card)({
+    marginTop: 24,
+    backgroundColor: 'primary.light',
+  });
   const handleReset = () => {
     setImage(null);
     setReport('');
@@ -159,6 +165,21 @@ const UltrasoundReportGenerator = () => {
           <img src={breadcrumbImg} alt={t('AI Report Generator')} width="155px" />
         </Box>
       </Breadcrumb>
+      <Grid item xs={12}>
+  <InformationCard>
+    <CardContent>
+      <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+        Importance of Automated Report Generation
+      </Typography>
+      <Typography variant="body1" paragraph>
+        Automated report generation streamlines the documentation process by compiling detailed analysis from ultrasound data into comprehensive reports. This feature saves time for healthcare professionals, ensures consistency, and provides patients with clear, actionable insights about their pregnancy, facilitating more efficient and informed medical decision-making.
+      </Typography>
+    </CardContent>
+  </InformationCard>
+</Grid>
+<Typography sx={{ py: 3 }}>
+        
+        </Typography>
       <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 4 }}>
         {steps.map((label) => (
           <Step key={label}>

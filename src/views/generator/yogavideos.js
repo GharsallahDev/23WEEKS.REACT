@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Paper, Container, TextField, Grid, Button } from '@mui/material';
+import { Box, Typography, Paper, Container, TextField, Grid, Button, Alert } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
@@ -88,6 +88,11 @@ function YogaVideos() {
       </Breadcrumb>
 
       <StyledContainer>
+        {/* Alert Message */}
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          Please consult your doctor before doing these exercises.
+        </Alert>
+
         <TextField
           type="text"
           className="search-input"

@@ -6,8 +6,7 @@ import { motion } from 'framer-motion';
 import { Element } from 'react-scroll';
 import { members } from '../../../constants/index';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import Footer from 'src/components/landingpage/footer/Footer';
-
+import Footer from 'src/components/landingpage/footer/Footer.js';
 const AboutAndMission = () => {
   return (
     <>

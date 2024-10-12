@@ -120,12 +120,11 @@ export const plans = [
     title: 'Basic',
     priceMonthly: 0,
     priceYearly: 49.99,
-    caption: '599.88 $ /year',
     features: [
-      'Chat (limited)', 
-      'Basic smart reminders', 
-      'Access to selected blog articles', 
-      'Simple search functionality'],
+      'Ultrasound quality enhancing (limited use)',
+      'Basic ultrasound report generation',
+      'Health tracking (basic metrics)'
+    ],
     logo: '../images/silver.png',
     icon: '../images/enter_white.png',
 
@@ -135,7 +134,6 @@ export const plans = [
     title: 'Advanced Care',
     priceMonthly: 9.99,
     priceYearly: 99.99,
-    caption: '599.88 $ /year',
     features: [
       'Unlimited chat', 
       'Comprehensive smart reminders', 
@@ -150,7 +148,6 @@ export const plans = [
     title: 'Premium Care',
     priceMonthly: 19.99,
     priceYearly: 149.99   ,
-    caption: '599.88 $ /year',
     features: [
       'Personalized story generation with voice generation',
       'Priority support',
@@ -168,7 +165,7 @@ export const testimonials = [
     role: 'Gynecologist',
     avatarUrl: '../images/user-8.jpg',
     comment:
-      "need other user feedback",
+      "The 23 Weeks app is very useful for my practice, especially the ultrasound enhancement. It would be great to see more feedback from other users to improve some features.",
   },
   {
     id: '1',

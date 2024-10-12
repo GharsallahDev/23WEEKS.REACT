@@ -174,7 +174,10 @@ const HeadCircumferenceCalculator = () => {
     setAccuracy(null); 
     setError(null);
   };
-
+  const InformationCard = styled(Card)({
+    marginTop: 24,
+    backgroundColor: 'primary.light',
+  });
   return (
     <PageContainer title={t('Head Circumference Calculation')}>
       <Breadcrumb title={t('Head Circumference Calculation')} items={BCrumb}>
@@ -182,7 +185,21 @@ const HeadCircumferenceCalculator = () => {
           <img src={breadcrumbImg} alt={t('Ultrasound')} width="155px" />
         </Box>
       </Breadcrumb>
-
+      <Grid item xs={12}>
+  <InformationCard>
+    <CardContent>
+      <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+        Head Circumference and Fetal Age Prediction
+      </Typography>
+      <Typography variant="body1" paragraph>
+        Measuring head circumference is crucial for assessing fetal brain development and growth patterns. Combined with fetal age prediction, these measurements help healthcare professionals track developmental milestones, detect potential growth abnormalities, and ensure that the pregnancy is progressing as expected, providing key insights for personalized care and timely interventions.
+      </Typography>
+    </CardContent>
+  </InformationCard>
+</Grid>
+<Typography sx={{ py: 3 }}>
+        
+        </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <FixedHeightCard>

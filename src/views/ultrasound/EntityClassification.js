@@ -87,7 +87,10 @@ const UltrasoundClassification = () => {
       setError(null);
     }
   };
-
+  const InformationCard = styled(Card)({
+    marginTop: 24,
+    backgroundColor: 'primary.light',
+  });
   const processImage = async () => {
     setIsProcessing(true);
     setError(null);
@@ -190,7 +193,21 @@ const UltrasoundClassification = () => {
           <img src={breadcrumbImg} alt={t('Ultrasound')} height="150px" width="auto" />
         </Box>
       </Breadcrumb>
-
+      <Grid item xs={12}>
+  <InformationCard>
+    <CardContent>
+      <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+        Importance of Entity Classification in Ultrasound Analysis
+      </Typography>
+      <Typography variant="body1" paragraph>
+        Entity classification in ultrasound images helps identify and differentiate between various fetal structures, ensuring that key anatomical features are properly evaluated. Accurate classification supports early detection of abnormalities and aids in making informed clinical decisions, enhancing the quality of prenatal care.
+      </Typography>
+    </CardContent>
+  </InformationCard>
+</Grid>
+<Typography sx={{ py: 3 }}>
+        
+        </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <FixedHeightCard>

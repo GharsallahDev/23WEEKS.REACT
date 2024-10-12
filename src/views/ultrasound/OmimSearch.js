@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, TextField, Container, Paper, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Typography, Button, TextField, Container, Paper, List, ListItem, ListItemText,Card, Grid, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb'; 
 import breadcrumbImg from 'src/assets/images/breadcrumb/fetus.png';
@@ -52,7 +52,10 @@ const OmimSearch = () => {
       setLoading(false);
     }
   };
-
+  const InformationCard = styled(Card)({
+    marginTop: 24,
+    backgroundColor: 'primary.light',
+  });
   return (
     <PageContainer title="Disease Search">
       <Breadcrumb title="Disease Search" items={BCrumb}>
@@ -60,6 +63,19 @@ const OmimSearch = () => {
           <img src={breadcrumbImg} alt="OMIM Disease Search" width="155px" />
         </Box>
       </Breadcrumb>
+      <Grid item xs={12}>
+  <InformationCard>
+    <CardContent>
+      <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+        Disease Search and Information Retrieval
+      </Typography>
+      <Typography variant="body1" paragraph>
+        The disease search feature allows doctors to quickly look up specific conditions by typing the disease name. The system then provides relevant links to medical resources and research, helping healthcare professionals stay informed about the latest findings and treatment options, ultimately enhancing patient care and clinical decision-making.
+      </Typography>
+    </CardContent>
+  </InformationCard>
+</Grid>
+
       <StyledContainer>
         <StyledPaper>
           <Typography variant="h5" align="center" gutterBottom>
@@ -131,7 +147,7 @@ const OmimSearch = () => {
               ))}
             </List>
           ) : (
-            <Typography variant="body1" align="center" style={{ marginTop: '20px' }}>Searching for Diseases.</Typography>
+            <Typography variant="body1" align="center" style={{ marginTop: '20px' }}></Typography>
           )}
         </StyledPaper>
       </StyledContainer>

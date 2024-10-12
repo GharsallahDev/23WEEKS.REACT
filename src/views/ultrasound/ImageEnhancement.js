@@ -29,7 +29,10 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1,
 });
-
+const InformationCard = styled(Card)({
+  marginTop: 24,
+  backgroundColor: 'primary.light',
+});
 const FixedHeightCard = styled(Card)({
   height: '100%',
   display: 'flex',
@@ -124,7 +127,21 @@ const ImageQualityEnhancement = () => {
           <img src={breadcrumbImg} alt={t('Ultrasound')} width="155px" />
         </Box>
       </Breadcrumb>
-
+      <Grid item xs={12}>
+        <InformationCard>
+          <CardContent>
+            <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+              Importance of Ultrasound Image Quality Enhancement
+            </Typography>
+            <Typography variant="body1" paragraph>
+              Enhancing the quality of ultrasound images plays a critical role in improving diagnostic accuracy. Clearer images allow healthcare professionals to detect abnormalities earlier and provide better care to patients, leading to more accurate and timely interventions.
+            </Typography>
+          </CardContent>
+        </InformationCard>
+      </Grid>
+      <Typography sx={{ py: 3 }}>
+        
+        </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <FixedHeightCard>

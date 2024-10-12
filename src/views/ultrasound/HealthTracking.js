@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, TextField, Container, Paper } from '@mui/material';
+import { Box, Typography, Button, TextField, Container, Paper,Card, Grid, CardContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PageContainer from '../../components/container/PageContainer';
 import Breadcrumb from 'src/layouts/full/shared/breadcrumb/Breadcrumb';
@@ -120,7 +120,10 @@ const HealthTracking = () => {
       setPredictionText('An error occurred while fetching the prediction.');
     }
   };
-
+  const InformationCard = styled(Card)({
+    marginTop: 24,
+    backgroundColor: 'primary.light',
+  });
   return (
     <PageContainer title="Health Tracking">
       <Breadcrumb title="Health Tracking" items={BCrumb}>
@@ -128,6 +131,19 @@ const HealthTracking = () => {
           <img src={breadcrumbImg} alt="Health Tracking" width="155px" />
         </Box>
       </Breadcrumb>
+      <Grid item xs={12}>
+  <InformationCard>
+    <CardContent>
+      <Typography sx={{ color: '#dd1367' }} variant="h6" gutterBottom>
+        Health Tracking and Risk Prediction
+      </Typography>
+      <Typography variant="body1" paragraph>
+        The health tracking feature monitors key vital signs provided by doctors to assess the risk level during pregnancy. By analyzing these inputs, the system predicts whether the pregnancy is high-risk or low-risk, enabling early intervention when necessary. This proactive approach ensures that both the mother and baby receive appropriate care, supporting safer pregnancies and improved outcomes.
+      </Typography>
+    </CardContent>
+  </InformationCard>
+</Grid>
+
       <StyledContainer>
         <StyledPaper>
           <Typography variant="h5" align="center">
