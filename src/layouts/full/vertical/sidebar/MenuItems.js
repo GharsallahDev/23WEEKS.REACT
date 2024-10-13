@@ -40,7 +40,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: 'Pregnancy Dashboard',
+    title: 'My Pregnancy Guide',
     icon: IconWoman,
     href: '/dashboard/woman',
     userType: 'user',

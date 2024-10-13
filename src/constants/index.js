@@ -2,6 +2,9 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import DataUsageIcon from '@mui/icons-material/DataUsage';
 import SecurityIcon from '@mui/icons-material/Security';
 import { id } from 'date-fns/locale';
+import pck1 from 'src/assets/images/backgrounds/silver.png';
+import pck2 from 'src/assets/images/backgrounds/bronze.png';
+import pck3 from 'src/assets/images/backgrounds/gold.png';
 
 export const features = [
   {
@@ -118,9 +121,14 @@ export const plans = [
   {
     id: '0',
     title: 'Basic',
-    priceMonthly: 0,
-    priceYearly: 49.99,
-    features: [
+    pricePreg: 0,
+    priceGyn: 49.99,
+    featuresPreg: [
+      'Ultrasound quality enhancing (limited use)',
+      'Basic ultrasound report generation',
+      'Health tracking (basic metrics)'
+    ],
+    featuresGyn: [
       'Ultrasound quality enhancing (limited use)',
       'Basic ultrasound report generation',
       'Health tracking (basic metrics)'
@@ -132,14 +140,69 @@ export const plans = [
   {
     id: '1',
     title: 'Advanced Care',
+    pricePreg: 9.99,
+    priceGyn: 99.99,
+    featuresPreg: [
+      'All Basic features', 
+      'Report generation', 
+      'Ultrasound classification', 
+      'Enhanced search engine',
+      'Baby name generation'],
+    featuresGyn: [
+       'Unlimited ultrasound quality enhancing',
+      'Advanced ultrasound report generation',
+      'Ultrasound classification',
+      'Head circumference calculation'
+    ],
+    logo: '../images/bronze.png',
+    icon: '../images/enter_white.png',
+    },
+  {
+    id: '2',
+    title: 'Premium Care',
+    pricePreg: 19.99,
+    priceGyn: 149.99   ,
+    featuresPreg: [
+      'Personalized story generation with voice generation',
+      'Priority support',
+      'Integration with health tracking devices'],
+    featuresGyn: [
+      'All Advanced features',
+     'Anomaly detection',
+      'Advanced analytics and insights',
+      'Integration with other medical systems'
+    ],
+    logo: '../images/gold.png',
+    icon: '../images/enter_white.png',
+
+  },
+];
+export const plans_gynecologists = [
+  {
+    id: '0',
+    title: 'Basic',
+    priceMonthly: 0,
+    priceYearly: 49.99,
+    features: [
+      'Anomaly detection',
+      'Advanced analytics and insights',
+      'Integration with other medical systems'
+    ],
+    logo: '../images/silver.png',
+    icon: '../images/enter_white.png',
+
+  },
+  {
+    id: '1',
+    title: 'Advanced Care',
     priceMonthly: 9.99,
     priceYearly: 99.99,
     features: [
-      'Unlimited chat', 
-      'Comprehensive smart reminders', 
-      'Full access to blog content', 
-      'Enhanced search engine',
-      'Baby name generation'],
+      'Unlimited ultrasound Quality enhancing', 
+      'Report generation ', 
+      'Ultrasound classification ', 
+      'Head circumference calculation',
+      'Enhanced health tracking'],
       logo: '../images/bronze.png',
       icon: '../images/enter_white.png',
     },
@@ -149,9 +212,9 @@ export const plans = [
     priceMonthly: 19.99,
     priceYearly: 149.99   ,
     features: [
-      'Personalized story generation with voice generation',
+      'Anomaly detection',
       'Priority support',
-      'Integration with health tracking devices'],
+      'Advanced analytics and insights'],
     logo: '../images/gold.png',
     icon: '../images/enter_white.png',
 
@@ -261,6 +324,106 @@ export const technology = [
   },
 ];
 
+const pricingPlans = {
+  women: [
+    {
+      id: 1,
+      package: 'Basic',
+      monthlyplan: 0,
+      yearlyplan: 0,
+      avatar: pck1,
+      badge: false,
+      btntext: 'Choose Basic',
+      rules: [
+        { limit: true, title: 'Chat (limited)' },
+        { limit: true, title: 'Basic smart reminders' },
+        { limit: true, title: 'Access to selected blog articles' },
+        { limit: true, title: 'Simple search functionality' },
+        { limit: false, title: 'Personalized story generation' },
+      ],
+    },
+    {
+      id: 2,
+      package: 'Advanced',
+      monthlyplan: 9.99,
+      yearlyplan: 99.99,
+      avatar: pck2,
+      badge: true,
+      btntext: 'Choose Advanced',
+      rules: [
+        { limit: true, title: 'Unlimited chat' },
+        { limit: true, title: 'Comprehensive smart reminders' },
+        { limit: true, title: 'Full access to blog content' },
+        { limit: true, title: 'Enhanced search engine' },
+        { limit: true, title: 'Baby name generation' },
+      ],
+    },
+    {
+      id: 3,
+      package: 'Premium',
+      monthlyplan: 19.99,
+      yearlyplan: 199.99,
+      avatar: pck3,
+      badge: false,
+      btntext: 'Choose Premium',
+      rules: [
+        { limit: true, title: 'Personalized story generation with voice generation' },
+        { limit: true, title: 'Priority support' },
+        { limit: true, title: 'Integration with health tracking devices' },
+      ],
+    },
+  ],
+  gynecologists: [
+    {
+      id: 1,
+      package: 'Basic',
+      monthlyplan: 49.99,
+      yearlyplan: 499.99,
+      avatar: pck1,
+      badge: false,
+      btntext: 'Choose Basic',
+      rules: [
+        { limit: true, title: 'Ultrasound quality enhancing (limited use)' },
+        { limit: true, title: 'Basic ultrasound report generation' },
+        { limit: true, title: 'Health tracking (basic metrics)' },
+        { limit: false, title: 'Anomaly detection' },
+        { limit: false, title: 'Integration with other medical systems' },
+      ],
+    },
+    {
+      id: 2,
+      package: 'Advanced',
+      monthlyplan: 99.99,
+      yearlyplan: 999.99,
+      avatar: pck2,
+      badge: true,
+      btntext: 'Choose Advanced',
+      rules: [
+        { limit: true, title: 'Unlimited ultrasound quality enhancing' },
+        { limit: true, title: 'Advanced ultrasound report generation' },
+        { limit: true, title: 'Ultrasound classification' },
+        { limit: true, title: 'Head circumference calculation' },
+        { limit: true, title: 'Enhanced health tracking' },
+      ],
+    },
+    {
+      id: 3,
+      package: 'Premium',
+      monthlyplan: 149.99,
+      yearlyplan: 1499.99,
+      avatar: pck3,
+      badge: false,
+      btntext: 'Choose Premium',
+      rules: [
+        { limit: true, title: 'Anomaly detection' },
+        { limit: true, title: 'Priority support' },
+        { limit: true, title: 'Advanced analytics and insights' },
+        { limit: true, title: 'Integration with other medical systems' },
+        { limit: true, title: 'All Advanced features' },
+      ],
+    },
+  ],
+};
 export const members = [
 
   {
@@ -269,6 +432,7 @@ export const members = [
     title: 'Nadia TRABELSI',
     description:
       'AI Engineer',
+    linkedin: 'https://www.linkedin.com/in/nadia-trabelsi-h6b3/'
   },
   {
     id: '1',
@@ -276,6 +440,7 @@ export const members = [
     title: 'Eya BEN MOULEHEM',
     description:
       'AI Engineer',
+    linkedin: 'https://www.linkedin.com/in/eya-ben-moulehem/'
   },
   {
     id: '2',
@@ -283,6 +448,7 @@ export const members = [
     title: 'Malek GHARSALLAH',
     description:
       'AI Engineer',
+    linkedin: 'https://www.linkedin.com/in/malek-gharsallah-4066b72b8/'
   },
   {
     id: '3',
@@ -290,6 +456,7 @@ export const members = [
     title: 'Nour BEN AMMAR',
     description:
       'AI Engineer',
+      linkedin: 'https://www.linkedin.com/in/nour-ben-ammar-1a7a5424b/'
   },
 ];
 

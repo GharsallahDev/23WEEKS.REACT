@@ -6,7 +6,7 @@ import { plans } from '../../constants/index.js';
 import Button from '../Button.js';
 
 const Pricing = () => {
-  const [monthly, setMonthly] = useState(false);
+  const [isMotherToBe, setIsMotherToBe] = useState(true); // Rename state to be more meaningful
 
   return (
     <section>
@@ -19,14 +19,14 @@ const Pricing = () => {
 
             <div className="relative z-4 mx-auto flex w-[375px] rounded-3xl border-[3px] border-s8/60 bg-s8/30 p-2 backdrop-blur-[6px] max-md:w-[310px]">
               <button
-                className={clsx('pricing-head_btn', monthly && 'text-pink-950')}
-                onClick={() => setMonthly(true)}
+                className={clsx('pricing-head_btn', isMotherToBe && 'text-pink-950')}
+                onClick={() => setIsMotherToBe(true)}  // Set to Mothers-to-be view
               >
                 Mothers-to-be
               </button>
               <button
-                className={clsx('pricing-head_btn', !monthly && 'text-pink-950')}
-                onClick={() => setMonthly(false)}
+                className={clsx('pricing-head_btn', !isMotherToBe && 'text-pink-950')}
+                onClick={() => setIsMotherToBe(false)}  // Set to Gynecologists view
               >
                 Gynecologists
               </button>
@@ -34,7 +34,7 @@ const Pricing = () => {
               <div
                 className={clsx(
                   'g4 rounded-14 before:h-100 pricing-head_btn_before absolute left-2 top-2 h-[calc(100%-16px)] w-[calc(50%-8px)] overflow-hidden shadow-400 transition-transform duration-500',
-                  !monthly && 'translate-x-full',
+                  !isMotherToBe && 'translate-x-full',
                 )}
               />
             </div>
@@ -50,7 +50,7 @@ const Pricing = () => {
             </div>
           </div>
 
-          {/*  pricing section*/}
+          {/*  Pricing Section */}
           <div className="scroll-hide relative z-2 -mt-12 flex items-start max-xl:gap-5 max-xl:overflow-auto max-xl:pt-6">
             {plans.map((plan, index) => (
               <div
@@ -108,8 +108,8 @@ const Pricing = () => {
                     >
                       ${' '}
                       <CountUp
-                        start={plan.priceMonthly}
-                        end={monthly ? plan.priceMonthly : plan.priceYearly}
+                        start={plan.pricePreg}
+                        end={isMotherToBe ? plan.pricePreg : plan.priceGyn} // Adjust price based on selection
                         duration={0.4}
                         useEasing={false}
                         preserveValue
@@ -128,8 +128,9 @@ const Pricing = () => {
                   {plan.caption}
                 </div>
 
+                {/* Feature list changes based on selection */}
                 <ul className="mx-auto  space-y-4 xl:px-7">
-                  {plan.features.map((feature) => (
+                  {(isMotherToBe ? plan.featuresPreg : plan.featuresGyn).map((feature) => (
                     <li key={feature} className="relative flex items-center gap-5">
                       <img
                         src={index === 1 ? '/images/tick.png' : '/images/tick1.png'}

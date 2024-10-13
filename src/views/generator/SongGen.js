@@ -113,17 +113,6 @@ const SongGenerator = () => {
           />
 
           <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isCustom}
-                  onChange={() => setIsCustom(!isCustom)}
-                  color="primary"
-                />
-              }
-              label="Custom Mode"
-              sx={{ mb: 2 }}
-            />
 
             {isCustom && (
               <>

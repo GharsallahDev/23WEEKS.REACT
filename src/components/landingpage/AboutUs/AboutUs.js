@@ -1,12 +1,15 @@
 import React from 'react';
 import { Box, Container, Typography, Grid, Avatar, IconButton } from '@mui/material';
-import AboutImage from '../../../assets/images/aboutus/Untitled-14.png'; // Use your image path
+import Mission from '../../../assets/images/aboutus/pregwoman.png'; // Use your image path
+import AboutImage from '../../../assets/images/aboutus/mission.png'; // Use your image path
+import Vision from '../../../assets/images/aboutus/ai.png'; // Use your image path
 import Header from '../header/Header';
 import { motion } from 'framer-motion';
 import { Element } from 'react-scroll';
 import { members } from '../../../constants/index';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import Footer from 'src/components/landingpage/footer/Footer.js';
+import Footer from 'src/components/landingpage/footer/Footer';
+
 const AboutAndMission = () => {
   return (
     <>
@@ -91,7 +94,7 @@ const AboutAndMission = () => {
                 >
                   <Box sx={{ textAlign: 'center' }}>
                     <img
-                      src={AboutImage}
+                      src={Mission}
                       alt="23weeks"
                       style={{ maxWidth: '100%', borderRadius: '8px' }}
                     />
@@ -181,7 +184,7 @@ const AboutAndMission = () => {
                 >
                   <Box sx={{ textAlign: 'center' }}>
                     <img
-                      src={AboutImage}
+                      src={Vision}
                       alt="23weeks"
                       style={{ maxWidth: '100%', borderRadius: '8px' }}
                     />
@@ -295,3 +298,4 @@ const AboutAndMission = () => {
 };
 
 export default AboutAndMission;
+
